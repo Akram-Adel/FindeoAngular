@@ -1,0 +1,229 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+	<!-- Header Container
+	================================================== -->
+	<header id="header-container" class="header-style-2">
+
+		<!-- Header -->
+		<div id="header">
+			<div class="container">
+
+				<!-- Left Side Content -->
+				<div class="left-side">
+
+					<!-- Logo -->
+					<div id="logo" class="margin-top-10">
+						<a [routerLink]="['en/main']"><img src="assets/images/logo.png" alt=""></a>
+
+						<!-- Logo for Sticky Header -->
+						<a [routerLink]="['en/main']" class="sticky-logo"><img src="assets/images/logo2.png" alt=""></a>
+					</div>
+
+					<!-- Mobile Navigation -->
+					<div class="mmenu-trigger">
+						<button class="hamburger hamburger--collapse" type="button">
+							<span class="hamburger-box">
+								<span class="hamburger-inner"></span>
+							</span>
+						</button>
+					</div>
+
+				</div>
+				<!-- Left Side Content / End -->
+
+				<!-- Right Side Content / End -->
+				<div class="right-side">
+					<ul class="header-widget">
+						<li>
+							<i class="sl sl-icon-call-in"></i>
+							<div class="widget-content">
+								<span class="title">Questions?</span>
+								<span class="data">(123) 123-456 </span>
+							</div>
+						</li>
+
+						<li>
+							<i class="sl sl-icon-location"></i>
+							<div class="widget-content">
+								<span class="title">Our Office</span>
+								<span class="data">45 Park Avenue, NY</span>
+							</div>
+						</li>
+
+						<li class="with-btn"><a [routerLink]="['/en/submit-property']" class="button border">Submit Property</a></li>
+					</ul>
+				</div>
+				<!-- Right Side Content / End -->
+
+			</div>
+
+			<!-- Main Navigation -->
+			<nav id="navigation" class="style-2" data-spy="affix">
+				<div class="container">
+						<ul id="responsive">
+
+							<li><a routerLinkActive="current" [routerLink]="['/en/main']">Home</a> </li>
+
+							<li><a routerLinkActive="current" [routerLink]="['/en/listings/default']">Listings</a> </li>
+
+							<li><a>Features</a>
+								<ul>
+									<li><a>My Account</a>
+										<ul>
+											<li><a [routerLink]="['/en/profile']">My Profile</a></li>
+											<li><a [routerLink]="['/en/bookmarks']">Bookmarked Listings</a></li>
+											<li><a [routerLink]="['/en/properties']">My Properties</a></li>
+											<li><a [routerLink]="['/en/change-password']">Change Password</a></li>
+										</ul>
+									</li>
+									<li><a [routerLink]="['/en/agents']">Agents List</a></li>
+
+									<li><a [routerLink]="['/en/submit-property']">Submit Property</a></li>
+								</ul>
+							</li>
+
+							<li><a>Pages</a>
+								<ul>
+									<li><a [routerLink]="['/en/blog']">Blog</a></li>
+									<li><a [routerLink]="['/en/contact']">Contact</a></li>
+									<li><a [routerLink]="['/en/pricing']">Pricing Tables</a></li>
+								</ul>
+							</li>
+
+							<li class="right-side-menu-item">
+								<a href="ar/main" style="font-size:30px" title="Translate to Arabic">
+									<i class="fa fa-language"></i>
+								</a>
+							</li>
+
+							<li class="right-side-menu-item"><a [routerLink]="['/en/login']" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li>
+						</ul>
+				</div>
+			</nav>
+
+			<div class="clearfix"></div>
+			<!-- Main Navigation / End -->
+		</div>
+		<!-- Header / End -->
+
+	</header>
+	<div class="clearfix"></div>
+	<!-- Header Container / End -->
+</div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+	<!-- Header Container
+	================================================== -->
+	<header id="header-container" class="header-style-2">
+
+		<!-- Header -->
+		<div id="header">
+			<div class="container">
+
+				<!-- Left Side Content -->
+				<div class="left-side">
+
+					<!-- Logo -->
+					<div id="logo" class="margin-top-10">
+						<a [routerLink]="['ar/main']"><img src="assets/images/logo.png" alt=""></a>
+
+						<!-- Logo for Sticky Header -->
+						<a [routerLink]="['ar/main']" class="sticky-logo"><img src="assets/images/logo2.png" alt=""></a>
+					</div>
+
+					<!-- Mobile Navigation -->
+					<div class="mmenu-trigger">
+						<button class="hamburger hamburger--collapse" type="button">
+							<span class="hamburger-box">
+								<span class="hamburger-inner"></span>
+							</span>
+						</button>
+					</div>
+
+				</div>
+				<!-- Left Side Content / End -->
+
+				<!-- Right Side Content / End -->
+				<div class="right-side">
+					<ul class="header-widget">
+						<li>
+							<i class="sl sl-icon-call-in"></i>
+							<div class="widget-content">
+								<span class="title">اسئلة ؟</span>
+								<span class="data">(123) 123-456 </span>
+							</div>
+						</li>
+
+						<li>
+							<i class="sl sl-icon-location"></i>
+							<div class="widget-content">
+								<span class="title">مكتبنا</span>
+								<span class="data">45 Park Avenue, NY</span>
+							</div>
+						</li>
+
+						<li class="with-btn"><a [routerLink]="['/ar/submit-property']" class="button border">اضف عقار</a></li>
+					</ul>
+				</div>
+				<!-- Right Side Content / End -->
+
+			</div>
+
+			<!-- Main Navigation -->
+			<nav id="navigation" class="style-2">
+				<div class="container">
+						<ul id="responsive">
+
+							<li><a routerLinkActive="current" [routerLink]="['/ar/main']">الرئيسية</a></li>
+
+							<li><a routerLinkActive="current" [routerLink]="['/ar/listings/default']">المعروضات</a></li>
+
+							<li><a>المميزات</a>
+								<ul>
+									<li><a>حسابي</a>
+										<ul>
+											<li><a [routerLink]="['/ar/profile']">صفحتي الشخصية</a></li>
+											<li><a [routerLink]="['/ar/bookmarks']">العقارات المرجعية</a></li>
+											<li><a [routerLink]="['/ar/properties']">عقاراتي</a></li>
+											<li><a [routerLink]="['/ar/change-password']">تغير كلمة السر</a></li>
+										</ul>
+									</li>
+									<li><a [routerLink]="['/ar/agents']">قائمة السماسرة</a></li>
+
+									<li><a [routerLink]="['/ar/submit-property']">اضف عقار</a></li>
+								</ul>
+							</li>
+
+							<li><a>الصفح</a>
+								<ul>
+									<li><a [routerLink]="['/ar/blog']">المدونة</a></li>
+									<li><a [routerLink]="['/ar/contact']">الاتصال</a></li>
+									<li><a [routerLink]="['/ar/pricing']">جداول الاسعار</a></li>
+								</ul>
+							</li>
+
+							<li class="right-side-menu-item">
+								<a href="en/main" style="font-size:30px" class="not" title="ترجم للانجليزية">
+									<i class="fa fa-language"></i>
+								</a>
+							</li>
+
+							<li class="right-side-menu-item"><a [routerLink]="['/ar/login']" class="sign-in"><i class="fa fa-user"></i> تسجيل الدخول \ التسجيل</a></li>
+						</ul>
+				</div>
+			</nav>
+
+			<div class="clearfix"></div>
+			<!-- Main Navigation / End -->
+		</div>
+		<!-- Header / End -->
+
+	</header>
+	<div class="clearfix"></div>
+	<!-- Header Container / End -->
+<div>
+<!-- Arabic Section / End -->

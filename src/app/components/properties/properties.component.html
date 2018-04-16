@@ -1,0 +1,195 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>My Properties</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/en/main']">Home</a></li>
+              <li>My Properties</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Account</li>
+              <li><a [routerLink]="['/en/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> My Profile</a></li>
+              <li><a [routerLink]="['/en/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> Bookmarked Listings</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Listings</li>
+              <li><a [routerLink]="['/en/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> My Properties</a></li>
+              <li><a [routerLink]="['/en/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> Submit New Property</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/en/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> Change Password</a></li>
+              <li><a href="#"><i class="sl sl-icon-power" routerLinkActive="current"></i> Log Out</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <table class="manage-table responsive-table">
+
+          <tr>
+            <th><i class="fa fa-file-text"></i> Property</th>
+            <th class="expire-date"><i class="fa fa-calendar"></i> Expiration Date</th>
+            <th></th>
+          </tr>
+
+          <!-- Item -->
+          <tr *ngFor="let property of properties">
+            <td class="title-container">
+              <img src="{{ property.image }}">
+              <div class="title">
+                <h4><a [routerLink]="['/en/single-property', property.id]">{{ property.title }}</a></h4>
+                <span>{{ property.adress }} </span>
+                <span class="table-property-price">{{ property.price }}</span>
+              </div>
+            </td>
+            <td class="expire-date">{{ property.expireDate }}</td>
+            <td class="action">
+              <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+              <a href="#"><i class="fa  fa-eye-slash"></i> Hide</a>
+              <a href="#" class="delete"><i class="fa fa-remove"></i> Delete</a>
+            </td>
+          </tr>
+
+        </table>
+        <a [routerLink]="['/en/submit-property']" class="margin-top-40 button">Submit New Property</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="margin-top-55"></div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>عقاراتي</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرئيسية</a></li>
+              <li>عقاراتي</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر الحساب</li>
+              <li><a [routerLink]="['/ar/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> صفحتي الشخصية</a></li>
+              <li><a [routerLink]="['/ar/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر العقارات</li>
+              <li><a [routerLink]="['/ar/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> عقاراتي</a></li>
+              <li><a [routerLink]="['/ar/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> اضف عقار جديد</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/ar/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> تغيير كلمة السر</a></li>
+              <li><a href="#"><i class="sl sl-icon-power"></i> تسجيل الخروج</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <table class="manage-table responsive-table">
+
+          <tr>
+            <th><i class="fa fa-file-text"></i> العقارات</th>
+            <th class="expire-date"><i class="fa fa-calendar"></i> تاريخ الانتهاء</th>
+            <th></th>
+          </tr>
+
+          <!-- Item -->
+          <tr *ngFor="let property of properties">
+            <td class="title-container">
+              <img src="{{ property.image }}">
+              <div class="title">
+                <h4><a [routerLink]="['/ar/single-property', property.id]">{{ property.title }}</a></h4>
+                <span>{{ property.adress }} </span>
+                <span class="table-property-price">{{ property.price }}</span>
+              </div>
+            </td>
+            <td class="expire-date">{{ property.expireDate }}</td>
+            <td class="action">
+              <a href="#"><i class="fa fa-pencil"></i> عدل</a>
+              <a href="#"><i class="fa  fa-eye-slash"></i> اخفي</a>
+              <a href="#" class="delete"><i class="fa fa-remove"></i> امسح</a>
+            </td>
+          </tr>
+
+        </table>
+        <a [routerLink]="['/ar/submit-property']" class="margin-top-40 button">اضف عقار جديد</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="margin-top-55"></div>
+<!-- Arabic Section / End -->

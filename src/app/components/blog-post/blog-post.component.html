@@ -1,0 +1,565 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>Blog</h2>
+          <span>Keep up to date with the latest news</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/en/main']">Home</a></li>
+              <li>Blog</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+
+    <!-- Blog Posts -->
+    <div class="blog-page">
+    <div class="row">
+
+
+      <!-- Post Content -->
+      <div class="col-md-8">
+
+
+        <!-- Blog Post -->
+        <div class="blog-post single-post">
+
+          <!-- Img -->
+          <img class="post-img" src="{{ post.image }}">
+
+
+          <!-- Content -->
+          <div class="post-content">
+            <h3>{{ post.title }}</h3>
+
+            <ul class="post-meta">
+              <li>{{ post.date }}</li>
+              <li><a href="#" (click)="false">{{ post.commentsNum }} Comments</a></li>
+            </ul>
+
+            <div [innerHTML]="post.post"></div>
+
+            <!-- Share Buttons -->
+            <ul class="share-buttons margin-top-40 margin-bottom-0">
+              <li><a class="fb-share" href="#"><i class="fa fa-facebook"></i> Share</a></li>
+              <li><a class="twitter-share" href="#"><i class="fa fa-twitter"></i> Tweet</a></li>
+              <li><a class="gplus-share" href="#"><i class="fa fa-google-plus"></i> Share</a></li>
+              <li><a class="pinterest-share" href="#"><i class="fa fa-pinterest-p"></i> Pin</a></li>
+            </ul>
+            <div class="clearfix"></div>
+
+          </div>
+        </div>
+        <!-- Blog Post / End -->
+
+
+        <!-- Post Navigation -->
+        <ul id="posts-nav" class="margin-top-0 margin-bottom-40">
+          <li class="next-post">
+            <a [routerLink]="['/en/blog-post', post.next.id]"><span>Next Post</span>
+            {{ post.next.post }}</a>
+          </li>
+          <li class="prev-post">
+            <a [routerLink]="['/en/blog-post', post.prev.id]"><span>Previous Post</span>
+            {{ post.prev.post }}</a>
+          </li>
+        </ul>
+
+
+        <!-- About Author -->
+        <div class="about-author">
+          <img src="{{ post.author.image }}"/>
+          <div class="about-description">
+            <h4>{{ post.author.name }}</h4>
+            <a href="#" (click)="false">{{ post.author.email }}</a>
+            <p>{{ post.author.about }}</p>
+          </div>
+        </div>
+
+
+        <!-- Related Posts -->
+        <div class="clearfix"></div>
+        <h4 class="headline margin-top-25">Related Posts</h4>
+        <div class="row">
+          <div class="col-md-6" *ngFor="let post of post.relatedPosts">
+
+            <!-- Blog Post -->
+            <div class="blog-post">
+
+              <!-- Img -->
+              <a [routerLink]="['/en/blog-post', post.id]" class="post-img">
+                <img src="{{ post.image }}">
+              </a>
+
+              <!-- Content -->
+              <div class="post-content">
+                <h3><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }}</a></h3>
+                <p>{{ post.post_header }} </p>
+
+                <a [routerLink]="['/en/blog-post', post.id]" class="read-more">Read More <i class="fa fa-angle-right"></i></a>
+              </div>
+
+            </div>
+            <!-- Blog Post / End -->
+
+          </div>
+        </div>
+        <!-- Related Posts / End -->
+
+
+        <div class="margin-top-50"></div>
+
+        <!-- Reviews -->
+        <section class="comments">
+        <h4 class="headline margin-bottom-35">Comments <span class="comments-amount">({{ post.commentsNum }})</span></h4>
+
+          <ul>
+            <li *ngFor="let comment of post.comments">
+              <div class="avatar"><img src="{{ comment.image }}"/></div>
+              <div class="comment-content"><div class="arrow-comment"></div>
+                <div class="comment-by">{{ comment.name }}<span class="date">{{ comment.date }}</span>
+                  <a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
+                </div>
+                <p>{{ post.comment }}</p>
+              </div>
+
+              <ul>
+                <li *ngFor="let reply of comment.replies">
+                  <div class="avatar"><img src="{{ reply.image }}"/></div>
+                  <div class="comment-content"><div class="arrow-comment"></div>
+                    <div class="comment-by">{{ reply.name }}<span class="date">{{ reply.date }}</span>
+                      <a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
+                    </div>
+                    <p>{{ reply.reply }}</p>
+                  </div>
+                </li>
+              </ul>
+
+            </li>
+           </ul>
+
+        </section>
+        <div class="clearfix"></div>
+        <div class="margin-top-55"></div>
+
+
+        <!-- Add Comment -->
+        <h4 class="headline">Add Comment</h4>
+        <div class="margin-top-15"></div>
+
+        <!-- Add Comment Form -->
+        <form id="add-comment" class="add-comment">
+          <fieldset>
+
+            <div>
+              <label>Name:</label>
+              <input type="text" value=""/>
+            </div>
+
+            <div>
+              <label>Email: <span>*</span></label>
+              <input type="text" value=""/>
+            </div>
+
+            <div>
+              <label>Comment: <span>*</span></label>
+              <textarea cols="40" rows="3"></textarea>
+            </div>
+
+          </fieldset>
+
+          <a href="#" class="button">Add Comment</a>
+          <div class="clearfix"></div>
+          <div class="margin-bottom-20"></div>
+
+        </form>
+
+    </div>
+    <!-- Content / End -->
+
+
+
+    <!-- Sidebar
+    ================================================== -->
+
+    <!-- Widgets -->
+    <div class="col-md-4">
+      <div class="sidebar right">
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">Search Blog</h3>
+          <div class="search-blog-input">
+            <div class="input"><input class="search-field" type="text" placeholder="Type and hit enter" value=""/></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3>Got any questions?</h3>
+          <div class="info-box margin-bottom-10">
+            <p>If you are having any questions, please feel free to ask.</p>
+            <a href="contact.html" class="button fullwidth margin-top-20"><i class="fa fa-envelope-o"></i> Drop Us a Line</a>
+          </div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+
+          <h3>Popular Posts</h3>
+          <ul class="widget-tabs">
+
+            <!-- Post -->
+            <li *ngFor="let post of popularPosts">
+              <div class="widget-content">
+                  <div class="widget-thumb">
+                  <a [routerLink]="['/en/blog-post', post.id]"><img src="{{ post.image }}"></a>
+                </div>
+
+                <div class="widget-text">
+                  <h5><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }} </a></h5>
+                  <span>{{ post.date }}</span>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">Social</h3>
+          <ul class="social-icons rounded">
+            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+        <div class="clearfix"></div>
+        <div class="margin-bottom-40"></div>
+      </div>
+    </div>
+    </div>
+    <!-- Sidebar / End -->
+
+
+  </div>
+  </div>
+
+  <div class="margin-top-55"></div>
+</div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>المدونة</h2>
+          <span>ابق علي اطلاع باحدث الاخبار</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرئيسية</a></li>
+              <li>المدونة</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+
+    <!-- Blog Posts -->
+    <div class="blog-page">
+    <div class="row">
+
+
+      <!-- Post Content -->
+      <div class="col-md-8">
+
+
+        <!-- Blog Post -->
+        <div class="blog-post single-post">
+
+          <!-- Img -->
+          <img class="post-img" src="{{ post.image }}">
+
+
+          <!-- Content -->
+          <div class="post-content">
+            <h3>{{ post.title }}</h3>
+
+            <ul class="post-meta">
+              <li>{{ post.date }}</li>
+              <li><a href="#" (click)="false">{{ post.commentsNum }} Comments</a></li>
+            </ul>
+
+            <div [innerHTML]="post.post"></div>
+
+            <!-- Share Buttons -->
+            <ul class="share-buttons margin-top-40 margin-bottom-0">
+              <li><a class="fb-share" href="#"><i class="fa fa-facebook"></i> شارك</a></li>
+              <li><a class="twitter-share" href="#"><i class="fa fa-twitter"></i> غرد</a></li>
+              <li><a class="gplus-share" href="#"><i class="fa fa-google-plus"></i> شارك</a></li>
+              <li><a class="pinterest-share" href="#"><i class="fa fa-pinterest-p"></i> ثبت</a></li>
+            </ul>
+            <div class="clearfix"></div>
+
+          </div>
+        </div>
+        <!-- Blog Post / End -->
+
+
+        <!-- Post Navigation -->
+        <ul id="posts-nav" class="margin-top-0 margin-bottom-40">
+          <li class="next-post">
+            <a [routerLink]="['/ar/blog-post', post.next.id]"><span>المنشور التالي</span>
+            {{ post.next.post }}</a>
+          </li>
+          <li class="prev-post">
+            <a [routerLink]="['/en/blog-post', post.prev.id]"><span>المنشور السابق</span>
+            {{ post.prev.post }}</a>
+          </li>
+        </ul>
+
+
+        <!-- About Author -->
+        <div class="about-author">
+          <img src="{{ post.author.image }}"/>
+          <div class="about-description">
+            <h4>{{ post.author.name }}</h4>
+            <a href="#" (click)="false">{{ post.author.email }}</a>
+            <p>{{ post.author.about }}</p>
+          </div>
+        </div>
+
+
+        <!-- Related Posts -->
+        <div class="clearfix"></div>
+        <h4 class="headline margin-top-25">منشورات ذات صلة</h4>
+        <div class="row">
+          <div class="col-md-6" *ngFor="let post of post.relatedPosts">
+
+            <!-- Blog Post -->
+            <div class="blog-post">
+
+              <!-- Img -->
+              <a [routerLink]="['/ar/blog-post', post.id]" class="post-img">
+                <img src="{{ post.image }}">
+              </a>
+
+              <!-- Content -->
+              <div class="post-content">
+                <h3><a [routerLink]="['/ar/blog-post', post.id]">{{ post.title }}</a></h3>
+                <p>{{ post.post_header }} </p>
+
+                <a [routerLink]="['/ar/blog-post', post.id]" class="read-more">اقرا المزيد <i class="fa fa-angle-left"></i></a>
+              </div>
+
+            </div>
+            <!-- Blog Post / End -->
+
+          </div>
+        </div>
+        <!-- Related Posts / End -->
+
+
+        <div class="margin-top-50"></div>
+
+        <!-- Reviews -->
+        <section class="comments">
+        <h4 class="headline margin-bottom-35">تعليقات <span class="comments-amount">({{ post.commentsNum }})</span></h4>
+
+          <ul>
+            <li *ngFor="let comment of post.comments">
+              <div class="avatar"><img src="{{ comment.image }}"/></div>
+              <div class="comment-content"><div class="arrow-comment"></div>
+              <div class="comment-by">{{ comment.name }}<span class="date">{{ comment.date }}</span>
+                  <a href="#" class="reply"><i class="fa fa-reply"></i> رد</a>
+                </div>
+                <p>{{ post.comment }}</p>
+              </div>
+
+              <ul>
+                <li *ngFor="let reply of comment.replies">
+                  <div class="avatar"><img src="{{ reply.image }}"/></div>
+                  <div class="comment-content"><div class="arrow-comment"></div>
+                  <div class="comment-by">{{ reply.name }}<span class="date">{{ reply.date }}</span>
+                      <a href="#" class="reply"><i class="fa fa-reply"></i> رد</a>
+                    </div>
+                    <p>{{ reply.reply }}</p>
+                  </div>
+                </li>
+              </ul>
+
+            </li>
+           </ul>
+
+        </section>
+        <div class="clearfix"></div>
+        <div class="margin-top-55"></div>
+
+
+        <!-- Add Comment -->
+        <h4 class="headline">اضف تعليق</h4>
+        <div class="margin-top-15"></div>
+
+        <!-- Add Comment Form -->
+        <form id="add-comment" class="add-comment">
+          <fieldset>
+
+            <div>
+              <label>الاسم:</label>
+              <input type="text" value=""/>
+            </div>
+
+            <div>
+              <label>الايميل: <span>*</span></label>
+              <input type="text" value=""/>
+            </div>
+
+            <div>
+              <label>التعليق: <span>*</span></label>
+              <textarea cols="40" rows="3"></textarea>
+            </div>
+
+          </fieldset>
+
+          <a href="#" class="button">اضف تعليق</a>
+          <div class="clearfix"></div>
+          <div class="margin-bottom-20"></div>
+
+        </form>
+
+    </div>
+    <!-- Content / End -->
+
+
+
+    <!-- Sidebar
+    ================================================== -->
+
+    <!-- Widgets -->
+    <div class="col-md-4">
+      <div class="sidebar left">
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">ابحث في المدونة</h3>
+          <div class="search-blog-input">
+            <div class="input"><input class="search-field" type="text" placeholder="اكتب ثم اضغط ادخال" value=""/></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3>لديك اي اسئلة ؟</h3>
+          <div class="info-box margin-bottom-10">
+            <p>اذا كان لديك اي اسئلة من فضلك ارسل لنا</p>
+            <a href="contact.html" class="button fullwidth margin-top-20"><i class="fa fa-envelope-o"></i> ارسل لنا</a>
+          </div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+
+          <h3>منشورات مشهورة</h3>
+          <ul class="widget-tabs">
+
+            <!-- Post -->
+            <li *ngFor="let post of popularPosts">
+              <div class="widget-content">
+                  <div class="widget-thumb">
+                    <a [routerLink]="['/en/blog-post', post.id]"><img src="{{ post.image }}"></a>
+                </div>
+
+                <div class="widget-text">
+                  <h5><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }} </a></h5>
+                  <span>{{ post.date }}</span>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">التواصل الاجتماعي</h3>
+          <ul class="social-icons rounded">
+            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+        <div class="clearfix"></div>
+        <div class="margin-bottom-40"></div>
+      </div>
+    </div>
+    </div>
+    <!-- Sidebar / End -->
+
+
+  </div>
+  </div>
+
+  <div class="margin-top-55"></div>
+</div>
+<!-- Arabic Section / End -->

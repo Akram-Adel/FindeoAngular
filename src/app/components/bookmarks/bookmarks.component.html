@@ -1,0 +1,185 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>Bookmarked Listings</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li>Bookmarked Listings</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Account</li>
+              <li><a [routerLink]="['/en/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> My Profile</a></li>
+              <li><a [routerLink]="['/en/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> Bookmarked Listings</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Listings</li>
+              <li><a [routerLink]="['/en/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> My Properties</a></li>
+              <li><a [routerLink]="['/en/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> Submit New Property</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/en/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> Change Password</a></li>
+              <li><a href="#"><i class="sl sl-icon-power" routerLinkActive="current"></i> Log Out</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <table class="manage-table bookmarks-table responsive-table">
+
+          <tr>
+            <th><i class="fa fa-file-text"></i> Property</th>
+            <th></th>
+          </tr>
+
+          <!-- Item -->
+          <tr *ngFor="let bookmark of bookmarks">
+            <td class="title-container">
+              <img src="{{ bookmark.image }}">
+              <div class="title">
+                <h4><a [routerLink]="['/en/single-property', bookmark.id]">{{ bookmark.title }}</a></h4>
+                <span>{{ bookmark.adress }}</span>
+                <span class="table-property-price">{{ bookmark.price }}</span>
+              </div>
+            </td>
+            <td class="action">
+              <a href="#" class="delete"><i class="fa fa-remove"></i> Remove</a>
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="margin-top-55"></div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>العقارات المرجعية</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرئيسية</a></li>
+              <li>العقارات المرجعية</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر الحساب</li>
+              <li><a [routerLink]="['/ar/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> صفحتي الشخصية</a></li>
+              <li><a [routerLink]="['/ar/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر العقارات</li>
+              <li><a [routerLink]="['/ar/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> عقاراتي</a></li>
+              <li><a [routerLink]="['/ar/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> اضف عقار جديد</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/ar/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> تغيير كلمة السر</a></li>
+              <li><a href="#"><i class="sl sl-icon-power"></i> تسجيل الخروج</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <table class="manage-table bookmarks-table responsive-table">
+
+          <tr>
+            <th><i class="fa fa-file-text"></i> العقارات</th>
+            <th></th>
+          </tr>
+
+          <!-- Item -->
+          <tr *ngFor="let bookmark of bookmarks">
+            <td class="title-container">
+              <img src="{{ bookmark.image }}">
+              <div class="title">
+                <h4><a [routerLink]="['/en/single-property', bookmark.id]">{{ bookmark.title }}</a></h4>
+                <span>{{ bookmark.adress }}</span>
+                <span class="table-property-price">{{ bookmark.price }}</span>
+              </div>
+            </td>
+            <td class="action">
+              <a href="#" class="delete"><i class="fa fa-remove"></i> ازل</a>
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="margin-top-55"></div>
+<!-- Arabic Section / End -->

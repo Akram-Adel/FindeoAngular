@@ -1,0 +1,22 @@
+export interface CompareProperties {
+  link: string,
+  state: string,
+  name: string,
+  price: string,
+  image: string,
+  area: number,
+  rooms: number,
+  bedrooms: number,
+  bathrooms: number,
+  airConditioning: boolean,
+  swimmingPool: boolean,
+  laundryRoom: boolean,
+  windoCovering: boolean,
+  gym: boolean,
+  internet: boolean,
+  alarm: boolean,
+  age: string,
+  heating: string,
+  parking: boolean,
+  sewer: string
+}

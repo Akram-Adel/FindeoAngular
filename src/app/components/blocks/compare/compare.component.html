@@ -1,0 +1,81 @@
+<!-- English Section   -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Compare Properties Widget
+  ================================================== -->
+  <div class="compare-slide-menu">
+
+    <div class="csm-trigger"></div>
+
+    <div class="csm-content">
+      <h4>Compare Properties <div class="csm-mobile-trigger"></div></h4>
+
+      <div class="csm-properties">
+
+        <!-- Property -->
+        <div class="listing-item compact" *ngFor="let property of properties$ | reverse | limit:3; let i = index">
+          <a class="listing-img-container">
+            <div class="remove-from-compare" (click)="delete(property, i)"><i class="fa fa-close"></i></div>
+            <div class="listing-badges">
+              <span>{{ property.state }}</span>
+            </div>
+            <a class="listing-img-content" [routerLink]="property.link">
+              <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+            </a>
+            <img src="{{property.image}}">
+          </a>
+        </div>
+
+      </div>
+
+      <div class="csm-buttons">
+        <a [routerLink]="['/en/compare-properties']" class="button">Compare</a>
+        <a class="button reset" (click)="reset()">Reset</a>
+      </div>
+    </div>
+
+  </div>
+  <!-- Compare Properties Widget / End -->
+</div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Compare Properties Widget
+  ================================================== -->
+  <div class="compare-slide-menu">
+
+    <div class="csm-trigger"></div>
+
+    <div class="csm-content">
+      <h4>قارن العقارات <div class="csm-mobile-trigger"></div></h4>
+
+      <div class="csm-properties">
+
+        <!-- Property -->
+        <div class="listing-item compact" *ngFor="let property of properties$ | reverse | limit:3; let i = index">
+          <a class="listing-img-container" (click)="delete(property, i)">
+            <div class="remove-from-compare"><i class="fa fa-close"></i></div>
+            <div class="listing-badges">
+              <span>{{ property.state | translate }}</span>
+            </div>
+            <div class="listing-img-content">
+              <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+            </div>
+            <img src="{{property.image}}">
+          </a>
+        </div>
+
+      </div>
+
+      <div class="csm-buttons">
+        <a [routerLink]="['/ar/compare-properties']" class="button">قارن</a>
+        <a class="button reset" (click)="reset()">اعد البدا</a>
+      </div>
+    </div>
+
+  </div>
+  <!-- Compare Properties Widget / End -->
+</div>
+<!-- Arabic Section / End -->

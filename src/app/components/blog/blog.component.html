@@ -1,0 +1,335 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>Blog</h2>
+          <span>Keep up to date with the latest news</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/en/main']">Home</a></li>
+              <li>Blog</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+
+    <!-- Blog Posts -->
+    <div class="blog-page">
+    <div class="row">
+      <div class="col-md-8">
+
+        <!-- Blog Post -->
+        <div class="blog-post" *ngFor="let post of blog">
+
+          <!-- Img -->
+          <a [routerLink]="['/en/blog-post', post.id]" class="post-img">
+            <img src="{{ post.image }}">
+          </a>
+
+          <!-- Content -->
+          <div class="post-content">
+            <h3><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }}</a></h3>
+
+            <ul class="post-meta">
+              <li>{{ post.date }}</li>
+              <li><a [routerLink]="['/en/blog-post', post.id]">{{ post.comments }} Comments</a></li>
+            </ul>
+
+            <div [innerHTML]="post.post_header"></div>
+
+            <a [routerLink]="['/en/blog-post', post.id]" class="read-more">Read More <i class="fa fa-angle-right"></i></a>
+          </div>
+
+        </div>
+        <!-- Blog Post / End -->
+
+
+        <!-- Pagination -->
+        <div class="clearfix"></div>
+        <div class="pagination-container">
+          <nav class="pagination">
+            <ul>
+              <li><a href="#" class="current-page">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>
+          </nav>
+
+          <nav class="pagination-next-prev">
+            <ul>
+              <li><a href="#" class="prev">Previous</a></li>
+              <li><a href="#" class="next">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="clearfix"></div>
+
+      </div>
+
+    <!-- Blog Posts / End -->
+
+
+    <!-- Widgets -->
+    <div class="col-md-4">
+      <div class="sidebar right">
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">Search Blog</h3>
+          <div class="search-blog-input">
+            <div class="input"><input class="search-field" type="text" placeholder="Type and hit enter" value=""/></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3>Got any questions?</h3>
+          <div class="info-box margin-bottom-10">
+            <p>If you are having any questions, please feel free to ask.</p>
+            <a href="contact.html" class="button fullwidth margin-top-20"><i class="fa fa-envelope-o"></i> Drop Us a Line</a>
+          </div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+
+          <h3>Popular Posts</h3>
+          <ul class="widget-tabs">
+
+            <!-- Post -->
+            <li *ngFor="let post of popularPosts">
+              <div class="widget-content">
+                  <div class="widget-thumb">
+                  <a [routerLink]="['/en/blog-post', post.id]"><img src="{{ post.image }}"></a>
+                </div>
+
+                <div class="widget-text">
+                  <h5><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }} </a></h5>
+                  <span>{{ post.date }}</span>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">Social</h3>
+          <ul class="social-icons rounded">
+            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+        <div class="clearfix"></div>
+        <div class="margin-bottom-40"></div>
+      </div>
+    </div>
+    </div>
+    <!-- Sidebar / End -->
+
+
+  </div>
+  </div>
+
+  <div class="margin-top-55"></div>
+</div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>المدونة</h2>
+          <span>ابق علي اطلاع باحدث الاخبار</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرئيسية</a></li>
+              <li>المدونة</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+
+    <!-- Blog Posts -->
+    <div class="blog-page">
+    <div class="row">
+      <div class="col-md-8">
+
+        <!-- Blog Post -->
+        <div class="blog-post" *ngFor="let post of blog">
+
+          <!-- Img -->
+          <a [routerLink]="['/en/blog-post', post.id]" class="post-img">
+            <img src="{{ post.image }}">
+          </a>
+
+          <!-- Content -->
+          <div class="post-content">
+            <h3><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }}</a></h3>
+
+            <ul class="post-meta">
+              <li>{{ post.date }}</li>
+              <li><a [routerLink]="['/en/blog-post', post.id]">{{ post.comments }} تعليقات</a></li>
+            </ul>
+
+            <div [innerHTML]="post.post_header"></div>
+
+            <a [routerLink]="['/en/blog-post', post.id]" class="read-more">اقرأ المزيد <i class="fa fa-angle-left"></i></a>
+          </div>
+
+        </div>
+        <!-- Blog Post / End -->
+
+
+        <!-- Pagination -->
+        <div class="clearfix"></div>
+        <div class="pagination-container">
+          <nav class="pagination">
+            <ul>
+              <li><a href="#" class="current-page">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>
+          </nav>
+
+          <nav class="pagination-next-prev">
+            <ul>
+              <li><a href="#" class="prev">السابق</a></li>
+              <li><a href="#" class="next">التالي</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="clearfix"></div>
+
+      </div>
+
+    <!-- Blog Posts / End -->
+
+
+    <!-- Widgets -->
+    <div class="col-md-4">
+      <div class="sidebar left">
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">ابحث في المدونة</h3>
+          <div class="search-blog-input">
+            <div class="input"><input class="search-field" type="text" placeholder="اكتب ثم اضغط ادخال" value=""/></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3>لديك اي اسئلة ؟</h3>
+          <div class="info-box margin-bottom-10">
+            <p>اذا كان لديك اي اسئلة من فضلك ارسل لنا</p>
+            <a href="contact.html" class="button fullwidth margin-top-20"><i class="fa fa-envelope-o"></i> ارسل لنا</a>
+          </div>
+        </div>
+        <!-- Widget / End -->
+
+
+        <!-- Widget -->
+        <div class="widget">
+
+          <h3>منشورات مشهورة</h3>
+          <ul class="widget-tabs">
+
+            <!-- Post -->
+            <li *ngFor="let post of popularPosts">
+              <div class="widget-content">
+                  <div class="widget-thumb">
+                    <a [routerLink]="['/en/blog-post', post.id]"><img src="{{ post.image }}"></a>
+                </div>
+
+                <div class="widget-text">
+                  <h5><a [routerLink]="['/en/blog-post', post.id]">{{ post.title }} </a></h5>
+                  <span>{{ post.date }}</span>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+
+        <!-- Widget -->
+        <div class="widget">
+          <h3 class="margin-top-0 margin-bottom-25">التواصل الاجتماعي</h3>
+          <ul class="social-icons rounded">
+            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+          </ul>
+
+        </div>
+        <!-- Widget / End-->
+
+        <div class="clearfix"></div>
+        <div class="margin-bottom-40"></div>
+      </div>
+    </div>
+    </div>
+    <!-- Sidebar / End -->
+
+
+  </div>
+  </div>
+
+  <div class="margin-top-55"></div>
+</div>
+<!-- Arabic Section / End -->

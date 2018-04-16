@@ -1,0 +1,233 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>Agents</h2>
+          <span>List of Our Agents</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/en/main']">Home</a></li>
+              <li>Listings</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12">
+        <!-- Main Search Input -->
+        <div class="main-search-input margin-bottom-40">
+          <input type="text" class="ico-01" placeholder="Type an agent name or location" value=""/>
+          <button class="button">Search</button>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="row">
+
+          <!-- Agents Container -->
+          <div class="agents-grid-container">
+
+            <!-- Agent -->
+            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents">
+              <div class="agent">
+
+                <div class="agent-avatar">
+                  <a [routerLink]="['/en/agent-page', agent.id]">
+                    <img src="{{ agent.image }}">
+                    <span class="view-profile-btn">View Profile</span>
+                  </a>
+                </div>
+
+                <div class="agent-content">
+                  <div class="agent-name">
+                    <h4><a [routerLink]="['/en/agent-page', agent.id]">{{ agent.name }}</a></h4>
+                    <span>{{ agent.title }}</span>
+                  </div>
+
+                  <ul class="agent-contact-details">
+                    <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
+                    <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
+                  </ul>
+
+                  <ul class="social-icons">
+                    <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+                    <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+                    <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+                    <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Agent / End -->
+
+          </div>
+          <!-- Agents Container / End -->
+
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="clearfix"></div>
+        <!-- Pagination -->
+        <div class="pagination-container margin-top-20">
+          <nav class="pagination">
+            <ul>
+              <li><a href="#" class="current-page">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>
+          </nav>
+
+          <nav class="pagination-next-prev">
+            <ul>
+              <li><a href="#" class="prev">Previous</a></li>
+              <li><a href="#" class="next">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+        <!-- Pagination / End -->
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>السماسرة</h2>
+          <span>قائمة السماسرة</span>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرئيسية</a></li>
+              <li>القوائم</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12">
+        <!-- Main Search Input -->
+        <div class="main-search-input margin-bottom-40">
+          <input type="text" class="ico-01" placeholder="اكتب اسم السمسار او عنوان" value=""/>
+          <button class="button">ابحث</button>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="row">
+
+          <!-- Agents Container -->
+          <div class="agents-grid-container">
+
+            <!-- Agent -->
+            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents">
+              <div class="agent">
+
+                <div class="agent-avatar">
+                  <a [routerLink]="['/ar/agent-page', agent.id]">
+                    <img src="{{ agent.image }}">
+                    <span class="view-profile-btn">تفحص صفحتة</span>
+                  </a>
+                </div>
+
+                <div class="agent-content">
+                  <div class="agent-name">
+                    <h4><a [routerLink]="['/ar/agent-page', agent.id]">{{ agent.name }}</a></h4>
+                    <span>{{ agent.title }}</span>
+                  </div>
+
+                  <ul class="agent-contact-details" style="direction:ltr">
+                    <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
+                    <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
+                  </ul>
+
+                  <ul class="social-icons">
+                    <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
+                    <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
+                    <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
+                    <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Agent / End -->
+
+          </div>
+          <!-- Agents Container / End -->
+
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="clearfix"></div>
+        <!-- Pagination -->
+        <div class="pagination-container margin-top-20">
+          <nav class="pagination">
+            <ul>
+              <li><a href="#" class="current-page">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>
+          </nav>
+
+          <nav class="pagination-next-prev">
+            <ul>
+              <li><a href="#" class="prev">السابق</a></li>
+              <li><a href="#" class="next">التالي</a></li>
+            </ul>
+          </nav>
+        </div>
+        <!-- Pagination / End -->
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Arabic Section / End -->
