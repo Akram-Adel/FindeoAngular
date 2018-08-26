@@ -49,7 +49,6 @@
 
             <ul class="my-account-nav">
               <li><a [routerLink]="['/en/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> Change Password</a></li>
-              <li><a href="#"><i class="sl sl-icon-power" routerLinkActive="current"></i> Log Out</a></li>
             </ul>
 
           </div>
@@ -64,49 +63,95 @@
           <div class="col-md-8 my-profile">
             <h4 class="margin-top-0 margin-bottom-30">My Account</h4>
 
-            <label>Your Name</label>
-            <input value="{{ profileInfo.name }}" type="text">
+            <label>Fisrt Name</label>
+            <input [(ngModel)]="profileInfo.firstName" name="firstName" type="text">
 
-            <label>Your Title</label>
-            <input value="{{ profileInfo.title }}" type="text">
-
-            <label>Phone</label>
-            <input value="{{ profileInfo.phone }}" type="text">
+            <label>Last Name</label>
+            <input [(ngModel)]="profileInfo.lastName" name="lastName" type="text">
 
             <label>Email</label>
-            <input value="{{ profileInfo.email }}" type="text">
+            <input [(ngModel)]="profileInfo.email" name="email" type="email" disabled>
+
+            <label>Phone</label>
+            <input [(ngModel)]="profileInfo.phone" type="text">
 
 
-            <h4 class="margin-top-50 margin-bottom-25">About Me</h4>
-            <textarea name="about" id="about" cols="30" rows="10">{{ profileInfo.about}}</textarea>
+            <!-- I want Agent -->
+            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
+              <span class="trigger "><a href="#">I want to become an agent<i class="sl sl-icon-plus"></i></a></span>
+              <div class="toggle-container">
+                <h5 style="color:#274abb">Fill all the data to complete your request</h5>
+
+                <label class="margin-top-50 margin-bottom-25">About Me</label>
+                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+                <div class="margin-top-50">
+                  <!-- City -->
+                  <label>City</label>
+                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                    <option *ngFor="let city of cityList">{{ city.name }}</option>
+                  </select>
+
+                  <label>Area</label>
+                  <div class="autocomplete">
+                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                    <ul class="chosen-results" [hidden]="!isAutofill">
+                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                    </ul>
+                  </div>
+
+                  <label>Street</label>
+                  <input type="text" [(ngModel)]="street">
+                </div>
 
 
-            <h4 class="margin-top-50 margin-bottom-0">Social</h4>
-
-            <label><i class="fa fa-twitter"></i> Twitter</label>
-            <input value="{{ profileInfo.social.twitter }}" type="text">
-
-            <label><i class="fa fa-facebook-square"></i> Facebook</label>
-            <input value="{{ profileInfo.social.facebook }}" type="text">
-
-            <label><i class="fa fa-google-plus"></i> Google+</label>
-            <input value="{{ profileInfo.social.google }}" type="text">
-
-            <label><i class="fa fa-linkedin"></i> Linkedin</label>
-            <input value="{{ profileInfo.social.linkedin }}" type="text">
+                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">Become an agent</button>
+              </div>
+            </div>
 
 
-            <button class="button margin-top-20 margin-bottom-20">Save Changes</button>
+            <!-- I am Agent -->
+            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
+              <h4 class="margin-bottom-30">Agent Data</h4>
+
+              <label class="margin-top-50 margin-bottom-25">About Me</label>
+              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+              <div class="margin-top-50">
+                <!-- City -->
+                <label>City</label>
+                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                  <option *ngFor="let city of cityList">{{ city.name }}</option>
+                </select>
+
+                <label>Area</label>
+                <div class="autocomplete">
+                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                  <ul class="chosen-results" [hidden]="!isAutofill">
+                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                  </ul>
+                </div>
+
+                <label>Street</label>
+                <input type="text" [(ngModel)]="street">
+              </div>
+            </div>
+
+
+            <button class="button margin-top-50 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">Save Changes</button>
+            <div class="margin-top-50"></div>
           </div>
 
           <div class="col-md-4">
             <!-- Avatar -->
             <div class="edit-profile-photo">
-              <img src="{{ profileInfo.image }}">
-              <div class="change-photo-btn">
+              <img [src]="profileInfo.imageUrl">
+              <div class="change-photo-btn" [ngClass]="{disabled: isConnecting}">
                 <div class="photoUpload">
                     <span><i class="fa fa-upload"></i> Upload Photo</span>
-                    <input type="file" class="upload" />
+                    <input type="file" accept="image/*" class="upload" [disabled]="isConnecting" (change)="photoChange($event.target.files)"/>
                 </div>
               </div>
             </div>
@@ -121,7 +166,6 @@
   </div>
 </div>
 
-<div class="margin-top-55"></div>
 <!-- English Section / End -->
 
 
@@ -177,7 +221,6 @@
 
             <ul class="my-account-nav">
               <li><a [routerLink]="['/ar/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> تغيير كلمة السر</a></li>
-              <li><a href="#"><i class="sl sl-icon-power"></i> تسجيل الخروج</a></li>
             </ul>
 
           </div>
@@ -193,50 +236,93 @@
             <h4 class="margin-top-0 margin-bottom-30">حسابي</h4>
 
             <label>الاسم</label>
-            <input value="{{ profileInfo.name }}" type="text">
+            <input [(ngModel)]="profileInfo.firstName" name="firstName" type="text">
 
-            <label>اللقب</label>
-            <input value="{{ profileInfo.title }}" type="text">
-
-            <label>رقم الهاتف</label>
-            <input value="{{ profileInfo.phone }}" type="text" style="direction:ltr; text-align:right">
+            <label>لفب العائلة</label>
+            <input [(ngModel)]="profileInfo.lastName" name="lastName" type="text">
 
             <label>البريد الالكتروني</label>
-            <input value="{{ profileInfo.email }}" type="text">
+            <input [(ngModel)]="profileInfo.email" name="email" type="email" disabled>
+
+            <label>التليفون</label>
+            <input [(ngModel)]="profileInfo.phone" type="text">
 
 
-            <h4 class="margin-top-50 margin-bottom-25">نبزة عنك</h4>
-            <textarea name="about" id="about" cols="30" rows="10">{{ profileInfo.about}}</textarea>
+            <!-- I want Agent -->
+            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
+              <span class="trigger "><a href="#">اريد ان اصبح سمسار<i class="sl sl-icon-plus"></i></a></span>
+              <div class="toggle-container">
+                <h5 style="color:#274abb">قم بملئ كل البيانات لنتمكن من تنفيز طلبك</h5>
+
+                <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
+                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+                <div class="margin-top-50">
+                  <!-- City -->
+                  <label>المدينة</label>
+                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                    <option *ngFor="let city of cityList">{{ city.name }}</option>
+                  </select>
+
+                  <label>المنطقة</label>
+                  <div class="autocomplete">
+                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                    <ul class="chosen-results" [hidden]="!isAutofill">
+                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                    </ul>
+                  </div>
+
+                  <label>الشارع</label>
+                  <input type="text" [(ngModel)]="street">
+                </div>
 
 
-            <h4 class="margin-top-50 margin-bottom-0">التواصل الاجتماعي</h4>
-
-            <div style="direction:ltr">
-              <label><i class="fa fa-twitter"></i> Twitter</label>
-              <input value="{{ profileInfo.social.twitter }}" type="text">
-
-              <label><i class="fa fa-facebook-square"></i> Facebook</label>
-              <input value="{{ profileInfo.social.facebook }}" type="text">
-
-              <label><i class="fa fa-google-plus"></i> Google+</label>
-              <input value="{{ profileInfo.social.google }}" type="text">
-
-              <label><i class="fa fa-linkedin"></i> Linkedin</label>
-              <input value="{{ profileInfo.social.linkedin }}" type="text">
+                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">اجعلني سمسار</button>
+              </div>
             </div>
 
 
-            <button class="button margin-top-20 margin-bottom-20">احفظ التغيرات</button>
+            <!-- I am Agent -->
+            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
+              <h4 class="margin-bottom-30">بيانات السمسار</h4>
+
+              <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
+              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+              <div class="margin-top-50">
+                <!-- City -->
+                <label>المدينة</label>
+                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                  <option *ngFor="let city of cityList">{{ city.name }}</option>
+                </select>
+
+                <label>المنطقة</label>
+                <div class="autocomplete">
+                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                  <ul class="chosen-results" [hidden]="!isAutofill">
+                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                  </ul>
+                </div>
+
+                <label>الشارع</label>
+                <input type="text" [(ngModel)]="street">
+              </div>
+            </div>
+
+
+            <button class="button margin-top-20 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">احفظ التغيرات</button>
           </div>
 
           <div class="col-md-4">
             <!-- Avatar -->
             <div class="edit-profile-photo">
-              <img src="{{ profileInfo.image }}">
-              <div class="change-photo-btn">
+              <img [src]="profileInfo.imageUrl">
+              <div class="change-photo-btn" [ngClass]="{disabled: isConnecting}">
                 <div class="photoUpload">
                     <span><i class="fa fa-upload"></i> حمل صورة</span>
-                    <input type="file" class="upload" />
+                    <input type="file" accept="image/*" class="upload" [disabled]="isConnecting" (change)="photoChange($event.target.files)"/>
                 </div>
               </div>
             </div>
@@ -251,5 +337,4 @@
   </div>
 </div>
 
-<div class="margin-top-55"></div>
 <!-- Arabic Section / End -->

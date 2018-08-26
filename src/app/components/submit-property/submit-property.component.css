@@ -1,0 +1,71 @@
+.autocomplete { position: relative; }
+
+.autocomplete ul.chosen-results {
+  position: absolute; width: 100%;
+  top: 100%; left: 0; right: 0;
+  color: #888;
+  z-index: 99;
+  overflow-x: hidden; overflow-y: hidden;
+  margin: 0 4px 0px 0;
+  padding: 0 4px 0 8px;
+  max-height: 300px;
+  margin-top: -1px;
+  border: 1px solid #e0e0e0;
+  background-color: #fcfcfc;
+  background: linear-gradient(to bottom, rgba(252,252,252,1) 0%,rgba(255,255,255,1) 100%);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.autocomplete ul.chosen-results>li {
+  display: list-item;
+  cursor: pointer;
+  margin: 0;
+  padding: 10px 10px;
+  list-style: none;
+  line-height: 15px;
+  word-wrap: break-word;
+}
+
+.autocomplete ul.chosen-results>li:last-child { margin-bottom: 8px; }
+
+.autocomplete ul.chosen-results>li:hover {
+  background-color: #274abb;
+  border-radius: 3px;
+  color: #fff;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+
+
+input:focus { border-color: #274abb; }
+input.ng-valid { border-color: #5f9025; }
+input.ng-invalid.ng-touched, input.ng-invalid.ng-dirty { border-color: #de5959; }
+
+form button:disabled {
+  background-color: gray;
+  cursor: no-drop;
+}
+input:disabled {
+  background-color: #eee;
+  cursor: no-drop;
+}
+
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+.submit-wrapper { position: relative; }
+.submit-wrapper i.im.im-icon-Arrow-Around {
+  position: absolute; top: calc(50% - 10px);
+  font-size: 30px;
+  vertical-align: middle;
+  color: #274abb;
+  font-weight: 800;
+  animation-name: spin;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.submit-wrapper button[type="button"] { transition: all 0.5s ease-out !important; }
+.submit-wrapper button[type="button"].loading { margin-left: 50px; }

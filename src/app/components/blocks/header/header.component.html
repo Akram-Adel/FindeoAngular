@@ -66,29 +66,15 @@
 
 							<li><a routerLinkActive="current" [routerLink]="['/en/listings/default']">Listings</a> </li>
 
-							<li><a>Features</a>
-								<ul>
-									<li><a>My Account</a>
-										<ul>
-											<li><a [routerLink]="['/en/profile']">My Profile</a></li>
-											<li><a [routerLink]="['/en/bookmarks']">Bookmarked Listings</a></li>
-											<li><a [routerLink]="['/en/properties']">My Properties</a></li>
-											<li><a [routerLink]="['/en/change-password']">Change Password</a></li>
-										</ul>
-									</li>
-									<li><a [routerLink]="['/en/agents']">Agents List</a></li>
+							<li><a [routerLink]="['/en/agents']">Agents List</a></li>
 
-									<li><a [routerLink]="['/en/submit-property']">Submit Property</a></li>
-								</ul>
-							</li>
-
-							<li><a>Pages</a>
+							<!-- <li><a>Pages</a>
 								<ul>
 									<li><a [routerLink]="['/en/blog']">Blog</a></li>
 									<li><a [routerLink]="['/en/contact']">Contact</a></li>
 									<li><a [routerLink]="['/en/pricing']">Pricing Tables</a></li>
 								</ul>
-							</li>
+							</li> -->
 
 							<li class="right-side-menu-item">
 								<a href="ar/main" style="font-size:30px" title="Translate to Arabic">
@@ -96,7 +82,18 @@
 								</a>
 							</li>
 
-							<li class="right-side-menu-item"><a [routerLink]="['/en/login']" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li>
+							<li class="right-side-menu-item" *ngIf="!email"><a [routerLink]="['/en/login']" class="sign-in"><i class="fa fa-user"></i> Log In / Register</a></li>
+
+							<!-- User Menu -->
+							<div class="user-menu"  *ngIf="email" (click)="userMenu()">
+								<div class="user-name"><span><img [src]="imageUrl"></span>Hi, {{firstName}}!</div>
+								<ul>
+									<li><a [routerLink]="['/en/profile']"><i class="sl sl-icon-user"></i> My Profile</a></li>
+									<li><a [routerLink]="['/en/bookmarks']"><i class="sl sl-icon-star"></i> Bookmarks</a></li>
+									<li><a [routerLink]="['/en/properties']"><i class="sl sl-icon-docs"></i> My Properties</a></li>
+									<li><a (click)="logOut()"><i class="sl sl-icon-power"></i> Log Out</a></li>
+								</ul>
+							</div>
 						</ul>
 				</div>
 			</nav>
@@ -182,29 +179,15 @@
 
 							<li><a routerLinkActive="current" [routerLink]="['/ar/listings/default']">المعروضات</a></li>
 
-							<li><a>المميزات</a>
-								<ul>
-									<li><a>حسابي</a>
-										<ul>
-											<li><a [routerLink]="['/ar/profile']">صفحتي الشخصية</a></li>
-											<li><a [routerLink]="['/ar/bookmarks']">العقارات المرجعية</a></li>
-											<li><a [routerLink]="['/ar/properties']">عقاراتي</a></li>
-											<li><a [routerLink]="['/ar/change-password']">تغير كلمة السر</a></li>
-										</ul>
-									</li>
-									<li><a [routerLink]="['/ar/agents']">قائمة السماسرة</a></li>
+							<li><a [routerLink]="['/ar/agents']">قائمة السماسرة</a></li>
 
-									<li><a [routerLink]="['/ar/submit-property']">اضف عقار</a></li>
-								</ul>
-							</li>
-
-							<li><a>الصفح</a>
+							<!-- <li><a>الصفح</a>
 								<ul>
 									<li><a [routerLink]="['/ar/blog']">المدونة</a></li>
 									<li><a [routerLink]="['/ar/contact']">الاتصال</a></li>
 									<li><a [routerLink]="['/ar/pricing']">جداول الاسعار</a></li>
 								</ul>
-							</li>
+							</li> -->
 
 							<li class="right-side-menu-item">
 								<a href="en/main" style="font-size:30px" class="not" title="ترجم للانجليزية">
@@ -212,7 +195,18 @@
 								</a>
 							</li>
 
-							<li class="right-side-menu-item"><a [routerLink]="['/ar/login']" class="sign-in"><i class="fa fa-user"></i> تسجيل الدخول \ التسجيل</a></li>
+							<li class="right-side-menu-item" *ngIf="!email"><a [routerLink]="['/ar/login']" class="sign-in"><i class="fa fa-user"></i> تسجيل الدخول \ التسجيل</a></li>
+
+							<!-- User Menu -->
+							<div class="user-menu" *ngIf="email" (click)="userMenu()">
+								<div class="user-name" style="direction:ltr"><span><img [src]="imageUrl"></span>Hi, {{firstName}}!</div>
+								<ul>
+									<li><a [routerLink]="['/ar/profile']"><i class="sl sl-icon-user"></i> صفحتي الشخصيى</a></li>
+									<li><a [routerLink]="['/ar/bookmarks']"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+									<li><a [routerLink]="['/ar/properties']"><i class="sl sl-icon-docs"></i> عقاراتي</a></li>
+									<li><a (click)="logOut()"><i class="sl sl-icon-power"></i> تسجيل الخروج</a></li>
+								</ul>
+							</div>
 						</ul>
 				</div>
 			</nav>

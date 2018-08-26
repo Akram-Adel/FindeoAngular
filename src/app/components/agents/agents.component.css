@@ -1,0 +1,6 @@
+button:disabled {
+  background-color: gray;
+  cursor: no-drop;
+}
+
+a.next, a.prev { cursor: pointer }

@@ -8,7 +8,6 @@
         <div class="col-md-12">
 
           <h2>{{ agent.name }}</h2>
-          <span>{{ agent.title }}</span>
 
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
@@ -46,16 +45,8 @@
 
             <ul class="agent-contact-details">
               <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
-              <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
+              <li><i class="fa fa-envelope-o "></i><a>{{ agent.email }}</a></li>
             </ul>
-
-            <ul class="social-icons">
-              <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-              <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-              <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-              <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
-            </ul>
-            <div class="clearfix"></div>
           </div>
 
         </div>
@@ -74,30 +65,10 @@
 
         <h4 class="headline">My Listings</h4>
 
-        <!-- Main Search Input -->
-        <div class="main-search-input margin-bottom-35">
-          <input type="text" class="ico-01" placeholder="Enter address e.g. street, city and state or zip" value=""/>
-          <button class="button">Search</button>
-        </div>
-
         <!-- Sorting / Layout Switcher -->
         <div class="row margin-bottom-15">
 
           <div class="col-md-6">
-            <!-- Sort by -->
-            <div class="sort-by">
-              <label>Sort by:</label>
-
-              <div class="sort-by-select">
-                <select data-placeholder="Default order" class="chosen-select-no-single" >
-                  <option>Default Order</option>
-                  <option>Price Low to High</option>
-                  <option>Price High to Low</option>
-                  <option>Newest Properties</option>
-                  <option>Oldest Properties</option>
-                </select>
-              </div>
-            </div>
           </div>
 
           <div class="col-md-6">
@@ -114,7 +85,7 @@
         <div class="listings-container list-layout">
 
           <!-- Listing Item -->
-          <div class="listing-item" *ngFor="let listing of agent.listings">
+          <div class="listing-item" *ngFor="let listing of agent.listings | slice:startSlice:endSlice">
 
             <a class="listing-img-container">
 
@@ -128,16 +99,14 @@
                 <span class="like-icon tooltip"></span>
               </div>
 
-              <div class="listing-carousel">
-                <div *ngFor="let img of listing.images"><img src="{{ img }}"></div>
-              </div>
+              <img src="{{ listing.image }}" alt=""/>
             </a>
 
             <div class="listing-content">
 
               <div class="listing-title">
                 <h4><a [routerLink]="['/en/single-property', listing.id]">{{ listing.name }}</a></h4>
-                <a href="{{ listing.mapUrl }}" class="listing-address popup-gmaps">
+                <a class="listing-address">
                   <i class="fa fa-map-marker"></i>
                   {{ listing.adress }}
                 </a>
@@ -148,13 +117,11 @@
               <ul class="listing-details">
                 <li>{{ listing.area }} sq ft</li>
                 <li>{{ listing.bedrooms }} Bedrooms</li>
-                <li>{{ listing.rooms }} Rooms</li>
                 <li>{{ listing.bathrooms }} Bathrooms</li>
               </ul>
 
               <div class="listing-footer">
-                <a href="#"><i class="fa fa-user"></i> {{ agent.name }}</a>
-                <span><i class="fa fa-calendar-o"></i> {{ listing.date }} day ago</span>
+                <a><i class="fa fa-user"></i> {{ agent.name }}</a>
               </div>
 
             </div>
@@ -170,15 +137,14 @@
         <div class="pagination-container margin-top-20">
           <nav class="pagination">
             <ul>
-              <li><a href="#" class="current-page">1</a></li>
-              <li><a href="#">2</a></li>
+              <li><a class="current-page">{{ currentPage }} <span *ngIf="numOfPages > 0">/ {{ Math.ceil(numOfPages) }}</span></a></li>
             </ul>
           </nav>
 
           <nav class="pagination-next-prev">
             <ul>
-              <li><a href="#" class="prev">Previous</a></li>
-              <li><a href="#" class="next">Next</a></li>
+              <li><a (click)="prevPage()" class="prev">Previous</a></li>
+              <li><a (click)="nextPage()" class="next">Next</a></li>
             </ul>
           </nav>
         </div>
@@ -199,10 +165,9 @@
             <div class="row with-forms">
               <!-- Status -->
               <div class="col-md-12">
-                <select data-placeholder="Any Status" class="chosen-select-no-single" >
-                  <option>Any Status</option>
-                  <option>For Sale</option>
-                  <option>For Rent</option>
+                <select class="chosen-select-no-single api-updated-servicetype">
+                  <option label="blank"></option>
+                  <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
                 </select>
               </div>
             </div>
@@ -213,101 +178,9 @@
             <div class="row with-forms">
               <!-- Type -->
               <div class="col-md-12">
-                <select data-placeholder="Any Type" class="chosen-select-no-single" >
-                  <option>Any Type</option>
-                  <option>Apartments</option>
-                  <option>Houses</option>
-                  <option>Commercial</option>
-                  <option>Garages</option>
-                  <option>Lots</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- States -->
-              <div class="col-md-12">
-                <select data-placeholder="All States" class="chosen-select" >
-                  <option>All States</option>
-                  <option>Alabama</option>
-                  <option>Alaska</option>
-                  <option>Arizona</option>
-                  <option>Arkansas</option>
-                  <option>California</option>
-                  <option>Colorado</option>
-                  <option>Connecticut</option>
-                  <option>Delaware</option>
-                  <option>Florida</option>
-                  <option>Georgia</option>
-                  <option>Hawaii</option>
-                  <option>Idaho</option>
-                  <option>Illinois</option>
-                  <option>Indiana</option>
-                  <option>Iowa</option>
-                  <option>Kansas</option>
-                  <option>Kentucky</option>
-                  <option>Louisiana</option>
-                  <option>Maine</option>
-                  <option>Maryland</option>
-                  <option>Massachusetts</option>
-                  <option>Michigan</option>
-                  <option>Minnesota</option>
-                  <option>Mississippi</option>
-                  <option>Missouri</option>
-                  <option>Montana</option>
-                  <option>Nebraska</option>
-                  <option>Nevada</option>
-                  <option>New Hampshire</option>
-                  <option>New Jersey</option>
-                  <option>New Mexico</option>
-                  <option>New York</option>
-                  <option>North Carolina</option>
-                  <option>North Dakota</option>
-                  <option>Ohio</option>
-                  <option>Oklahoma</option>
-                  <option>Oregon</option>
-                  <option>Pennsylvania</option>
-                  <option>Rhode Island</option>
-                  <option>South Carolina</option>
-                  <option>South Dakota</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Utah</option>
-                  <option>Vermont</option>
-                  <option>Virginia</option>
-                  <option>Washington</option>
-                  <option>West Virginia</option>
-                  <option>Wisconsin</option>
-                  <option>Wyoming</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Cities -->
-              <div class="col-md-12">
-                <select data-placeholder="All Cities" class="chosen-select" >
-                  <option>All Cities</option>
-                  <option>New York</option>
-                  <option>Los Angeles</option>
-                  <option>Chicago</option>
-                  <option>Brooklyn</option>
-                  <option>Queens</option>
-                  <option>Houston</option>
-                  <option>Manhattan</option>
-                  <option>Philadelphia</option>
-                  <option>Phoenix</option>
-                  <option>San Antonio</option>
-                  <option>Bronx</option>
-                  <option>San Diego</option>
-                  <option>Dallas</option>
-                  <option>San Jose</option>
+                <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
+                  <option label="blank"></option>
+                  <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
                 </select>
               </div>
             </div>
@@ -319,9 +192,8 @@
 
               <!-- Min Area -->
               <div class="col-md-6">
-                <select data-placeholder="Beds" class="chosen-select-no-single" >
+                <select data-placeholder="Beds" class="chosen-select-no-single chosen-bedrooms" >
                   <option label="blank"></option>
-                  <option>Beds (Any)</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -332,9 +204,8 @@
 
               <!-- Max Area -->
               <div class="col-md-6">
-                <select data-placeholder="Baths" class="chosen-select-no-single" >
+                <select data-placeholder="Baths" class="chosen-select-no-single chosen-bathrooms" >
                   <option label="blank"></option>
-                  <option>Baths (Any)</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -348,101 +219,17 @@
 
             <br>
 
-            <!-- Area Range -->
-            <div class="range-slider">
-              <label>Area Range</label>
-              <div id="area-range" data-min="0" data-max="1500" data-unit="sq ft"></div>
-              <div class="clearfix"></div>
-            </div>
-
-            <br>
-
             <!-- Price Range -->
             <div class="range-slider">
               <label>Price Range</label>
-              <div id="price-range" data-min="0" data-max="400000" data-unit="$"></div>
+              <div id="price-range" data-min="0" data-max="400000" data-unit=""></div>
               <div class="clearfix"></div>
             </div>
 
+            <form [formGroup]="searchForm">
+              <button class="button fullwidth margin-top-30" [disabled]="!searchForm.valid" (click)="search()">Search</button>
+            </form>
 
-
-            <!-- More Search Options -->
-            <a href="#" class="more-search-options-trigger margin-bottom-10 margin-top-30" data-open-title="Additional Features" data-close-title="Additional Features"></a>
-
-            <div class="more-search-options relative">
-
-              <!-- Checkboxes -->
-              <div class="checkboxes one-in-row margin-bottom-10">
-
-                <input id="check-2" type="checkbox" name="check">
-                <label for="check-2">Air Conditioning</label>
-
-                <input id="check-3" type="checkbox" name="check">
-                <label for="check-3">Swimming Pool</label>
-
-                <input id="check-4" type="checkbox" name="check" >
-                <label for="check-4">Central Heating</label>
-
-                <input id="check-5" type="checkbox" name="check">
-                <label for="check-5">Laundry Room</label>
-
-
-                <input id="check-6" type="checkbox" name="check">
-                <label for="check-6">Gym</label>
-
-                <input id="check-7" type="checkbox" name="check">
-                <label for="check-7">Alarm</label>
-
-                <input id="check-8" type="checkbox" name="check">
-                <label for="check-8">Window Covering</label>
-
-              </div>
-              <!-- Checkboxes / End -->
-
-            </div>
-            <!-- More Search Options / End -->
-
-            <button class="button fullwidth margin-top-30">Search</button>
-
-
-          </div>
-          <!-- Widget / End -->
-
-
-          <!-- Widget -->
-          <div class="widget margin-top-55">
-            <h3 class="margin-bottom-35">Featured Properties</h3>
-
-            <div class="listing-carousel outer">
-              <!-- Item -->
-              <div class="item" *ngFor="let property of featuredProperties">
-                <div class="listing-item compact">
-
-                  <a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
-
-                    <div class="listing-badges">
-                      <span class="featured">Featured</span>
-                      <span>{{ property.state }}</span>
-                    </div>
-
-                    <div class="listing-img-content">
-                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-                      <ul class="listing-hidden-content">
-                        <li>Area <span>{{ property.area }} sq ft</span></li>
-                        <li>Rooms <span>{{ property.rooms }}</span></li>
-                        <li>Beds <span>{{ property.beds }}</span></li>
-                        <li>Baths <span>{{ property.baths }}</span></li>
-                      </ul>
-                    </div>
-
-                    <img src="{{ property.image }}">
-                  </a>
-
-                </div>
-              </div>
-              <!-- Item / End -->
-            </div>
 
           </div>
           <!-- Widget / End -->
@@ -471,7 +258,6 @@
         <div class="col-md-12">
 
           <h2>{{ agent.name }}</h2>
-          <span>{{ agent.title }}</span>
 
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
@@ -496,7 +282,7 @@
         <div class="agent agent-page">
 
           <div class="agent-avatar">
-            <img src="assets/images/agent-02.jpg" alt="">
+            <img src="{{ agent.image }}">
           </div>
 
           <div class="agent-content">
@@ -509,16 +295,8 @@
 
             <ul class="agent-contact-details">
               <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
-              <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
+              <li><i class="fa fa-envelope-o "></i><a>{{ agent.email }}</a></li>
             </ul>
-
-            <ul class="social-icons">
-              <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-              <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-              <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-              <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
-            </ul>
-            <div class="clearfix"></div>
           </div>
 
         </div>
@@ -537,30 +315,10 @@
 
         <h4 class="headline">عقاراتي</h4>
 
-        <!-- Main Search Input -->
-        <div class="main-search-input margin-bottom-35">
-          <input type="text" class="ico-01" placeholder="ادخل عنوان, مثل الشارع, المدينة , رقم البوستة" value=""/>
-          <button class="button">ابحث</button>
-        </div>
-
         <!-- Sorting / Layout Switcher -->
         <div class="row margin-bottom-15">
 
           <div class="col-md-6">
-            <!-- Sort by -->
-            <div class="sort-by">
-              <label>رتب عن طريق :</label>
-
-              <div class="sort-by-select">
-                <select data-placeholder="Default order" class="chosen-select-no-single" >
-                  <option>الترتيب الاصلي</option>
-                  <option>السعر من الاقل للاعلي</option>
-                  <option>السعر من الاعلي للاقل</option>
-                  <option>احدث العقارات</option>
-                  <option>اقدم العقارات</option>
-                </select>
-              </div>
-            </div>
           </div>
 
           <div class="col-md-6">
@@ -577,7 +335,7 @@
         <div class="listings-container list-layout">
 
           <!-- Listing Item -->
-          <div class="listing-item" *ngFor="let listing of agent.listings">
+          <div class="listing-item" *ngFor="let listing of agent.listings | slice:startSlice:endSlice">
 
             <a class="listing-img-container">
 
@@ -591,16 +349,14 @@
                 <span class="like-icon tooltip"></span>
               </div>
 
-              <div class="listing-carousel" style="direction:ltr">
-                <div *ngFor="let img of listing.images"><img src="{{ img }}"></div>
-              </div>
+              <img src="{{ listing.image }}" alt=""/>
             </a>
 
             <div class="listing-content">
 
               <div class="listing-title">
                 <h4><a [routerLink]="['/en/single-property', listing.id]">{{ listing.name }}</a></h4>
-                <a href="{{ listing.mapUrl }}" class="listing-address popup-gmaps">
+                <a class="listing-address">
                   <i class="fa fa-map-marker"></i>
                   {{ listing.adress }}
                 </a>
@@ -609,15 +365,13 @@
               </div>
 
               <ul class="listing-details">
-                <li>{{ listing.area }} sq ft</li>
-                <li>{{ listing.bedrooms }} غرفة نوم</li>
-                <li>{{ listing.rooms }} غرف</li>
+                <li>{{ listing.area }}</li>
+                <li>{{ listing.bedrooms }} غرف نوم</li>
                 <li>{{ listing.bathrooms }} حمام</li>
               </ul>
 
               <div class="listing-footer">
-                <a href="#"><i class="fa fa-user"></i> {{ agent.name }}</a>
-                <span><i class="fa fa-calendar-o"></i> منذ {{ listing.date }} ايام</span>
+                <a><i class="fa fa-user"></i> {{ agent.name }}</a>
               </div>
 
             </div>
@@ -633,15 +387,14 @@
         <div class="pagination-container margin-top-20">
           <nav class="pagination">
             <ul>
-              <li><a href="#" class="current-page">1</a></li>
-              <li><a href="#">2</a></li>
+              <li><a class="current-page">{{ currentPage }} <span *ngIf="numOfPages > 0">/ {{ Math.ceil(numOfPages) }}</span></a></li>
             </ul>
           </nav>
 
           <nav class="pagination-next-prev">
             <ul>
-              <li><a href="#" class="prev">السابف</a></li>
-              <li><a href="#" class="next">التالي</a></li>
+              <li><a (click)="prevPage()" class="prev">السابف</a></li>
+              <li><a (click)="nextPage()" class="next">التالي</a></li>
             </ul>
           </nav>
         </div>
@@ -662,10 +415,9 @@
             <div class="row with-forms">
               <!-- Status -->
               <div class="col-md-12">
-                <select data-placeholder="Any Status" class="chosen-select-no-single" >
-                  <option>اي حالة</option>
-                  <option>للإيجار</option>
-                  <option>للبيع</option>
+                <select class="chosen-select-no-single api-updated-servicetype">
+                  <option label="blank"></option>
+                  <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
                 </select>
               </div>
             </div>
@@ -676,101 +428,9 @@
             <div class="row with-forms">
               <!-- Type -->
               <div class="col-md-12">
-                <select data-placeholder="Any Type" class="chosen-select-no-single" >
-                  <option>اي نوع</option>
-                  <option>شقق</option>
-                  <option>منازل</option>
-                  <option>متاجر</option>
-                  <option>جاراج</option>
-                  <option>اراضي</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- States -->
-              <div class="col-md-12">
-                <select data-placeholder="All States" class="chosen-select" >
-                  <option>كل الولايات</option>
-                  <option>Alabama</option>
-                  <option>Alaska</option>
-                  <option>Arizona</option>
-                  <option>Arkansas</option>
-                  <option>California</option>
-                  <option>Colorado</option>
-                  <option>Connecticut</option>
-                  <option>Delaware</option>
-                  <option>Florida</option>
-                  <option>Georgia</option>
-                  <option>Hawaii</option>
-                  <option>Idaho</option>
-                  <option>Illinois</option>
-                  <option>Indiana</option>
-                  <option>Iowa</option>
-                  <option>Kansas</option>
-                  <option>Kentucky</option>
-                  <option>Louisiana</option>
-                  <option>Maine</option>
-                  <option>Maryland</option>
-                  <option>Massachusetts</option>
-                  <option>Michigan</option>
-                  <option>Minnesota</option>
-                  <option>Mississippi</option>
-                  <option>Missouri</option>
-                  <option>Montana</option>
-                  <option>Nebraska</option>
-                  <option>Nevada</option>
-                  <option>New Hampshire</option>
-                  <option>New Jersey</option>
-                  <option>New Mexico</option>
-                  <option>New York</option>
-                  <option>North Carolina</option>
-                  <option>North Dakota</option>
-                  <option>Ohio</option>
-                  <option>Oklahoma</option>
-                  <option>Oregon</option>
-                  <option>Pennsylvania</option>
-                  <option>Rhode Island</option>
-                  <option>South Carolina</option>
-                  <option>South Dakota</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Utah</option>
-                  <option>Vermont</option>
-                  <option>Virginia</option>
-                  <option>Washington</option>
-                  <option>West Virginia</option>
-                  <option>Wisconsin</option>
-                  <option>Wyoming</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Cities -->
-              <div class="col-md-12">
-                <select data-placeholder="All Cities" class="chosen-select" >
-                  <option>كل المدن</option>
-                  <option>New York</option>
-                  <option>Los Angeles</option>
-                  <option>Chicago</option>
-                  <option>Brooklyn</option>
-                  <option>Queens</option>
-                  <option>Houston</option>
-                  <option>Manhattan</option>
-                  <option>Philadelphia</option>
-                  <option>Phoenix</option>
-                  <option>San Antonio</option>
-                  <option>Bronx</option>
-                  <option>San Diego</option>
-                  <option>Dallas</option>
-                  <option>San Jose</option>
+                <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
+                  <option label="blank"></option>
+                  <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
                 </select>
               </div>
             </div>
@@ -782,9 +442,8 @@
 
               <!-- Min Area -->
               <div class="col-md-6">
-                <select data-placeholder="السرائر" class="chosen-select-no-single" >
+                <select data-placeholder="Beds" class="chosen-select-no-single chosen-bedrooms" >
                   <option label="blank"></option>
-                  <option>السرائر (اي عدد)</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -795,9 +454,8 @@
 
               <!-- Max Area -->
               <div class="col-md-6">
-                <select data-placeholder="الحمامات" class="chosen-select-no-single" >
+                <select data-placeholder="Baths" class="chosen-select-no-single chosen-bathrooms" >
                   <option label="blank"></option>
-                  <option>الحمامات (اي عدد)</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -811,101 +469,17 @@
 
             <br>
 
-            <!-- Area Range -->
-            <div class="range-slider">
-              <label>مدي المساحة</label>
-              <div id="area-range" data-min="0" data-max="1500" data-unit="sq ft"></div>
-              <div class="clearfix"></div>
-            </div>
-
-            <br>
-
             <!-- Price Range -->
             <div class="range-slider">
               <label>مدي السعر</label>
-              <div id="price-range" data-min="0" data-max="400000" data-unit="$"></div>
+              <div id="price-range" data-min="0" data-max="400000" data-unit=""></div>
               <div class="clearfix"></div>
             </div>
 
+            <form [formGroup]="searchForm">
+              <button class="button fullwidth margin-top-30" [disabled]="!searchForm.valid" (click)="search()">ابحث</button>
+            </form>
 
-
-            <!-- More Search Options -->
-            <a href="#" class="more-search-options-trigger margin-bottom-10 margin-top-30" data-open-title="مميزات اخري" data-close-title="مميزات اخري"></a>
-
-            <div class="more-search-options relative">
-
-              <!-- Checkboxes -->
-              <div class="checkboxes one-in-row margin-bottom-10">
-
-                <input id="check-2" type="checkbox" name="check">
-                <label for="check-2">مكيف هواء</label>
-
-                <input id="check-3" type="checkbox" name="check">
-                <label for="check-3">حمام سباحة</label>
-
-                <input id="check-4" type="checkbox" name="check" >
-                <label for="check-4">سخان مركذي</label>
-
-                <input id="check-5" type="checkbox" name="check">
-                <label for="check-5">غرفة غسيل</label>
-
-
-                <input id="check-6" type="checkbox" name="check">
-                <label for="check-6">صالة رياضية</label>
-
-                <input id="check-7" type="checkbox" name="check">
-                <label for="check-7">جهاز انزار</label>
-
-                <input id="check-8" type="checkbox" name="check">
-                <label for="check-8">غطاء نوافز</label>
-
-              </div>
-              <!-- Checkboxes / End -->
-
-            </div>
-            <!-- More Search Options / End -->
-
-            <button class="button fullwidth margin-top-30">ابحث</button>
-
-
-          </div>
-          <!-- Widget / End -->
-
-
-          <!-- Widget -->
-          <div class="widget margin-top-55">
-            <h3 class="margin-bottom-35">عقارات مميزة</h3>
-
-            <div class="listing-carousel outer" style="direction:ltr">
-              <!-- Item -->
-              <div class="item" *ngFor="let property of featuredProperties">
-                <div class="listing-item compact">
-
-                  <a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
-
-                    <div class="listing-badges">
-                      <span class="featured">Featured</span>
-                      <span>{{ property.state | translate }}</span>
-                    </div>
-
-                    <div class="listing-img-content">
-                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-                      <ul class="listing-hidden-content">
-                        <li>مساحة <span>{{ property.area }} sq ft</span></li>
-                        <li>غرف <span>{{ property.rooms }}</span></li>
-                        <li>سرائر <span>{{ property.beds }}</span></li>
-                        <li>حمامات <span>{{ property.baths }}</span></li>
-                      </ul>
-                    </div>
-
-                    <img src="{{ property.image }}">
-                  </a>
-
-                </div>
-              </div>
-              <!-- Item / End -->
-            </div>
 
           </div>
           <!-- Widget / End -->
@@ -921,3 +495,5 @@
   <div class="margin-top-55"></div>
 </div>
 <!-- Arabic Section / End -->
+
+<div class="overlay"></div>

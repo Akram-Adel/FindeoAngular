@@ -1,15 +1,14 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-
-import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
 import { CompareService } from '../../services/compare.service';
+import { SearchService } from '../../services/search.service';
 
 declare var google:any;
-declare var ZoomControl:any;
 declare var $:any;
 
 @Component({
@@ -17,39 +16,47 @@ declare var $:any;
   templateUrl: './single-property.component.html',
   styleUrls: ['./single-property.component.css']
 })
-export class SinglePropertyComponent implements OnInit,AfterViewInit {
+export class SinglePropertyComponent implements OnInit, OnDestroy {
 
   language:string;
   listingResults:any;
-  featuredProperties = [];
+  subsciption:any;
 
   constructor(
     private route:ActivatedRoute,
     private languageService:LanguageService,
-    private apiService:ApiService,
+    private api:ApiService,
     private sanitizer:DomSanitizer,
-    private compareService:CompareService) { }
+    private compareService:CompareService,
+    private http:HttpClient,
+    private searchService:SearchService) { }
 
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
 
-    //Get Single Property Data
-    this.listingResults = this.apiService.api.singleProperty;
+    //Get Single Property Pre-Data
+    this.listingResults = { images: [ "assets/images/single-property-01.jpg" ] };
 
-    //Get Featured Properties
-    this.featuredProperties = this.apiService.api.featuredListings;
+    let id = this.route.snapshot.paramMap.get('id');
+    this.http.get(this.api.link+'/api/public/properties/'+id).subscribe(res => {this.searchService.newProperty(res); this.searchService.getPropertyImages()})
+    this.subsciption = this.searchService.searchImages$.subscribe(res => this.gotListing())
   }
 
-  ngAfterViewInit() {
+  MY_ngAfterViewInit() {
     this.inlineCSS();
     this.slickCarousel();
     this.accordion();
     this.owlCarousel();
     this.layoutSwitcher();
     this.eventListeners();
+    this.fotterPadding();
 
     this.initMap();
+  }
+
+  ngOnDestroy() {
+    this.subsciption.unsubscribe()
   }
 
 
@@ -392,6 +399,10 @@ export class SinglePropertyComponent implements OnInit,AfterViewInit {
 	    }, 600);
     });
   }
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
+  }
 
   markerIcon = {
     path: 'M19.9,0c-0.2,0-1.6,0-1.8,0C8.8,0.6,1.4,8.2,1.4,17.8c0,1.4,0.2,3.1,0.5,4.2c-0.1-0.1,0.5,1.9,0.8,2.6c0.4,1,0.7,2.1,1.2,3 c2,3.6,6.2,9.7,14.6,18.5c0.2,0.2,0.4,0.5,0.6,0.7c0,0,0,0,0,0c0,0,0,0,0,0c0.2-0.2,0.4-0.5,0.6-0.7c8.4-8.7,12.5-14.8,14.6-18.5 c0.5-0.9,0.9-2,1.3-3c0.3-0.7,0.9-2.6,0.8-2.5c0.3-1.1,0.5-2.7,0.5-4.1C36.7,8.4,29.3,0.6,19.9,0z M2.2,22.9 C2.2,22.9,2.2,22.9,2.2,22.9C2.2,22.9,2.2,22.9,2.2,22.9C2.2,22.9,3,25.2,2.2,22.9z M19.1,26.8c-5.2,0-9.4-4.2-9.4-9.4 s4.2-9.4,9.4-9.4c5.2,0,9.4,4.2,9.4,9.4S24.3,26.8,19.1,26.8z M36,22.9C35.2,25.2,36,22.9,36,22.9C36,22.9,36,22.9,36,22.9 C36,22.9,36,22.9,36,22.9z M13.8,17.3a5.3,5.3 0 1,0 10.6,0a5.3,5.3 0 1,0 -10.6,0',
@@ -403,7 +414,6 @@ export class SinglePropertyComponent implements OnInit,AfterViewInit {
     scale: 1,
     anchor: new google.maps.Point(19,50)
   }
-
   initMap() {
     var myLatLng = {lng: $( '#propertyMap' ).data('longitude'), lat: $( '#propertyMap' ).data('latitude'), };
 
@@ -469,6 +479,45 @@ export class SinglePropertyComponent implements OnInit,AfterViewInit {
   }
 
 
+
+  gotListing() {
+    let pr = this.searchService.propertyResult;
+    this.listingResults = {
+      id: pr.id,
+      name: pr.title,
+      state: (pr.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
+      adress: pr.location.city +' '+ pr.location.street,
+      price: pr.price,
+      priceDetail: pr.currency,
+      images: [],
+      area: pr.landSize +' '+pr.landSizeMeasureType,
+      beds: pr.bedrooms,
+      bathrooms: pr.bathrooms,
+      description: "<p> ",
+      details: [],
+      latitude: pr.location.lat,
+      longitude: pr.location.lng,
+    }
+    // images
+    if(pr.images.length == 0) this.listingResults.images.push("assets/images/single-property-01.jpg");
+    for(let i=0; i<pr.images.length; i++) {
+      this.listingResults.images.push(
+        pr.images[i].image.s3Path
+      )
+    }
+    // description
+    this.listingResults.description += (pr.description +' </p>');
+    // details
+    this.listingResults.details.push( "Building Quality: <span>"+pr.buildingQuality+"</span>" )
+    this.listingResults.details.push( "Building Age: <span>"+pr.ageType+"</span>" )
+
+    setTimeout(() => {
+      this.MY_ngAfterViewInit();
+      $('.overlay').fadeOut();
+    }, 100);
+  }
+
+
   mortgageCalc() {
     var amount = parseFloat($("#amount").val().replace(/[^0-9\.]+/g,"")),
 		    months = parseFloat( $("#years").val().replace(/[^0-9\.]+/g,"").toString() ) * 12,
@@ -484,27 +533,19 @@ export class SinglePropertyComponent implements OnInit,AfterViewInit {
   }
 
   addProperty() {
+    let pr = this.searchService.propertyResult;
+
     let property = {
-      link: '/'+this.route.snapshot.paramMap.get('lng')+'/single-property/'+this.listingResults.id,
-      state: this.listingResults.state,
-      name: this.listingResults.name,
-      price: this.listingResults.price,
-      image: this.listingResults.images[0],
-      area: this.listingResults.area,
-      rooms: this.listingResults.rooms,
-      bedrooms: this.listingResults.beds,
-      bathrooms: this.listingResults.bathrooms,
-      airConditioning: true,
-      swimmingPool: true,
-      laundryRoom: true,
-      windoCovering: true,
-      gym: true,
-      internet: true,
-      alarm: true,
-      age: '---',
-      heating: '---',
-      parking: '---',
-      sewer: '---'
+      link: '/'+this.route.snapshot.paramMap.get('lng')+'/single-property/'+pr.id,
+      state: (pr.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
+      name: pr.title,
+      price: pr.price,
+      image: (pr.images.length == 0) ? "assets/images/single-property-01.jpg" : pr.images[0].image.s3Path,
+      area: pr.landSize +' '+pr.landSizeMeasureType,
+      bedrooms: pr.bedrooms,
+      bathrooms: pr.bathrooms,
+      age: pr.ageType,
+      quality: pr.buildingQuality
     }
 
     this.compareService.addProperty(property);

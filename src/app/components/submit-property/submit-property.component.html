@@ -19,12 +19,12 @@
   <div class="row">
 
     <!-- Submit Page -->
-    <div class="col-md-12">
+    <form method="POST" class="col-md-12" [formGroup]="submitForm">
       <div class="submit-page">
 
-      <div class="notification notice large margin-bottom-55">
+      <div class="notification notice large margin-bottom-55" *ngIf="!isLogged">
         <h4>Don't Have an Account?</h4>
-        <p>If you don't have an account you can create one by entering your email address in contact details section. A password will be automatically emailed to you.</p>
+        <p>If you don't have an account you can create one by registering <a [routerLink]="['/en/login']"><u>here</u></a>.</p>
       </div>
 
       <!-- Section -->
@@ -34,32 +34,27 @@
         <!-- Title -->
         <div class="form">
           <h5>Property Title <i class="tip" data-tip-content="Type title that will also contains an unique feature of your property (e.g. renovated, air contidioned)"></i></h5>
-          <input class="search-field" type="text" value=""/>
+          <input class="search-field" type="text" formControlName="title"/>
         </div>
 
         <!-- Row -->
         <div class="row with-forms">
 
-          <!-- Status -->
+          <!-- Service Type -->
           <div class="col-md-6">
-            <h5>Status</h5>
-            <select class="chosen-select-no-single" >
+            <h5>Service Type</h5>
+            <select class="chosen-select-no-single api-updated-servicetype">
               <option label="blank"></option>
-              <option>For Sale</option>
-              <option>For Rent</option>
+              <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
             </select>
           </div>
 
           <!-- Type -->
           <div class="col-md-6">
-            <h5>Type</h5>
-            <select class="chosen-select-no-single" >
+            <h5>Property Type <i class="tip" data-tip-content="Fill Service-type first to fill this area"></i></h5>
+            <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
               <option label="blank"></option>
-              <option>Apartment</option>
-              <option>House</option>
-              <option>Commercial</option>
-              <option>Garage</option>
-              <option>Lot</option>
+              <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
             </select>
           </div>
 
@@ -71,32 +66,48 @@
         <div class="row with-forms">
 
           <!-- Price -->
-          <div class="col-md-4">
-            <h5>Price <i class="tip" data-tip-content="Type overall or monthly price if property is for rent"></i></h5>
-            <div class="select-input disabled-first-option">
-              <input type="text" data-unit="USD">
-            </div>
+          <div class="col-md-6">
+            <h5>Price <i class="tip" data-tip-content="Fill Property-type and Service-type first to fill this area"></i></h5>
+            <input type="text" class="search-field" formControlName="price">
           </div>
+
+          <!-- Currency -->
+          <div class="col-md-3">
+            <h5>Currency</h5>
+            <select class="chosen-select-no-single api-updated-currency" [disabled]="!isTypes">
+              <option label="blank"></option>
+              <option *ngFor="let currency of currencyList" [value]="currency.key">{{ currency.value }}</option>
+            </select>
+          </div>
+
+          <!-- Price Type -->
+          <div class="col-md-3">
+            <h5>Price Type</h5>
+            <select class="chosen-select-no-single api-updated-priceType" [disabled]="!isTypes">
+              <option label="blank"></option>
+              <option *ngFor="let price of pricetypeList" [value]="price.key">{{ price.value }}</option>
+            </select>
+          </div>
+
+        </div>
+        <!-- Row / End -->
+
+
+        <!-- Row -->
+        <div class="row with-forms">
 
           <!-- Area -->
-          <div class="col-md-4">
-            <h5>Area</h5>
-            <div class="select-input disabled-first-option">
-              <input type="text" data-unit="Sq Ft">
-            </div>
+          <div class="col-md-6">
+            <h5>Area <i class="tip" data-tip-content="Fill Property-type and Service-type first to fill this area"></i></h5>
+            <input type="text" class="search-field" formControlName="landSize">
           </div>
 
-          <!-- Rooms -->
-          <div class="col-md-4">
-            <h5>Rooms</h5>
-            <select class="chosen-select-no-single" >
+          <!-- Measure Type -->
+          <div class="col-md-3">
+            <h5>Measure Type</h5>
+            <select class="chosen-select-no-single api-updated-measuretype" [disabled]="!isTypes">
               <option label="blank"></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>More than 5</option>
+              <option *ngFor="let measure of measuretypeList" [value]="measure.key">{{ measure.value }}</option>
             </select>
           </div>
 
@@ -110,45 +121,52 @@
       <!-- Section -->
       <h3>Gallery</h3>
       <div class="submit-section">
-        <form action="/file-upload" class="dropzone" ></form>
+        <form class="dropzone" ></form>
       </div>
       <!-- Section / End -->
 
 
       <!-- Section -->
       <h3>Location</h3>
-      <div class="submit-section">
+      <div class="submit-section" formGroupName="locationAd">
 
         <!-- Row -->
         <div class="row with-forms">
 
-          <!-- Address -->
-          <div class="col-md-6">
-            <h5>Address</h5>
-            <input type="text">
-          </div>
-
           <!-- City -->
           <div class="col-md-6">
             <h5>City</h5>
-            <input type="text">
+            <select class="chosen-select api-updated-cities">
+              <option *ngFor="let city of cityList">{{ city.name }}</option>
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div class="col-md-6">
+            <h5>Area</h5>
+            <div class="autocomplete">
+              <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" formControlName="city">
+              <ul class="chosen-results" [hidden]="!isAutofill">
+                <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+              </ul>
+            </div>
           </div>
 
           <!-- City -->
           <div class="col-md-6">
-            <h5>State</h5>
-            <input type="text">
-          </div>
-
-          <!-- Zip-Code -->
-          <div class="col-md-6">
-            <h5>Zip-Code</h5>
-            <input type="text">
+            <h5>Street</h5>
+            <input type="text" formControlName="street">
           </div>
 
         </div>
         <!-- Row / End -->
 
+        <!-- Google Maps -->
+        <div class="google-map-container">
+          <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+        </div>
+        <!-- Google Maps / End -->
       </div>
       <!-- Section / End -->
 
@@ -160,30 +178,40 @@
         <!-- Description -->
         <div class="form">
           <h5>Description</h5>
-          <textarea class="WYSIWYG" name="summary" cols="40" rows="3" id="summary" spellcheck="true"></textarea>
+          <textarea class="WYSIWYG" cols="40" rows="3" id="summary" spellcheck="true" formControlName="description"></textarea>
         </div>
 
         <!-- Row -->
-        <div class="row with-forms">
+        <div class="row with-forms" [hidden]="isLand">
 
           <!-- Age of Home -->
-          <div class="col-md-4">
-            <h5>Building Age <span>(optional)</span></h5>
-            <select class="chosen-select-no-single" >
+          <div class="col-md-6">
+            <h5>Building Age</h5>
+            <select class="chosen-select-no-single api-updated-agetype">
               <option label="blank"></option>
-              <option>0 - 1 Years</option>
-              <option>0 - 5 Years</option>
-              <option>0 - 10 Years</option>
-              <option>0 - 20 Years</option>
-              <option>0 - 50 Years</option>
-              <option>50 + Years</option>
+              <option *ngFor="let agetype of agetypeList" [value]="agetype.key">{{ agetype.value }}</option>
             </select>
           </div>
 
+          <!-- Quality of Home -->
+          <div class="col-md-6">
+            <h5>Building Quality</h5>
+            <select class="chosen-select-no-single api-updated-qualitytype">
+              <option label="blank"></option>
+              <option *ngFor="let qualitytype of qualitytypeList" [value]="qualitytype.key">{{ qualitytype.value }}</option>
+            </select>
+          </div>
+
+        </div>
+        <!-- Row / End -->
+
+        <!-- Row -->
+        <div class="row with-forms" [hidden]="isLand">
+
           <!-- Beds -->
-          <div class="col-md-4">
-            <h5>Bedrooms <span>(optional)</span></h5>
-            <select class="chosen-select-no-single" >
+          <div class="col-md-6">
+            <h5>Bedrooms</h5>
+            <select class="chosen-select-no-single chosen-bathrooms">
               <option label="blank"></option>
               <option>1</option>
               <option>2</option>
@@ -194,9 +222,9 @@
           </div>
 
           <!-- Baths -->
-          <div class="col-md-4">
-            <h5>Bathrooms <span>(optional)</span></h5>
-            <select class="chosen-select-no-single" >
+          <div class="col-md-6">
+            <h5>Bathrooms</h5>
+            <select class="chosen-select-no-single chosen-bedrooms">
               <option label="blank"></option>
               <option>1</option>
               <option>2</option>
@@ -209,82 +237,27 @@
         </div>
         <!-- Row / End -->
 
-
-        <!-- Checkboxes -->
-        <h5 class="margin-top-30">Other Features <span>(optional)</span></h5>
-        <div class="checkboxes in-row margin-bottom-20">
-
-          <input id="check-2" type="checkbox" name="check">
-          <label for="check-2">Air Conditioning</label>
-
-          <input id="check-3" type="checkbox" name="check">
-          <label for="check-3">Swimming Pool</label>
-
-          <input id="check-4" type="checkbox" name="check" >
-          <label for="check-4">Central Heating</label>
-
-          <input id="check-5" type="checkbox" name="check">
-          <label for="check-5">Laundry Room</label>
-
-
-          <input id="check-6" type="checkbox" name="check">
-          <label for="check-6">Gym</label>
-
-          <input id="check-7" type="checkbox" name="check">
-          <label for="check-7">Alarm</label>
-
-          <input id="check-8" type="checkbox" name="check">
-          <label for="check-8">Window Covering</label>
-
-        </div>
-        <!-- Checkboxes / End -->
-
-      </div>
-      <!-- Section / End -->
-
-
-      <!-- Section -->
-      <h3>Contact Details</h3>
-      <div class="submit-section">
-
-        <!-- Row -->
-        <div class="row with-forms">
-
-          <!-- Name -->
-          <div class="col-md-4">
-            <h5>Name</h5>
-            <input type="text">
-          </div>
-
-          <!-- Email -->
-          <div class="col-md-4">
-            <h5>E-Mail</h5>
-            <input type="text">
-          </div>
-
-          <!-- Name -->
-          <div class="col-md-4">
-            <h5>Phone <span>(optional)</span></h5>
-            <input type="text">
-          </div>
-
-        </div>
-        <!-- Row / End -->
-
       </div>
       <!-- Section / End -->
 
 
       <div class="divider"></div>
-      <a href="#" class="button preview margin-top-5">Preview <i class="fa fa-arrow-circle-right"></i></a>
+
+      <div class="submit-wrapper">
+        <i class="im im-icon-Arrow-Around"></i>
+        <button type="button" class="button preview margin-top-5" [ngClass]="{loading: isConnecting}" [disabled]="!submitForm.valid || isConnecting" (click)="submit(submitForm.value)">
+          Submit
+          <i class="fa fa-arrow-circle-right"></i>
+        </button>
+      </div>
 
       </div>
-    </div>
+    </form>
 
   </div>
   </div>
 
-  <div class="margin-top-55"></div>
+  <div class="padding-top-55"></div>
 </div>
 <!-- English Section / End -->
 
@@ -311,271 +284,239 @@
   <div class="row">
 
     <!-- Submit Page -->
-    <div class="col-md-12">
-      <div class="submit-page">
+    <form method="POST" class="col-md-12" [formGroup]="submitForm">
+      <div class="col-md-12">
+        <div class="submit-page">
 
-      <div class="notification notice large margin-bottom-55">
-        <h4>ليس لديك حساب ؟</h4>
-        <p>إذا لم يكن لديك حساب يمكنك انشاء واحد عن طريق ادخال بريدك الالكتروني في منطقة الاتصال. سيتم ارسال كلمة مروو إليك تلقائيا علي بريدك الالكتروني</p>
-      </div>
-
-      <!-- Section -->
-      <h3>معلومات اساسية</h3>
-      <div class="submit-section">
-
-        <!-- Title -->
-        <div class="form">
-          <h5>عنوان العقار <i class="tip" data-tip-content="قم بكتابة عنوان يحتوي ايضا علي ميزة فريدة للعقار مثل (مكيف بالهواء)"></i></h5>
-          <input class="search-field" type="text" value=""/>
+        <div class="notification notice large margin-bottom-55" *ngIf="!isLogged">
+          <h4>ليس لديك حساب ؟</h4>
+          <p>إذا لم يكن لديك حساب يمكنك انشاء واحد عن طريق ادخال بريدك الالكتروني في منطقة الاتصال. سيتم ارسال كلمة مروو إليك تلقائيا علي بريدك الالكتروني</p>
         </div>
 
-        <!-- Row -->
-        <div class="row with-forms">
+        <!-- Section -->
+        <h3>معلومات اساسية</h3>
+        <div class="submit-section">
 
-          <!-- Status -->
-          <div class="col-md-6">
-            <h5>الحالة</h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>للبيع</option>
-              <option>للايجار</option>
-            </select>
+          <!-- Title -->
+          <div class="form">
+            <h5>عنوان العقار <i class="tip" data-tip-content="قم بكتابة عنوان يحتوي ايضا علي ميزة فريدة للعقار مثل (مكيف بالهواء)"></i></h5>
+            <input class="search-field" type="text" formControlName="title"/>
           </div>
 
-          <!-- Type -->
-          <div class="col-md-6">
-            <h5>النوع</h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>شقة</option>
-              <option>بيت</option>
-              <option>متجر</option>
-              <option>جراج</option>
-              <option>ارض</option>
-            </select>
-          </div>
+          <!-- Row -->
+          <div class="row with-forms">
 
-        </div>
-        <!-- Row / End -->
-
-
-        <!-- Row -->
-        <div class="row with-forms">
-
-          <!-- Price -->
-          <div class="col-md-4">
-            <h5>السعر <i class="tip" data-tip-content="قم بكتابة السعر الشهري إذا كان العقار للإيجار"></i></h5>
-            <div class="select-input disabled-first-option">
-              <input type="text" data-unit="USD">
+            <!-- Service Type -->
+            <div class="col-md-6">
+              <h5>نوع الخدمة</h5>
+              <select class="chosen-select-no-single api-updated-servicetype">
+                <option label="blank"></option>
+                <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
+              </select>
             </div>
-          </div>
 
-          <!-- Area -->
-          <div class="col-md-4">
-            <h5>المساحة</h5>
-            <div class="select-input disabled-first-option">
-              <input type="text" data-unit="Sq Ft">
+            <!-- Type -->
+            <div class="col-md-6">
+              <h5>النوع <i class="tip" data-tip-content="اكتب نوع الخدمة اولا لتتمكن من كتابة هذة الخانة"></i></h5>
+              <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
+                <option label="blank"></option>
+                <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
+              </select>
             </div>
-          </div>
 
-          <!-- Rooms -->
-          <div class="col-md-4">
-            <h5>الغرف</h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>اكثر من 5</option>
-            </select>
           </div>
+          <!-- Row / End -->
+
+
+          <!-- Row -->
+          <div class="row with-forms">
+
+            <!-- Price -->
+            <div class="col-md-6">
+              <h5>السعر <i class="tip" data-tip-content="قم بكتابة النوع اولا لتتمكن من كتابة هذة الخانة"></i></h5>
+              <input type="text" class="search-field" formControlName="price">
+            </div>
+
+            <!-- Currency -->
+            <div class="col-md-3">
+              <h5>العملة</h5>
+              <select class="chosen-select-no-single api-updated-currency" [disabled]="!isTypes">
+                <option label="blank"></option>
+                <option *ngFor="let currency of currencyList" [value]="currency.key">{{ currency.value }}</option>
+              </select>
+            </div>
+
+            <!-- Price Type -->
+            <div class="col-md-3">
+              <h5>نوع العملة</h5>
+              <select class="chosen-select-no-single api-updated-priceType" [disabled]="!isTypes">
+                <option label="blank"></option>
+                <option *ngFor="let price of pricetypeList" [value]="price.key">{{ price.value }}</option>
+              </select>
+            </div>
+
+          </div>
+          <!-- Row / End -->
+
+
+          <!-- Row -->
+          <div class="row with-forms">
+
+            <!-- Area -->
+            <div class="col-md-6">
+              <h5>المساحة <i class="tip" data-tip-content="قم بكتابة النوع اولا لتتمكن من كتابة هذة الخانة"></i></h5>
+              <input type="text" class="search-field" formControlName="landSize">
+            </div>
+
+            <!-- Measure Type -->
+            <div class="col-md-3">
+              <h5>وحدة القياس</h5>
+              <select class="chosen-select-no-single api-updated-measuretype" [disabled]="!isTypes">
+                <option label="blank"></option>
+                <option *ngFor="let measure of measuretypeList" [value]="measure.key">{{ measure.value }}</option>
+              </select>
+            </div>
+
+          </div>
+          <!-- Row / End -->
 
         </div>
-        <!-- Row / End -->
-
-      </div>
-      <!-- Section / End -->
+        <!-- Section / End -->
 
 
-      <!-- Section -->
-      <h3>البوم الصور</h3>
-      <div class="submit-section">
-        <form action="/file-upload" class="dropzone" ></form>
-      </div>
-      <!-- Section / End -->
+        <!-- Section -->
+        <h3>البوم الصور</h3>
+        <div class="submit-section">
+          <form class="dropzone" ></form>
+        </div>
+        <!-- Section / End -->
 
 
-      <!-- Section -->
-      <h3>المكان</h3>
-      <div class="submit-section">
+        <!-- Section -->
+        <h3>المكان</h3>
+        <div class="submit-section" formGroupName="locationAd">
 
-        <!-- Row -->
-        <div class="row with-forms">
+          <!-- Row -->
+          <div class="row with-forms">
 
-          <!-- Address -->
-          <div class="col-md-6">
-            <h5>العنوان</h5>
-            <input type="text">
+            <!-- City -->
+            <div class="col-md-6">
+              <h5>المدينة</h5>
+              <select class="chosen-select api-updated-cities">
+                <option *ngFor="let city of cityList">{{ city.name }}</option>
+              </select>
+            </div>
+
+            <!-- Address -->
+            <div class="col-md-6">
+              <h5>المنطقة</h5>
+              <div class="autocomplete">
+                <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" formControlName="city">
+                <ul class="chosen-results" [hidden]="!isAutofill">
+                  <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                  <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- City -->
+            <div class="col-md-6">
+              <h5>الشارع</h5>
+              <input type="text" formControlName="street">
+            </div>
+
+          </div>
+          <!-- Row / End -->
+
+          <!-- Google Maps -->
+          <div class="google-map-container">
+            <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+          </div>
+          <!-- Google Maps / End -->
+        </div>
+        <!-- Section / End -->
+
+
+        <!-- Section -->
+        <h3>معلومات مفصلة</h3>
+        <div class="submit-section">
+
+          <!-- Description -->
+          <div class="form">
+            <h5>الوصف</h5>
+            <textarea class="WYSIWYG" cols="40" rows="3" id="summary" spellcheck="true" formControlName="description"></textarea>
           </div>
 
-          <!-- City -->
-          <div class="col-md-6">
-            <h5>المدينة</h5>
-            <input type="text">
-          </div>
+          <!-- Row -->
+          <div class="row with-forms" [hidden]="isLand">
 
-          <!-- City -->
-          <div class="col-md-6">
-            <h5>المحافظة</h5>
-            <input type="text">
-          </div>
+            <!-- Age of Home -->
+            <div class="col-md-6">
+              <h5>عمر البناء</h5>
+              <select class="chosen-select-no-single api-updated-agetype">
+                <option label="blank"></option>
+                <option *ngFor="let agetype of agetypeList" [value]="agetype.key">{{ agetype.value }}</option>
+              </select>
+            </div>
 
-          <!-- Zip-Code -->
-          <div class="col-md-6">
-            <h5>رقم البريد</h5>
-            <input type="text">
+            <!-- Quality of Home -->
+            <div class="col-md-6">
+              <h5>حالة البناء</h5>
+              <select class="chosen-select-no-single api-updated-qualitytype">
+                <option label="blank"></option>
+                <option *ngFor="let qualitytype of qualitytypeList" [value]="qualitytype.key">{{ qualitytype.value }}</option>
+              </select>
+            </div>
+
+            <!-- Beds -->
+            <div class="col-md-6">
+              <h5>عدد السرائر</h5>
+              <select class="chosen-select-no-single chosen-bathrooms">
+                <option label="blank"></option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+
+            <!-- Baths -->
+            <div class="col-md-6">
+              <h5>عدد الحمامات</h5>
+              <select class="chosen-select-no-single chosen-bedrooms">
+                <option label="blank"></option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+
           </div>
+          <!-- Row / End -->
 
         </div>
-        <!-- Row / End -->
+        <!-- Section / End -->
 
-      </div>
-      <!-- Section / End -->
+        <div class="divider"></div>
 
-
-      <!-- Section -->
-      <h3>معلومات مفصلة</h3>
-      <div class="submit-section">
-
-        <!-- Description -->
-        <div class="form">
-          <h5>الوصف</h5>
-          <textarea class="WYSIWYG" name="summary" cols="40" rows="3" id="summary" spellcheck="true"></textarea>
+        <div class="submit-wrapper">
+          <i class="im im-icon-Arrow-Around"></i>
+          <button type="button" class="button preview margin-top-5" [ngClass]="{loading: isConnecting}" [disabled]="!submitForm.valid || isConnecting" (click)="submit(submitForm.value)">
+            سجل الاعلان
+            <i class="fa fa-arrow-circle-left"></i>
+          </button>
         </div>
 
-        <!-- Row -->
-        <div class="row with-forms">
-
-          <!-- Age of Home -->
-          <div class="col-md-4">
-            <h5>عمر البناء <span>(اختياري)</span></h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>0 - 1 اعوام</option>
-              <option>0 - 5 اعوام</option>
-              <option>0 - 10 اعوام</option>
-              <option>0 - 20 اعوام</option>
-              <option>0 - 50 اعوام</option>
-              <option>50 + اعوام</option>
-            </select>
-          </div>
-
-          <!-- Beds -->
-          <div class="col-md-4">
-            <h5>السرائر <span>(اختياري)</span></h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
-
-          <!-- Baths -->
-          <div class="col-md-4">
-            <h5>الحمامات <span>(اختياري)</span></h5>
-            <select class="chosen-select-no-single" >
-              <option label="blank"></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
-
         </div>
-        <!-- Row / End -->
-
-
-        <!-- Checkboxes -->
-        <h5 class="margin-top-30">مميزات اخري <span>(اختياري)</span></h5>
-        <div class="checkboxes in-row margin-bottom-20">
-
-          <input id="check-2" type="checkbox" name="check">
-          <label for="check-2">مكيف هواء</label>
-
-          <input id="check-3" type="checkbox" name="check">
-          <label for="check-3">حمام سباحة</label>
-
-          <input id="check-4" type="checkbox" name="check" >
-          <label for="check-4">سخان مركذي</label>
-
-          <input id="check-5" type="checkbox" name="check">
-          <label for="check-5">غرفة غسيل</label>
-
-
-          <input id="check-6" type="checkbox" name="check">
-          <label for="check-6">صالة رياضية</label>
-
-          <input id="check-7" type="checkbox" name="check">
-          <label for="check-7">جهاز انزار</label>
-
-          <input id="check-8" type="checkbox" name="check">
-          <label for="check-8">غطاء زجاج</label>
-
-        </div>
-        <!-- Checkboxes / End -->
-
       </div>
-      <!-- Section / End -->
-
-
-      <!-- Section -->
-      <h3>تفاصيل الاتصال</h3>
-      <div class="submit-section">
-
-        <!-- Row -->
-        <div class="row with-forms">
-
-          <!-- Name -->
-          <div class="col-md-4">
-            <h5>الاسم</h5>
-            <input type="text">
-          </div>
-
-          <!-- Email -->
-          <div class="col-md-4">
-            <h5>البريد الالكتروني</h5>
-            <input type="text">
-          </div>
-
-          <!-- Name -->
-          <div class="col-md-4">
-            <h5>الهاتف <span>(اختياري)</span></h5>
-            <input type="text">
-          </div>
-
-        </div>
-        <!-- Row / End -->
-
-      </div>
-      <!-- Section / End -->
-
-
-      <div class="divider"></div>
-      <a href="#" class="button preview margin-top-5">اعرض <i class="fa fa-arrow-circle-left"></i></a>
-
-      </div>
-    </div>
+    </form>
 
   </div>
   </div>
 
-  <div class="margin-top-55"></div>
+  <div class="padding-top-55"></div>
 </div>
 <!-- Arabic Section / End -->

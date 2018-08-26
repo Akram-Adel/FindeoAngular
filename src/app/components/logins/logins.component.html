@@ -1,4 +1,4 @@
-<!-- English Section -->
+<!-- Arabic Section -->
 <div *ngIf=" language == 'ar' ">
   <!-- Titlebar
   ================================================== -->
@@ -12,7 +12,7 @@
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
             <ul>
-              <li><a href="#">الرئيسية</a></li>
+              <li><a [routerLink]="['/ar/main']" >الرئيسية</a></li>
               <li>تسجيل الدخول \ التسجيل</li>
             </ul>
           </nav>
@@ -44,27 +44,42 @@
 
         <!-- Login -->
         <div class="tab-content" id="tab1" style="display: none;">
-          <form method="post" class="login">
+          <form method="post" class="login" [formGroup]="logForm" (ngSubmit)="login(logForm.value)">
+
+            <div class="notification error closeable" *ngIf="generalERR">
+              <p>لقد حدث خطا ما !!<br> الرجاء المحاولة مرة اخري</p>
+            </div>
+            <div class="notification error closeable" *ngIf="invalidERR">
+              <p>البريد الالكتروني او كلمة المرور غير صحيح</p>
+            </div>
 
             <p class="form-row form-row-wide">
-              <label for="username">اسم المستخدم:
-                <i class="im im-icon-Male"></i>
-                <input type="text" class="input-text" name="username" id="username" value="" />
+              <label for="email">البريد الالكتروني
+                <i class="im im-icon-Mail"></i>
+                <input type="text" class="input-text" id="email" formControlName="email" />
               </label>
             </p>
 
             <p class="form-row form-row-wide">
-              <label for="password">كلمة السر:
+              <label for="firstName">الاسم الاول
                 <i class="im im-icon-Lock-2"></i>
-                <input class="input-text" type="password" name="password" id="password"/>
+                <input class="input-text" type="text" id="firstName" formControlName="firstName" />
               </label>
             </p>
 
-            <p class="form-row">
-              <input type="submit" class="button border margin-top-10" name="login" value="تسجيل الدخول" />
+            <p class="form-row form-row-wide">
+              <label for="password">كلمة المرور
+                <i class="im im-icon-Lock-2"></i>
+                <input class="input-text" type="password" id="password" formControlName="password" />
+              </label>
+            </p>
+
+            <p class="form-row login">
+              <i class="im im-icon-Arrow-Around"></i>
+              <input type="submit" class="button border margin-top-10" [ngClass]="{loading: isConnecting}" name="login" value="تسجيل الدخول" [disabled]="!logForm.valid || isConnecting" />
 
               <label for="rememberme" class="rememberme">
-              <input name="rememberme" type="checkbox" id="rememberme" value="forever" /> احفظ البيانات</label>
+              <input name="rememberme" type="checkbox" id="rememberme" formControlName="rememberMe" /> احفظ البيانات</label>
             </p>
 
             <p class="lost_password">
@@ -76,39 +91,46 @@
 
         <!-- Register -->
         <div class="tab-content" id="tab2" style="display: none;">
+          <form method="post" class="register" [formGroup]="regForm" (ngSubmit)="register(regForm.value)">
 
-          <form method="post" class="register">
-
-          <p class="form-row form-row-wide">
+          <!-- <p class="form-row form-row-wide">
             <label for="username2">اسم المستخدم:
               <i class="im im-icon-Male"></i>
               <input type="text" class="input-text" name="username" id="username2" value="" />
             </label>
-          </p>
+          </p> -->
+          <div class="notification error closeable" *ngIf="generalERR">
+            <p>لقد حدث خطا !!<br> ارجو المحاولة مرة اخري</p>
+          </div>
 
           <p class="form-row form-row-wide">
             <label for="email2">البريد الالكتروني:
               <i class="im im-icon-Mail"></i>
-              <input type="text" class="input-text" name="email" id="email2" value="" />
+              <input type="text" class="input-text" id="email2" formControlName="email" />
+
+              <div class="notification error closeable" *ngIf="emailERR">
+                <p>هذا المستخدم موجود بالفعل !!</p>
+              </div>
             </label>
           </p>
 
           <p class="form-row form-row-wide">
             <label for="password1">كلمة السر:
               <i class="im im-icon-Lock-2"></i>
-              <input class="input-text" type="password" name="password1" id="password1"/>
+              <input class="input-text" type="password" id="password1" formControlName="password" />
             </label>
           </p>
 
           <p class="form-row form-row-wide">
             <label for="password2">اعد كلمة السر:
               <i class="im im-icon-Lock-2"></i>
-              <input class="input-text" type="password" name="password2" id="password2"/>
+              <input class="input-text" type="password" name="password2" id="password2" formControlName="repassword" />
             </label>
           </p>
 
           <p class="form-row">
-            <input type="submit" class="button border fw margin-top-10" name="register" value="تسجيل" />
+            <i class="im im-icon-Arrow-Around"></i>
+            <input type="submit" class="button border fw margin-top-10" [ngClass]="{loading: isConnecting}" name="register" value="تسجيل" [disabled]="!regForm.valid || isConnecting" />
           </p>
 
           </form>
@@ -123,7 +145,7 @@
   </div>
   <!-- Container / End -->
 </div>
-<!-- English Section / End -->
+<!-- Arabic Section / End -->
 
 
 
@@ -141,7 +163,7 @@
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
             <ul>
-              <li><a href="#">Home</a></li>
+              <li><a [routerLink]="['/en/main']" >Home</a></li>
               <li>Log In & Register</li>
             </ul>
           </nav>
@@ -172,27 +194,35 @@
 
         <!-- Login -->
         <div class="tab-content" id="tab1" style="display: none;">
-          <form method="post" class="login">
+          <form method="post" class="login" [formGroup]="logForm" (ngSubmit)="login(logForm.value)">
+
+            <div class="notification error closeable" *ngIf="generalERR">
+              <p>An error has occured!!<br> Please try again later</p>
+            </div>
+            <div class="notification error closeable" *ngIf="invalidERR">
+              <p>Invalid Email or Password</p>
+            </div>
 
             <p class="form-row form-row-wide">
-              <label for="username">Username:
-                <i class="im im-icon-Male"></i>
-                <input type="text" class="input-text" name="username" id="username" value="" />
+              <label for="email">Email Address:
+                <i class="im im-icon-Mail"></i>
+                <input type="text" class="input-text" id="email" formControlName="email" />
               </label>
             </p>
 
             <p class="form-row form-row-wide">
               <label for="password">Password:
                 <i class="im im-icon-Lock-2"></i>
-                <input class="input-text" type="password" name="password" id="password"/>
+                <input class="input-text" type="password" id="password" formControlName="password" />
               </label>
             </p>
 
-            <p class="form-row">
-              <input type="submit" class="button border margin-top-10" name="login" value="Login" />
+            <p class="form-row login">
+              <i class="im im-icon-Arrow-Around"></i>
+              <input type="submit" class="button border margin-top-10" [ngClass]="{loading: isConnecting}" name="login" value="Login" [disabled]="!logForm.valid || isConnecting" />
 
               <label for="rememberme" class="rememberme">
-              <input name="rememberme" type="checkbox" id="rememberme" value="forever" /> Remember Me</label>
+              <input name="rememberme" type="checkbox" id="rememberme" formControlName="rememberMe" /> Remember Me</label>
             </p>
 
             <p class="lost_password">
@@ -204,40 +234,48 @@
 
         <!-- Register -->
         <div class="tab-content" id="tab2" style="display: none;">
+          <form method="post" class="register" [formGroup]="regForm" (ngSubmit)="register(regForm.value)">
 
-          <form method="post" class="register">
+            <div class="notification error closeable" *ngIf="generalERR">
+              <p>An error has occured!!<br> Please try again later</p>
+            </div>
 
-          <p class="form-row form-row-wide">
-            <label for="username2">Username:
-              <i class="im im-icon-Male"></i>
-              <input type="text" class="input-text" name="username" id="username2" value="" />
-            </label>
-          </p>
+            <p class="form-row form-row-wide">
+              <label for="email2">Email Address:
+                <i class="im im-icon-Mail"></i>
+                <input type="text" class="input-text" id="email2" formControlName="email" />
 
-          <p class="form-row form-row-wide">
-            <label for="email2">Email Address:
-              <i class="im im-icon-Mail"></i>
-              <input type="text" class="input-text" name="email" id="email2" value="" />
-            </label>
-          </p>
+                <div class="notification error closeable" *ngIf="emailERR">
+                  <p>This user already exists !!</p>
+                </div>
+              </label>
+            </p>
 
-          <p class="form-row form-row-wide">
-            <label for="password1">Password:
-              <i class="im im-icon-Lock-2"></i>
-              <input class="input-text" type="password" name="password1" id="password1"/>
-            </label>
-          </p>
+            <p class="form-row form-row-wide">
+              <label for="firstName">First Name:
+                <i class="im im-icon-Lock-2"></i>
+                <input class="input-text" type="text" id="firstName" formControlName="firstName" />
+              </label>
+            </p>
 
-          <p class="form-row form-row-wide">
-            <label for="password2">Repeat Password:
-              <i class="im im-icon-Lock-2"></i>
-              <input class="input-text" type="password" name="password2" id="password2"/>
-            </label>
-          </p>
+            <p class="form-row form-row-wide">
+              <label for="password1">Password:
+                <i class="im im-icon-Lock-2"></i>
+                <input class="input-text" type="password" id="password1" formControlName="password" />
+              </label>
+            </p>
 
-          <p class="form-row">
-            <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
-          </p>
+            <p class="form-row form-row-wide">
+              <label for="password2">Repeat Password:
+                <i class="im im-icon-Lock-2"></i>
+                <input class="input-text" type="password" id="password2" formControlName="repassword" />
+              </label>
+            </p>
+
+            <p class="form-row">
+              <i class="im im-icon-Arrow-Around"></i>
+              <input type="submit" class="button border fw margin-top-10" [ngClass]="{loading: isConnecting}" name="register" value="Register" [disabled]="!regForm.valid || isConnecting" />
+            </p>
 
           </form>
         </div>

@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import { Observable } from 'rxjs/Observable';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
+import { SearchService } from '../../services/search.service';
 
 declare var $:any;
 
@@ -13,34 +14,61 @@ declare var $:any;
   templateUrl: './agent-page.component.html',
   styleUrls: ['./agent-page.component.css']
 })
-export class AgentPageComponent implements OnInit,AfterViewInit {
+export class AgentPageComponent implements OnInit,OnDestroy {
 
   language:string;
-  agent:any;
-  featuredProperties:any;
+  subscription:any;
+  agent:any = {};
+  resultsNum:number = 0;
+  numOfPages:number = 0;
+  currentPage:number = 1; startSlice:number = 0; endSlice:number = 6;
+  Math:any;
+
+  searchForm:FormGroup;
+  servicetypeList:any;
+  propertytypeList:any; isProperty:boolean = false; isLand:boolean = false;
+
+
 
   constructor(
     private route:ActivatedRoute,
     private languageService:LanguageService,
-    private apiService:ApiService) { }
+    private api:ApiService,
+    private http:HttpClient,
+    private searchService:SearchService,
+    private fb:FormBuilder,
+    private router:Router) {
+
+      this.searchForm = this.fb.group({
+        serviceType: [null, Validators.required],
+        propertyType: [null, Validators.required],
+        bathrooms: [null], bedrooms: [null]
+      })
+    }
 
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
 
-    //Get Agent Info
-    this.agent = this.apiService.api.agentPage;
-
-    //Get Featured Properties
-    this.featuredProperties = this.apiService.api.featuredListings;
+    this.Math = Math;
+    let id = this.route.snapshot.paramMap.get('id');
+    this.http.get(this.api.link+'/api/public/agents/'+id).subscribe(res => {this.searchService.newAgent(res); this.searchService.getAgentProperties()})
+    this.subscription = this.searchService.searchImages$.subscribe(res => this.gotAgent())
   }
 
-  ngAfterViewInit() {
+  MY_ngAfterViewInit() {
     this.rangeSlider();
     this.chosenPlugin();
     this.searchOptions();
     this.owlCarousel();
     this.layoutSwitcher();
+    this.fotterPadding();
+
+    this.chosenServiceType(); this.chosenChange();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 
@@ -368,6 +396,156 @@ export class AgentPageComponent implements OnInit,AfterViewInit {
 			// if list layout is active
 			listLayout();
 
+    });
+  }
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
+  }
+
+  chosenServiceType() {
+    let self = this;
+
+    // get service type array
+    this.http.get(this.api.link+'/api/public/properties/service-types/ar').subscribe({
+      next: res => putservicetypeArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+
+    // add property type array to the DOM and update the chosenPlugin()
+    function putservicetypeArray(servicetype) {
+      self.servicetypeList = servicetype;
+      setTimeout(() => $('.api-updated-servicetype').trigger("chosen:updated"), 100);
+    }
+
+    // attach a change event
+    $('.api-updated-servicetype').on('change', (ev, params) => {
+      self.searchForm.controls.serviceType.setValue(params.selected);
+      self.chosenPropertyType();
+    })
+  }
+  chosenPropertyType() {
+    let self = this;
+    this.isProperty = true;
+
+    // get property type array
+    this.http.get(this.api.link+'/api/public/properties/property-types/ar/'+this.searchForm.controls.serviceType.value).subscribe({
+      next: res => putPropertytypeArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+
+    // add property type array to the DOM and update the chosenPlugin()
+    function putPropertytypeArray(propertytype) {
+      self.propertytypeList = propertytype;
+      self.searchForm.controls.propertyType.setValue(null);
+      setTimeout(() => $('.api-updated-propertytype').trigger("chosen:updated"), 100);
+    }
+
+    // attach a change event
+    $('.api-updated-propertytype').on('change', (ev, params) => {
+      self.searchForm.controls.propertyType.setValue(params.selected);
+      (params.selected == 'LAND' || params.selected == 'FARM') ? self.isLand = true : self.isLand = false;
+    })
+  }
+  chosenChange() {
+    let self = this;
+
+    $('.chosen-bathrooms').on('change', (ev, params) => self.searchForm.controls.bathrooms.setValue(params.selected) )
+    $('.chosen-bedrooms').on('change', (ev, params) => self.searchForm.controls.bedrooms.setValue(params.selected) )
+  }
+
+
+  gotAgent() {
+    let ar = this.searchService.agentResult;
+    this.agent = {
+      id: ar.id,
+      image: (ar.logo.s3Path) ? ar.logo.s3Path : "assets/images/agent-01.jpg",
+      name: ar.name,
+      about: ar.description,
+      phone: ar.phone,
+      email: ar.email,
+      listings: []
+    }
+    // sale listings
+    for(let i=0; i<ar.saleListing.length; i++) {
+      let l = ar.saleListing[i]
+      this.agent.listings.push({
+        id: l.id,
+        featured: false,
+        state: (l.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
+        price: l.price,
+        priceDetail: l.currency,
+        image: (l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
+        name: l.title,
+        mapUrl: null,
+        adress: l.location.city +' '+ l.location.street,
+        area: l.landSize +' '+l.landSizeMeasureType,
+        bedrooms: l.bedrooms,
+        bathrooms: l.bathrooms
+      })
+    }
+    // rent listings
+    for(let i=0; i<ar.rentalListing.length; i++) {
+      let l = ar.rentalListing[i]
+      this.agent.listings.push({
+        id: l.id,
+        featured: false,
+        state: (l.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
+        price: l.price,
+        priceDetail: l.currency,
+        image: (l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
+        name: l.title,
+        mapUrl: null,
+        adress: l.location.city +' '+ l.location.street,
+        area: l.landSize +' '+l.landSizeMeasureType,
+        bedrooms: l.bedrooms,
+        bathrooms: l.bathrooms
+      })
+    }
+
+    this.resultsNum = this.agent.listings.length;
+    this.numOfPages = this.resultsNum / 6;
+
+    setTimeout(() => {
+      this.MY_ngAfterViewInit();
+      $('.overlay').fadeOut();
+    }, 100);
+  }
+
+  prevPage() {
+    if(this.currentPage == 1) return;
+    this.currentPage -= 1;
+    this.startSlice -= 6;
+    this.endSlice -= 6;
+    $('.fs-inner-container:nth-child(2)>div').animate({
+      scrollTop: 100
+    }, 500)
+  }
+  nextPage() {
+    if(this.numOfPages == 0) return;
+    if(this.currentPage == Math.ceil(this.numOfPages)) return;
+    this.currentPage += 1;
+    this.startSlice += 6;
+    this.endSlice += 6;
+    $('.fs-inner-container:nth-child(2)>div').animate({
+      scrollTop: 100
+    }, 500)
+  }
+
+
+  search() {
+    let paramsStr = `serviceType.in=${this.searchForm.controls.serviceType.value}&propertyType.in=${this.searchForm.controls.propertyType.value}&size=1000`;
+    if(this.searchForm.controls.bedrooms.value  !== null) paramsStr += `&bedrooms.greaterOrEqualThan=${this.searchForm.controls.bedrooms.value}`;
+    if(this.searchForm.controls.bathrooms.value !== null) paramsStr += `&bathrooms.greaterOrEqualThan=${this.searchForm.controls.bathrooms.value}`;
+    paramsStr += `&price.greaterOrEqualThan=${$("#price-range").children( ".first-slider-value" ).val().replace(',','')}`;
+    paramsStr +=   `&price.lessOrEqualThan=${$("#price-range").children( ".second-slider-value" ).val().replace(',','')}`;
+
+    const httpOptions = {
+      params: new HttpParams({ fromString: paramsStr })
+    }
+    this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe({
+      next: res => { this.searchService.newSearch(res); this.router.navigate([this.language+'/listings/default'])},
+      error: err => this.api.API_ERROR(err, this.language)
     });
   }
 

@@ -378,7 +378,7 @@ header.fullwidth .container {
 
 	.header-style-2 .user-menu {
 		float: right;
-		margin-top: -52px;
+		/* margin-top: -52px; */
 		margin-right: 10px;
 	}
 
@@ -916,7 +916,7 @@ button.widget-button {
 }
 
 #navigation ul ul:before {
-	content: "123";
+	/* content: "123"; */
 	position: absolute;
 	width: 100%;
 	height: 10px;
@@ -1061,41 +1061,42 @@ button.widget-button {
 /* User Menu
 ------------------------------------- */
 .user-menu {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	margin-right: 25px;
-	top: 9px;
-	vertical-align: top;
-	padding-left: 25px;
-	padding-right: 20px;
-	margin-left: 25px;
+	position: relative !important;
+	display: inline-block !important;
+	cursor: pointer !important;
+	margin-right: 25px !important;
+	/* top: 9px !important; */
+	top: 15px !important;
+	vertical-align: top !important;
+	padding-left: 25px !important;
+	padding-right: 20px !important;
+	margin-left: 25px !important;
 }
 
 .user-menu .user-name {
-	transition: 0.2s;
-	color: #444;
+	transition: 0.2s !important;
+	color: #444 !important;
 }
 
 .user-menu .user-name {
-	transition: 0.2s;
-	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 145px;
+	transition: 0.2s !important;
+	white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 145px !important;
 }
 
 .user-menu .user-name:after {
-	content: "\f107";
-	font-family: "FontAwesome";
-	transition: 0.2s;
-	transform: rotate(0deg);
-	display: inline-block;
-	margin-left: 6px;
-	color: #aaa;
-	right: 0;
-	padding: 0 5px;
-	position: absolute;
+	content: "\f107" !important;
+	font-family: "FontAwesome" !important;
+	transition: 0.2s !important;
+	transform: rotate(0deg) !important;
+	display: inline-block !important;
+	margin-left: 6px !important;
+	color: #aaa !important;
+	right: 0 !important;
+	padding: 0 5px !important;
+	position: absolute !important;
 }
 
 .user-menu.active .user-name:after,
@@ -1105,7 +1106,7 @@ button.widget-button {
 	color: #66676b;
 }
 
-.user-menu.active .user-name:after { transform: rotate(180deg); }
+.user-menu.active .user-name:after { transform: rotate(180deg) !important; }
 
 /* Avatar */
 .user-name span img {
@@ -1127,56 +1128,56 @@ button.widget-button {
 }
 
 .user-menu ul {
-	float: left;
-	text-align: left;
-	position: absolute;
-	top: 45px;
-	right: 0;
-	list-style: none;
-	background-color: #fff;
-	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.12);
-	border-radius: 4px;
-	display: inline-block;
-	width: 190px;
-	font-size: 15px;
-	transform: translate3d(0,15px,0);
-	padding: 16px 8px;
-	box-sizing: border-box;
-	transition: 0.25s;
-	visibility: hidden;
-	opacity: 0;
-	z-index: 110;
+	float: left !important;
+	text-align: left !important;
+	position: absolute !important;
+	top: 45px !important;
+	right: 0 !important;
+	list-style: none !important;
+	background-color: #fff !important;
+	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.12) !important;
+	border-radius: 4px !important;
+	display: inline-block !important;
+	/* width: 190px !important; */
+	font-size: 15px !important;
+	transform: translate3d(0,15px,0) !important;
+	/* padding: 16px 8px !important; */
+	box-sizing: border-box !important;
+	transition: 0.25s !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	z-index: 110 !important;
 }
 
 .user-menu ul li a {
-	padding: 5px 15px;
-	line-height: 22px;
-	display: inline-block;
-	color: #696969;
-	transition: 0.2s;
+	padding: 5px 15px !important;
+	line-height: 22px !important;
+	display: inline-block !important;
+	color: #696969 !important;
+	transition: 0.2s !important;
 }
 
 .user-menu ul li a:hover {
-	color: #66676b;
+	color: #66676b !important;
 }
 
 .user-menu ul li a i {
-	width: 20px;
-	position: relative;
-	display: inline-block;
+	width: 20px !important;
+	position: relative !important;
+	display: inline-block !important;
 }
 
 .user-menu.active ul {
-	visibility: visible;
-	opacity: 1;
-	transform: translate3d(0,0,0);
+	visibility: visible !important;
+	opacity: 1 !important;
+	transform: translate3d(0,0,0) !important;
 }
 
 
 /* Mobile Fixes for User Menu */
 @media only screen and (max-width: 1366px) and (min-width: 1240px) {
 	.user-menu .user-name {
-	    max-width: 110px;
+	    max-width: 110px !important;
 	}
 }
 
@@ -1193,23 +1194,23 @@ button.widget-button {
 	    width: auto;
 	}
 
-	.user-menu { top: 12px; }
+	.user-menu { /* top: 12px !important; */ }
 	.right-side { position: relative; }
 }
 
 @media (max-width: 992px) {
 	.user-menu ul {
-	    right: -60px;
-	    float: right;
+	    right: -60px !important;
+	    float: right !important;
 	}
 }
 
 @media (max-width: 480px) {
 	.header-widget .user-menu {
-		top: 0;
-		margin-top: 7px;
-		margin-bottom: 20px;
-		float: left;
+		top: 0 !important;
+		margin-top: 7px !important;
+		margin-bottom: 20px !important;
+		float: left !important;
 	}
 }
 

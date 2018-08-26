@@ -1,8 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-
 import { LanguageService } from '../../services/language.service';
 
 declare var google:any;
@@ -29,6 +27,7 @@ export class ContactComponent implements OnInit,AfterViewInit {
 
   ngAfterViewInit() {
     this.inlineCSS();
+    this.fotterPadding();
 
     this.initMap();
   }
@@ -47,6 +46,10 @@ export class ContactComponent implements OnInit,AfterViewInit {
           $(this).css('background', ''+attrColorBG+'');
         }
 		});
+  }
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
   }
 
   markerIcon = {

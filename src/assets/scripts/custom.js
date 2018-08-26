@@ -31,7 +31,7 @@ $(document).ready(function(){
 			var wi = $(window).width();
 			if(wi <= '992') {
 
-				$('#footer').removeClass("sticky-footer");
+				// $('#footer').removeClass("sticky-footer");
 
 				$(".mmenu-init" ).remove();
 				$("#navigation").clone().addClass("mmenu-init").insertBefore("#navigation").removeAttr('id').removeClass('style-1 style-2').find('ul').removeAttr('id');
@@ -547,25 +547,6 @@ $(document).ready(function(){
 	});
 
 
-
-	/*----------------------------------------------------*/
-	/*	Toggle
-	/*----------------------------------------------------*/
-
-	$(".toggle-container").hide();
-
-	$('.trigger, .trigger.opened').on('click', function(a){
-		$(this).toggleClass('active');
-		a.preventDefault();
-	});
-
-	$(".trigger").on('click', function(){
-		$(this).next(".toggle-container").slideToggle(300);
-	});
-
-	$(".trigger.opened").addClass("active").next(".toggle-container").show();
-
-
 	/*----------------------------------------------------*/
 	/*  Notifications
 	/*----------------------------------------------------*/
@@ -706,7 +687,8 @@ $(document).ready(function(){
 
 		$this.before('<div class="footer-reveal-offset"></div>');
 
-    if ($this.outerHeight() <= $win.outerHeight()) {
+    // if ($this.outerHeight() <= $win.outerHeight()) {
+    if (true) {
       $this.css({
         'z-index' : defaults.zIndex,
         position : 'fixed',

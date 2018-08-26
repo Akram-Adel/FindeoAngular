@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -8,12 +8,14 @@ import { CompareService } from '../../services/compare.service';
 
 import { CompareProperties } from '../../interfaces/compare-properties';
 
+declare let $:any;
+
 @Component({
   selector: 'app-compare-properties',
   templateUrl: './compare-properties.component.html',
   styleUrls: ['./compare-properties.component.css']
 })
-export class ComparePropertiesComponent implements OnInit {
+export class ComparePropertiesComponent implements OnInit, AfterViewInit {
 
   language:string;
   properties$:Observable<CompareProperties[]>;
@@ -21,7 +23,7 @@ export class ComparePropertiesComponent implements OnInit {
   property2:any;
   property3:any;
   empty:CompareProperties = {
-    link: '---',
+    link: 'assets/images/single-property-01.jpg',
     state: '---',
     name: '---',
     price: '---',
@@ -60,5 +62,17 @@ export class ComparePropertiesComponent implements OnInit {
     });
     this.compareService.construct();
   }
+
+  ngAfterViewInit() {
+    this.fotterPadding();
+  }
+
+
+
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
+  }
+
 
 }

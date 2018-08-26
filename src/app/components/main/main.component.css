@@ -1,0 +1,4 @@
+form button:disabled {
+  background-color: gray;
+  cursor: no-drop;
+}

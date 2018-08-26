@@ -33,8 +33,11 @@
       <div class="col-md-12">
         <!-- Main Search Input -->
         <div class="main-search-input margin-bottom-40">
-          <input type="text" class="ico-01" placeholder="Type an agent name or location" value=""/>
-          <button class="button">Search</button>
+          <input type="text" class="ico-01" placeholder="Type an agent name" #agentInput/>
+          <!-- <select class="chosen-select api-updated-cities">
+              <option *ngFor="let city of cityList">{{ city.name }}</option>
+          </select> -->
+          <button class="button" (click)="search(agentInput.value)" [disabled]="isConnecting">Search</button>
         </div>
       </div>
 
@@ -46,7 +49,7 @@
           <div class="agents-grid-container">
 
             <!-- Agent -->
-            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents">
+            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents | slice:startSlice:endSlice">
               <div class="agent">
 
                 <div class="agent-avatar">
@@ -64,16 +67,8 @@
 
                   <ul class="agent-contact-details">
                     <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
-                    <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
+                    <li><i class="fa fa-envelope-o "></i><a>{{ agent.email }}</a></li>
                   </ul>
-
-                  <ul class="social-icons">
-                    <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-                    <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-                    <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-                    <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
-                  </ul>
-                  <div class="clearfix"></div>
                 </div>
 
               </div>
@@ -93,16 +88,14 @@
         <div class="pagination-container margin-top-20">
           <nav class="pagination">
             <ul>
-              <li><a href="#" class="current-page">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
+              <li><a class="current-page">{{ currentPage }} <span *ngIf="numOfPages > 0">/ {{ Math.ceil(numOfPages) }}</span></a></li>
             </ul>
           </nav>
 
           <nav class="pagination-next-prev">
             <ul>
-              <li><a href="#" class="prev">Previous</a></li>
-              <li><a href="#" class="next">Next</a></li>
+              <li><a (click)="prevPage()" class="prev">Previous</a></li>
+              <li><a (click)="nextPage()" class="next">Next</a></li>
             </ul>
           </nav>
         </div>
@@ -151,8 +144,8 @@
       <div class="col-md-12">
         <!-- Main Search Input -->
         <div class="main-search-input margin-bottom-40">
-          <input type="text" class="ico-01" placeholder="اكتب اسم السمسار او عنوان" value=""/>
-          <button class="button">ابحث</button>
+          <input type="text" class="ico-01" placeholder="اكتب اسم السمسار" #agentInput/>
+          <button class="button" (click)="search(agentInput.value)" [disabled]="isConnecting">ابحث</button>
         </div>
       </div>
 
@@ -164,7 +157,7 @@
           <div class="agents-grid-container">
 
             <!-- Agent -->
-            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents">
+            <div class="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let agent of agents | slice:startSlice:endSlice">
               <div class="agent">
 
                 <div class="agent-avatar">
@@ -184,14 +177,6 @@
                     <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
                     <li><i class="fa fa-envelope-o "></i><a href="#">{{ agent.email }}</a></li>
                   </ul>
-
-                  <ul class="social-icons">
-                    <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-                    <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-                    <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-                    <li><a class="linkedin" href="#"><i class="icon-linkedin"></i></a></li>
-                  </ul>
-                  <div class="clearfix"></div>
                 </div>
 
               </div>
@@ -211,16 +196,14 @@
         <div class="pagination-container margin-top-20">
           <nav class="pagination">
             <ul>
-              <li><a href="#" class="current-page">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
+              <li><a class="current-page">{{ currentPage }} <span *ngIf="numOfPages > 0">/ {{ Math.ceil(numOfPages) }}</span></a></li>
             </ul>
           </nav>
 
           <nav class="pagination-next-prev">
             <ul>
-              <li><a href="#" class="prev">السابق</a></li>
-              <li><a href="#" class="next">التالي</a></li>
+              <li><a (click)="prevPage()" class="prev">السابق</a></li>
+              <li><a (click)="nextPage()" class="next">التالي</a></li>
             </ul>
           </nav>
         </div>

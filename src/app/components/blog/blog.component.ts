@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -6,12 +6,14 @@ import { Observable } from 'rxjs/Observable';
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
 
+declare let $:any;
+
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css']
 })
-export class BlogComponent implements OnInit {
+export class BlogComponent implements OnInit, AfterViewInit {
 
   language:string;
   blog:any;
@@ -31,6 +33,17 @@ export class BlogComponent implements OnInit {
 
     //Get Popular Posts
     this.popularPosts = this.apiService.api.popularPosts;
+  }
+
+  ngAfterViewInit() {
+    this.fotterPadding();
+  }
+
+
+
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
   }
 
 }

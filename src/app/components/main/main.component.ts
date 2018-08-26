@@ -1,11 +1,13 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { Observable } from 'rxjs/Observable';
+import * as _ from 'lodash';
 
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
+import { SearchService } from '../../services/search.service';
 
 declare var $:any;
 
@@ -17,6 +19,13 @@ declare var $:any;
 export class MainComponent implements OnInit,AfterViewInit {
 
   language:string;
+
+  searchForm:FormGroup;
+  servicetypeList:any = [];
+  propertytypeList:any = [];
+  cityList:any = [];
+  selectedCity:any = {};
+
   featuredProperties = [];
   clientstestimonials = [];
   popularPlaces = [];
@@ -26,24 +35,22 @@ export class MainComponent implements OnInit,AfterViewInit {
   constructor(
     private route:ActivatedRoute,
     private languageService:LanguageService,
-    private apiService:ApiService,
-    private http:HttpClient) { }
+    private api:ApiService,
+    private http:HttpClient,
+    private router:Router,
+    private fb:FormBuilder,
+    private searchService:SearchService) {
+
+      this.searchForm = this.fb.group({
+        serviceType: ["SALE"],
+        propertyType: ["HOUSE"],
+        city: [null]
+      })
+    }
 
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
-
-    //Get Featured Properties
-    this.featuredProperties = this.apiService.api.featuredListings;
-
-    //Get Testmonials
-    this.clientstestimonials = this.apiService.api.testimonials;
-
-    //Get Most Popular Places
-    this.popularPlaces = this.apiService.api.topPopularPlaces;
-
-    //Get Blog Posts
-    this.blog = this.apiService.api.blog;
   }
 
   ngAfterViewInit() {
@@ -53,6 +60,9 @@ export class MainComponent implements OnInit,AfterViewInit {
     this.parallaxPosition();
     this.imageBox();
     this.chosenPlugin();
+    this.fotterPadding();
+
+    this.getServiceType(); this.getPropertyType(); this.chosenCities()
   }
 
 
@@ -251,6 +261,94 @@ export class MainComponent implements OnInit,AfterViewInit {
       // Unit character
       var fieldUnit = $(this).children('input').attr('data-unit');
       $(this).children('input').before('<i class="data-unit">'+ fieldUnit + '</i>');
+    });
+  }
+  fotterPadding() {
+    $('router-outlet ~ *').children().first().css('background-color', '#fff');
+    $('router-outlet ~ *').children().first().css('margin-bottom', $('.sticky-footer').outerHeight( true )+'px');
+  }
+
+  getServiceType() {
+    let self = this;
+
+    // get service type array
+    this.http.get(this.api.link+'/api/public/properties/service-types/ar').subscribe({
+      next: res => putservicetypeArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+
+    // add property type array to the DOM and update the chosenPlugin()
+    function putservicetypeArray(servicetype) {
+      self.servicetypeList = servicetype;
+      setTimeout(() => $('.api-updated-servicetype').trigger("chosen:updated"), 100);
+    }
+
+    // attach a change event
+    $('.api-updated-servicetype').on('change', (ev, params) => {
+      self.searchForm.controls.serviceType.setValue(params.selected);
+      self.getPropertyType();
+    })
+  }
+  getPropertyType() {
+    let self = this;
+
+    // get property type array
+    this.http.get(this.api.link+'/api/public/properties/property-types/ar/'+this.searchForm.controls.serviceType.value).subscribe({
+      next: res => putPropertytypeArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+
+    // add property type array to the DOM and update the chosenPlugin()
+    function putPropertytypeArray(propertytype) {
+      self.propertytypeList = propertytype;
+      setTimeout(() => $('.api-updated-propertytype').trigger("chosen:updated"), 100);
+    }
+
+    // attach a change event
+    $('.api-updated-propertytype').on('change', (ev, params) => {
+      self.searchForm.controls.propertyType.setValue(params.selected);
+    })
+  }
+  chosenCities() {
+    let self = this;
+
+    // attach a change event
+    $('.api-updated-cities').on('change', (ev, params) => {
+      self.selectedCity = _.find(self.cityList, {name: params.selected});
+      self.searchForm.controls.city.setValue(self.selectedCity.id);
+    })
+
+    // get city array
+    const httpOptions = {
+      params: new HttpParams()
+        .set( 'parentId.specified', 'false' )
+    }
+    this.http.get(this.api.link+'/api/public/regions', httpOptions).subscribe({
+      next: res => putCityArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+
+    // add city array to the DOM and update the chosenPlugin()
+    function putCityArray(cities) {
+      self.cityList = cities;
+      self.selectedCity = cities[0];
+      self.searchForm.controls.city.setValue(self.selectedCity.id);
+      setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
+    }
+  }
+
+
+  search(form) {
+    const httpOptions = {
+      params: new HttpParams()
+        .set( 'serviceType.in',  form.serviceType )
+        .set( 'propertyType.in', form.propertyType )
+        .set( 'size', '1000')
+        .set( 'cityId.equals', form.city )
+    }
+    this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe({
+      next: res => { this.searchService.newSearch(res); this.router.navigate([this.language+'/listings/default'])},
+      error: err => this.api.API_ERROR(err, this.language)
     });
   }
 

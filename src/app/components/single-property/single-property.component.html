@@ -61,7 +61,6 @@
           <!-- Main Features -->
           <ul class="property-main-features">
             <li>Area <span>{{ listingResults.area }}</span></li>
-            <li>Rooms <span>{{ listingResults.rooms }}</span></li>
             <li>Bedrooms <span>{{ listingResults.beds }}</span></li>
             <li>Bathrooms <span>{{ listingResults.bathrooms }}</span></li>
           </ul>
@@ -82,106 +81,12 @@
           </ul>
 
 
-          <!-- Features -->
-          <h3 class="desc-headline">Features</h3>
-          <ul class="property-features checkboxes margin-top-0">
-            <li *ngFor="let feature of listingResults.features" [innerHTML]="feature"></li>
-          </ul>
-
-
-          <!-- Floorplans -->
-          <h3 class="desc-headline no-border">Floorplans</h3>
-          <!-- Accordion -->
-          <div class="style-1 fp-accordion">
-            <div class="accordion">
-
-              <span *ngFor="let floor of listingResults.floorPlans">
-                <h3>{{ floor.title }} <span>{{ floor.area }}</span> <i class="fa fa-angle-down"></i> </h3>
-                <div>
-                  <a class="floor-pic mfp-image" href="{{ floor.image}}">
-                    <img src="{{ floor.image }}">
-                  </a>
-                  <p [innerHtml]="floor.description"></p>
-                </div>
-              </span>
-
-            </div>
-          </div>
-
-
-          <!-- Video -->
-          <h3 class="desc-headline no-border">Video</h3>
-          <div class="responsive-iframe">
-            <iframe width="560" height="315" [src]="sanitizer.bypassSecurityTrustResourceUrl(listingResults.video)" frameborder="0" allowfullscreen></iframe>
-          </div>
-
-
           <!-- Location -->
           <h3 class="desc-headline no-border" id="location">Location</h3>
           <div id="propertyMap-container">
             <div id="propertyMap" [attr.data-latitude]="listingResults.latitude" [attr.data-longitude]="listingResults.longitude"></div>
             <a href="#" id="streetView">Street View</a>
           </div>
-
-
-          <!-- Similar Listings Container -->
-          <h3 class="desc-headline no-border margin-bottom-35 margin-top-60">Similar Properties</h3>
-
-          <!-- Layout Switcher -->
-
-          <div class="layout-switcher hidden"><a href="#" class="list"><i class="fa fa-th-list"></i></a></div>
-          <div class="listings-container list-layout">
-
-            <!-- Listing Item -->
-            <div class="listing-item" *ngFor="let property of listingResults.similarProperties">
-
-              <a class="listing-img-container">
-
-                <div class="listing-badges">
-                  <span>{{ property.state }}</span>
-                </div>
-
-                <div class="listing-img-content">
-                  <span class="listing-price">{{ property.price }} <i>{{ property.priceDetail }}</i></span>
-                  <span class="like-icon"></span>
-                </div>
-
-                <img src="{{ property.image }}">
-
-              </a>
-
-              <div class="listing-content">
-
-                <div class="listing-title">
-                  <h4><a href="#">{{ property.title }}</a></h4>
-                  <a href="{{ property.mapUrl }}" class="listing-address popup-gmaps">
-                    <i class="fa fa-map-marker"></i>
-                    {{ property.adress }}
-                  </a>
-
-                  <a [routerLink]="['/en/single-property', property.id]" class="details button border">Details</a>
-                </div>
-
-                <ul class="listing-details">
-                  <li>{{ property.area }} sq ft</li>
-                  <li>{{ property.bedrooms }} Bedrooms</li>
-                  <li>{{ property.rooms }} Rooms</li>
-                  <li>{{ property.bathrooms }} Bathrooms</li>
-                </ul>
-
-                <div class="listing-footer">
-                  <a [routerLink]="['/agent-page']"><i class="fa fa-user"></i> {{ property.client }}</a>
-                  <span><i class="fa fa-calendar-o"></i> {{ property.date }} days ago</span>
-                </div>
-
-              </div>
-              <!-- Listing Item / End -->
-
-            </div>
-            <!-- Listing Item / End -->
-
-          </div>
-          <!-- Similar Listings Container / End -->
 
         </div>
       </div>
@@ -194,7 +99,6 @@
 
           <!-- Widget -->
           <div class="widget margin-bottom-30">
-            <button class="widget-button with-tip" data-tip-content="Print"><i class="sl sl-icon-printer"></i></button>
             <button class="widget-button with-tip" data-tip-content="Add to Bookmarks"><i class="fa fa-star-o"></i></button>
             <button class="widget-button with-tip compare-widget-button" data-tip-content="Add to Compare" (click)="addProperty()"><i class="icon-compare"></i></button>
             <div class="clearfix"></div>
@@ -204,35 +108,10 @@
 
           <!-- Widget -->
           <div class="widget">
-
-            <!-- Agent Widget -->
-            <div class="agent-widget">
-              <div class="agent-title">
-                <div class="agent-photo"><img src="{{ listingResults.client.image }}"/></div>
-                <div class="agent-details">
-                  <h4><a [routerLink]="['/en/agent-page', listingResults.client.id]">{{ listingResults.client.name }}</a></h4>
-                  <span><i class="sl sl-icon-call-in"></i>{{ listingResults.client.phone }}</span>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-
-              <input type="text" placeholder="Your Email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
-              <input type="text" placeholder="Your Phone">
-              <textarea>I'm interested in this property [ID 123456] and I'd like to know more details.</textarea>
-              <button class="button fullwidth margin-top-5">Send Message</button>
-            </div>
-            <!-- Agent Widget / End -->
-
-          </div>
-          <!-- Widget / End -->
-
-
-          <!-- Widget -->
-          <div class="widget">
             <h3 class="margin-bottom-30 margin-top-30">Mortgage Calculator</h3>
 
             <!-- Mortgage Calculator -->
-            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" data-calc-currency="USD">
+            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" [attr.data-calc-currency]="listingResults.priceDetail">
               <div class="calc-input">
                 <div class="pick-price tip" data-tip-content="Set This Property Price"></div>
                   <input type="text" id="amount" name="amount" placeholder="Sale Price" required>
@@ -262,51 +141,13 @@
           </div>
           <!-- Widget / End -->
 
-
-          <!-- Widget -->
-          <div class="widget">
-            <h3 class="margin-bottom-35">Featured Properties</h3>
-
-            <div class="listing-carousel outer">
-              <!-- Item -->
-              <div class="item" *ngFor="let property of featuredProperties">
-                <div class="listing-item compact">
-
-                  <a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
-
-                    <div class="listing-badges">
-                      <span class="featured">Featured</span>
-                      <span>{{ property.state }}</span>
-                    </div>
-
-                    <div class="listing-img-content">
-                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-                      <ul class="listing-hidden-content">
-                        <li>Area <span>{{ property.area }} sq ft</span></li>
-                        <li>Rooms <span>{{ property.rooms }}</span></li>
-                        <li>Beds <span>{{ property.beds }}</span></li>
-                        <li>Baths <span>{{ property.baths }}</span></li>
-                      </ul>
-                    </div>
-
-                    <img src="{{ property.image }}">
-                  </a>
-
-                </div>
-              </div>
-              <!-- Item / End -->
-            </div>
-
-          </div>
-          <!-- Widget / End -->
-
         </div>
       </div>
       <!-- Sidebar / End -->
 
     </div>
   </div>
+  <div class="padding-top-50"></div>
 </div>
 <!-- English Section / End -->
 
@@ -366,7 +207,7 @@
 
 
   <div class="container">
-    <div class="row">
+    <div class="row" style="overflow-x:hidden">
 
       <!-- Property Description -->
       <div class="col-lg-8 col-md-7">
@@ -375,7 +216,6 @@
           <!-- Main Features -->
           <ul class="property-main-features">
             <li>المساحة <span>{{ listingResults.area }}</span></li>
-            <li>الغرف <span>{{ listingResults.rooms }}</span></li>
             <li>السرائر <span>{{ listingResults.beds }}</span></li>
             <li>الحمامات <span>{{ listingResults.bathrooms }}</span></li>
           </ul>
@@ -384,7 +224,7 @@
           <!-- Description -->
           <h3 class="desc-headline">الوصف</h3>
           <div class="show-more">
-            <span [innerHTML]="listingResults.descriptionAr"></span>
+            <span [innerHTML]="listingResults.description"></span>
 
             <a href="#" class="show-more-button">اظهر المزيد <i class="fa fa-angle-down"></i></a>
           </div>
@@ -392,42 +232,8 @@
           <!-- Details -->
           <h3 class="desc-headline">التفاصيل</h3>
           <ul class="property-features margin-top-0">
-            <li *ngFor="let detail of listingResults.detailsAr" [innerHTML]="detail"></li>
+            <li *ngFor="let detail of listingResults.details" [innerHTML]="detail"></li>
           </ul>
-
-
-          <!-- Features -->
-          <h3 class="desc-headline">مميزات</h3>
-          <ul class="property-features checkboxes margin-top-0">
-            <li *ngFor="let feature of listingResults.featuresAr" [innerHTML]="feature"></li>
-          </ul>
-
-
-          <!-- Floorplans -->
-          <h3 class="desc-headline no-border">مخطط الدور</h3>
-          <!-- Accordion -->
-          <div class="style-1 fp-accordion">
-            <div class="accordion">
-
-              <span *ngFor="let floor of listingResults.floorPlans">
-                <h3>{{ floor.title | translate }} <span>{{ floor.area }}</span> <i class="fa fa-angle-down"></i> </h3>
-                <div>
-                  <a class="floor-pic mfp-image" href="{{ floor.image}}">
-                    <img src="{{ floor.image }}">
-                  </a>
-                  <p [innerHtml]="floor.description"></p>
-                </div>
-              </span>
-
-            </div>
-          </div>
-
-
-          <!-- Video -->
-          <h3 class="desc-headline no-border">فيديو</h3>
-          <div class="responsive-iframe">
-              <iframe width="560" height="315" [src]="sanitizer.bypassSecurityTrustResourceUrl(listingResults.video)" frameborder="0" allowfullscreen></iframe>
-          </div>
 
 
           <!-- Location -->
@@ -436,162 +242,6 @@
             <div id="propertyMap" [attr.data-latitude]="listingResults.latitude" [attr.data-longitude]="listingResults.longitude"></div>
             <a href="#" id="streetView">Street View</a>
           </div>
-
-
-          <!-- Similar Listings Container -->
-          <h3 class="desc-headline no-border margin-bottom-35 margin-top-60">عقارات مشابهة</h3>
-
-          <!-- Layout Switcher -->
-
-          <div class="layout-switcher hidden"><a href="#" class="list"><i class="fa fa-th-list"></i></a></div>
-          <div class="listings-container list-layout">
-
-            <!-- Listing Item -->
-            <div class="listing-item" *ngFor="let property of listingResults.similarProperties">
-
-              <a class="listing-img-container">
-
-                <div class="listing-badges">
-                  <span>{{ property.state | translate }}</span>
-                </div>
-
-                <div class="listing-img-content">
-                  <span class="listing-price">{{ property.price }} <i>{{ property.priceDetail }}</i></span>
-                  <span class="like-icon"></span>
-                </div>
-
-                <img src="{{ property.image }}">
-
-              </a>
-
-              <div class="listing-content">
-
-                <div class="listing-title">
-                  <h4><a href="#">{{ property.title }}</a></h4>
-                  <a href="{{ property.mapUrl }}" class="listing-address popup-gmaps">
-                    <i class="fa fa-map-marker"></i>
-                    <bdo dir="ltr"> {{ property.adress }} </bdo>
-                  </a>
-
-                  <a [routerLink]="['/ar/single-property', property.id]" class="details button border">تفاصيل</a>
-                </div>
-
-                <ul class="listing-details">
-                  <li>{{ property.area }} sq ft</li>
-                  <li>{{ property.bedrooms }} سرير</li>
-                  <li>{{ property.rooms }} غرف</li>
-                  <li>{{ property.bathrooms }} حمام</li>
-                </ul>
-
-                <div class="listing-footer">
-                  <a [routerLink]="['/agent-page']"><i class="fa fa-user"></i> {{ property.client }}</a>
-                  <span><i class="fa fa-calendar-o"></i> {{ property.date }} days ago</span>
-                </div>
-
-              </div>
-              <!-- Listing Item / End -->
-
-            </div>
-            <!-- Listing Item / End -->
-
-
-            <!-- Listing Item -->
-            <div class="listing-item">
-
-              <a href="#" class="listing-img-container">
-
-                <div class="listing-badges">
-                  <span>للبيع</span>
-                </div>
-
-                <div class="listing-img-content">
-                  <span class="listing-price">$420,000 <i>$770 / sq ft</i></span>
-                  <span class="like-icon"></span>
-                </div>
-
-                <div><img src="assets/images/listing-04.jpg" alt=""></div>
-
-              </a>
-
-              <div class="listing-content">
-
-                <div class="listing-title">
-                  <h4><a href="#">Selway Apartments</a></h4>
-                  <a href="https://maps.google.com/maps?q=221B+Baker+Street,+London,+United+Kingdom&hl=en&t=v&hnear=221B+Baker+St,+London+NW1+6XE,+United+Kingdom" class="listing-address popup-gmaps">
-                    <i class="fa fa-map-marker"></i>
-                    <bdo dir="ltr"> 33 William St. Northbrook, IL </bdo>
-                  </a>
-
-                  <a href="#" class="details button border">تفاصيل</a>
-                </div>
-
-                <ul class="listing-details">
-                  <li>540 sq ft</li>
-                  <li>1 سرير</li>
-                  <li>3 غرف</li>
-                  <li>2 حمام</li>
-                </ul>
-
-                <div class="listing-footer">
-                  <a href="#"><i class="fa fa-user"></i> Kristen Berry</a>
-                  <span><i class="fa fa-calendar-o"></i> منذ 3 ايام</span>
-                </div>
-
-              </div>
-              <!-- Listing Item / End -->
-
-            </div>
-            <!-- Listing Item / End -->
-
-
-            <!-- Listing Item -->
-            <div class="listing-item">
-
-              <a href="#" class="listing-img-container">
-                <div class="listing-badges">
-                  <span>للبيع</span>
-                </div>
-
-                <div class="listing-img-content">
-                  <span class="listing-price">$535,000 <i>$640 / sq ft</i></span>
-                  <span class="like-icon"></span>
-                </div>
-
-                <img src="assets/images/listing-05.jpg" alt="">
-              </a>
-
-              <div class="listing-content">
-
-                <div class="listing-title">
-                  <h4><a href="#">Oak Tree Villas</a></h4>
-                  <a href="https://maps.google.com/maps?q=221B+Baker+Street,+London,+United+Kingdom&hl=en&t=v&hnear=221B+Baker+St,+London+NW1+6XE,+United+Kingdom" class="listing-address popup-gmaps">
-                    <i class="fa fa-map-marker"></i>
-                    <bdo dir="ltr"> 71 Lower River Dr. Bronx, NY </bdo>
-                  </a>
-
-                  <a href="#" class="details button border">تفاصيل</a>
-                </div>
-
-                <ul class="listing-details">
-                  <li>350 sq ft</li>
-                  <li>1 سرير</li>
-                  <li>2 غرف</li>
-                  <li>1 حمام</li>
-                </ul>
-
-                <div class="listing-footer">
-                  <a href="#"><i class="fa fa-user"></i> Mabel Gagnon</a>
-                  <span><i class="fa fa-calendar-o"></i> منذ 4 ايام</span>
-                </div>
-
-              </div>
-              <!-- Listing Item / End -->
-
-            </div>
-            <!-- Listing Item / End -->
-
-          </div>
-          <!-- Similar Listings Container / End -->
 
         </div>
       </div>
@@ -603,7 +253,6 @@
 
           <!-- Widget -->
           <div class="widget margin-bottom-30">
-            <button class="widget-button with-tip" data-tip-content="Print"><i class="sl sl-icon-printer"></i></button>
             <button class="widget-button with-tip" data-tip-content="Add to Bookmarks"><i class="fa fa-star-o"></i></button>
             <button class="widget-button with-tip compare-widget-button" data-tip-content="Add to Compare"><i class="icon-compare"></i></button>
             <div class="clearfix"></div>
@@ -613,35 +262,10 @@
 
           <!-- Widget -->
           <div class="widget">
-
-            <!-- Agent Widget -->
-            <div class="agent-widget">
-              <div class="agent-title">
-                <div class="agent-photo"><img src="{{ listingResults.client.image }}"/></div>
-                <div class="agent-details">
-                  <h4><a [routerLink]="['/ar/agent-page', listingResults.client.id]">{{ listingResults.client.name }}</a></h4>
-                  <span><i class="sl sl-icon-call-in"></i>{{ listingResults.client.phone }}</span>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-
-              <input type="text" placeholder="البريد الالكتروني" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
-              <input type="text" placeholder="رقم الهاتف">
-              <textarea>انا مهتم بالعقار رقم [ID 123456] و احب ان اعرف تفاصيل اكثر</textarea>
-              <button class="button fullwidth margin-top-5">ارسل رسالة</button>
-            </div>
-            <!-- Agent Widget / End -->
-
-          </div>
-          <!-- Widget / End -->
-
-
-          <!-- Widget -->
-          <div class="widget">
             <h3 class="margin-bottom-30 margin-top-30">حساب الرهن العقاري</h3>
 
             <!-- Mortgage Calculator -->
-            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" data-calc-currency="USD">
+            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" [attr.data-calc-currency]="listingResults.priceDetail">
               <div class="calc-input">
                 <div class="pick-price tip" data-tip-content="Set This Property Price"></div>
                   <input type="text" id="amount" name="amount" placeholder="سعر البيع" required>
@@ -671,50 +295,14 @@
           </div>
           <!-- Widget / End -->
 
-
-          <!-- Widget -->
-          <div class="widget" style="direction:ltr">
-            <h3 class="margin-bottom-35">عقارات مميزة</h3>
-
-            <div class="listing-carousel outer">
-              <!-- Item -->
-              <div class="item" *ngFor="let property of featuredProperties">
-                <div class="listing-item compact">
-
-                  <a [routerLink]="['/ar/single-property', property.id]" class="listing-img-container">
-
-                    <div class="listing-badges">
-                      <span class="featured">مميز</span>
-                      <span>{{ property.state | translate }}</span>
-                    </div>
-
-                    <div class="listing-img-content">
-                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-                      <ul class="listing-hidden-content">
-                        <li>المساحة <span>{{ property.area }} sq ft</span></li>
-                        <li>الغرف <span>{{ property.rooms }}</span></li>
-                        <li>السرائر <span>{{ property.beds }}</span></li>
-                        <li>الحمامات <span>{{ property.baths }}</span></li>
-                      </ul>
-                    </div>
-
-                    <img src="{{ property.image }}">
-                  </a>
-
-                </div>
-              </div>
-              <!-- Item / End -->
-            </div>
-
-          </div>
-          <!-- Widget / End -->
-
         </div>
       </div>
       <!-- Sidebar / End -->
 
     </div>
   </div>
+  <div class="padding-top-50"></div>
 </div>
 <!-- Arabic Section / End -->
+
+<div class="overlay"></div>

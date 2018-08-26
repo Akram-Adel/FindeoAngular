@@ -18,6 +18,8 @@ html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform:
   html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform: translate(-440px, 0); -ms-transform: translate(-440px, 0); transform: translate(-440px, 0); -webkit-transform: translate3d(-440px, 0, 0); transform: translate3d(-440px, 0, 0); }
 }
 
+.rtl-config input, .rtl-config .widget input.first-slider-value { direction: ltr }
+.rtl-config .submit-page input, .rtl-config .widget input { direction: rtl }
 .rtl-config .compare-slide-menu { right: auto; left: -320px; }
 .rtl-config .compare-slide-menu.active { right: auto; left: 0; }
 .rtl-config .csm-trigger { left: auto; right: -50px; border-radius: 0 3px 3px 0; }
@@ -40,7 +42,7 @@ html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform:
 .rtl-config #navigation ul ul li a:only-child:after { content: ''; }
 .rtl-config .header-widget { text-align: left; }
 .rtl-config .header-widget .sign-in { margin-right: 0; margin-left: 25px; }
-.rtl-config .user-menu { margin-left: 35px; }
+.rtl-config .user-menu { margin-left: 35px; float: left; }
 .rtl-config .user-menu>ul>li { text-align: right; }
 .rtl-config .back-to-listings { float: right; left: auto; right: 15px; margin-right: 0; margin-left: 25px; }
 .rtl-config .back-to-listings:before { content: '\f105'; }
@@ -53,7 +55,7 @@ html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform:
 .rtl-config .listing-footer span { float: left; }
 .rtl-config .listing-footer i { padding-right: 0px; padding-left: 3px; }
 .rtl-config .widget-button.with-tip { float: right; margin-right: 0px; margin-left: 5px; }
-.rtl-config .mortgageCalc input, .mortgageCalc input:focus { padding-left: 20px; padding-right: 65px; }
+.rtl-config .mortgageCalc input, .rtl-config .mortgageCalc input:focus { padding-left: 20px; padding-right: 65px; }
 .rtl-config .mortgageCalc .fa { left: auto; right: 1px; }
 .rtl-config .pick-price.tip { right: auto; left: 15px; }
 .rtl-config .footer-links li:before { content: '\f104'; left: auto; right: 0; padding: 0 0 0 7px; }
@@ -104,6 +106,7 @@ html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform:
 .rtl-config a.read-more i { padding-left: 0; padding-right: 4px; }
 .rtl-config .widget .search-blog-input .input:before { right: auto; left: 18px; padding-left: 0; padding-right: 7px; }
 .rtl-config .button i { padding-right: 0; padding-left: 4px; }
+.rtl-config .submit-page .button i { padding-right: 4px; padding-left: 0; }
 .social-icons { display: flex; }
 .rtl-config .social-icons li { float: right; margin-right: 0; margin-left: 16px; }
 .rtl-config .facebook i, .facebook:before { margin: 13px 16px 0 0; right: 0; }
@@ -161,6 +164,10 @@ body.rtl-config .carousel { left: auto; right: -15px; }
 .rtl-config .details.button.border:hover:after { right: auto; left: 15px; }
 .rtl-config .back-to-listings:before { left: auto; right: -1px; }
 .rtl-config .fp-accordion .accordion h3.ui-accordion-header span { margin-left: 0; margin-right: 3px; }
+.rtl-config input[type="submit"] { margin-right: 0; margin-left: 6px; }
+.rtl-config p.form-row input.loading, .submit-wrapper button[type="button"].loading { margin-left: 0; margin-right: 50px; }
+.rtl-config .user-menu ul { right: auto !important; left: 0 !important;}
+.rtl-config button.button, .rtl-config input[type="button"], .rtl-config input[type="submit"], .rtl-config a.button.border, .rtl-config a.button { margin-right: 0; margin-left: 6px; }
 
 .translate .tip-content { transform: translate(-130%, 7px); }
 .translate:hover .tip-content { opacity: 1; visibility: visible; transform: translate(-120%, 7px); background-color: #fff; color: #333; }

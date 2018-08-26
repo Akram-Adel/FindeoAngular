@@ -84,13 +84,6 @@
             </li>
 
             <li>
-              <div>Rooms</div>
-              <div>{{ property1.rooms }}</div>
-              <div>{{ property2.rooms }}</div>
-              <div>{{ property3.rooms }}</div>
-            </li>
-
-            <li>
               <div>Bedrooms</div>
               <div>{{ property1.bedrooms }}</div>
               <div>{{ property2.bedrooms }}</div>
@@ -105,56 +98,6 @@
             </li>
 
             <li>
-              <div>Air Conditioning</div>
-              <div><span [ngClass]="{'available': property1.airConditioning, 'not-available': !property1.airConditioning}"></span></div>
-              <div><span [ngClass]="{'available': property2.airConditioning, 'not-available': !property2.airConditioning}"></span></div>
-              <div><span [ngClass]="{'available': property3.airConditioning, 'not-available': !property3.airConditioning}"></span></div>
-            </li>
-
-            <li>
-              <div>Swimming Pool</div>
-              <div><span [ngClass]="{'available': property1.swimmingPool, 'not-available': !property1.swimmingPool}"></span></div>
-              <div><span [ngClass]="{'available': property2.swimmingPool, 'not-available': !property2.swimmingPool}"></span></div>
-              <div><span [ngClass]="{'available': property3.swimmingPool, 'not-available': !property3.swimmingPool}"></span></div>
-            </li>
-
-            <li>
-              <div>Laundry Room</div>
-              <div><span [ngClass]="{'available': property1.laundryRoom, 'not-available': !property1.laundryRoom}"></span></div>
-              <div><span [ngClass]="{'available': property2.laundryRoom, 'not-available': !property2.laundryRoom}"></span></div>
-              <div><span [ngClass]="{'available': property3.laundryRoom, 'not-available': !property3.laundryRoom}"></span></div>
-            </li>
-
-            <li>
-              <div>Window Covering</div>
-              <div><span [ngClass]="{'available': property1.windoCovering, 'not-available': !property1.windoCovering}"></span></div>
-              <div><span [ngClass]="{'available': property2.windoCovering, 'not-available': !property2.windoCovering}"></span></div>
-              <div><span [ngClass]="{'available': property3.windoCovering, 'not-available': !property3.windoCovering}"></span></div>
-            </li>
-
-            <li>
-              <div>Gym</div>
-              <div><span [ngClass]="{'available': property1.gym, 'not-available': !property1.gym}"></span></div>
-              <div><span [ngClass]="{'available': property2.gym, 'not-available': !property2.gym}"></span></div>
-              <div><span [ngClass]="{'available': property3.gym, 'not-available': !property3.gym}"></span></div>
-            </li>
-
-            <li>
-              <div>Internet</div>
-              <div><span [ngClass]="{'available': property1.internet, 'not-available': !property1.internet}"></span></div>
-              <div><span [ngClass]="{'available': property2.internet, 'not-available': !property2.internet}"></span></div>
-              <div><span [ngClass]="{'available': property3.internet, 'not-available': !property3.internet}"></span></div>
-            </li>
-
-            <li>
-              <div>Alarm</div>
-              <div><span [ngClass]="{'available': property1.alarm, 'not-available': !property1.alarm}"></span></div>
-              <div><span [ngClass]="{'available': property2.alarm, 'not-available': !property2.alarm}"></span></div>
-              <div><span [ngClass]="{'available': property3.alarm, 'not-available': !property3.alarm}"></span></div>
-            </li>
-
-
-            <li>
               <div>Building Age</div>
               <div>{{ property1.age }}</div>
               <div>{{ property2.age }}</div>
@@ -162,23 +105,10 @@
             </li>
 
             <li>
-              <div>Heating</div>
-              <div>{{ property1.heating }}</div>
-              <div>{{ property2.heating }}</div>
-              <div>{{ property3.heating }}</div>
-            </li>
-
-            <li>
-              <div>Parking</div>
-              <div><span [ngClass]="{'available': property1.parking, 'not-available': !property1.parking}"></span></div>
-              <div><span [ngClass]="{'available': property2.parking, 'not-available': !property2.parking}"></span></div>
-              <div><span [ngClass]="{'available': property3.parking, 'not-available': !property3.parking}"></span></div>
-            </li>
-            <li>
-              <div>Sewer</div>
-              <div>{{ property1. sewer }}</div>
-              <div>{{ property2. sewer }}</div>
-              <div>{{ property3. sewer }}</div>
+              <div>Building Quality</div>
+              <div>{{ property1.quality }}</div>
+              <div>{{ property2.quality }}</div>
+              <div>{{ property3.quality }}</div>
             </li>
 
           </ul>
@@ -281,13 +211,6 @@
             </li>
 
             <li>
-              <div>الغرف</div>
-              <div>{{ property1.rooms }}</div>
-              <div>{{ property2.rooms }}</div>
-              <div>{{ property3.rooms }}</div>
-            </li>
-
-            <li>
               <div>السرائر</div>
               <div>{{ property1.bedrooms }}</div>
               <div>{{ property2.bedrooms }}</div>
@@ -302,56 +225,6 @@
             </li>
 
             <li>
-              <div>تكيف</div>
-              <div><span [ngClass]="{'available': property1.airConditioning, 'not-available': !property1.airConditioning}"></span></div>
-              <div><span [ngClass]="{'available': property2.airConditioning, 'not-available': !property2.airConditioning}"></span></div>
-              <div><span [ngClass]="{'available': property3.airConditioning, 'not-available': !property3.airConditioning}"></span></div>
-            </li>
-
-            <li>
-              <div>حمام سباحة</div>
-              <div><span [ngClass]="{'available': property1.swimmingPool, 'not-available': !property1.swimmingPool}"></span></div>
-              <div><span [ngClass]="{'available': property2.swimmingPool, 'not-available': !property2.swimmingPool}"></span></div>
-              <div><span [ngClass]="{'available': property3.swimmingPool, 'not-available': !property3.swimmingPool}"></span></div>
-            </li>
-
-            <li>
-              <div>غرقة غسيل</div>
-              <div><span [ngClass]="{'available': property1.laundryRoom, 'not-available': !property1.laundryRoom}"></span></div>
-              <div><span [ngClass]="{'available': property2.laundryRoom, 'not-available': !property2.laundryRoom}"></span></div>
-              <div><span [ngClass]="{'available': property3.laundryRoom, 'not-available': !property3.laundryRoom}"></span></div>
-            </li>
-
-            <li>
-              <div>غطاء نوافز</div>
-              <div><span [ngClass]="{'available': property1.windoCovering, 'not-available': !property1.windoCovering}"></span></div>
-              <div><span [ngClass]="{'available': property2.windoCovering, 'not-available': !property2.windoCovering}"></span></div>
-              <div><span [ngClass]="{'available': property3.windoCovering, 'not-available': !property3.windoCovering}"></span></div>
-            </li>
-
-            <li>
-              <div>صالة رياضية</div>
-              <div><span [ngClass]="{'available': property1.gym, 'not-available': !property1.gym}"></span></div>
-              <div><span [ngClass]="{'available': property2.gym, 'not-available': !property2.gym}"></span></div>
-              <div><span [ngClass]="{'available': property3.gym, 'not-available': !property3.gym}"></span></div>
-            </li>
-
-            <li>
-              <div>انترنت</div>
-              <div><span [ngClass]="{'available': property1.internet, 'not-available': !property1.internet}"></span></div>
-              <div><span [ngClass]="{'available': property2.internet, 'not-available': !property2.internet}"></span></div>
-              <div><span [ngClass]="{'available': property3.internet, 'not-available': !property3.internet}"></span></div>
-            </li>
-
-            <li>
-              <div>جهاز انزار</div>
-              <div><span [ngClass]="{'available': property1.alarm, 'not-available': !property1.alarm}"></span></div>
-              <div><span [ngClass]="{'available': property2.alarm, 'not-available': !property2.alarm}"></span></div>
-              <div><span [ngClass]="{'available': property3.alarm, 'not-available': !property3.alarm}"></span></div>
-            </li>
-
-
-            <li>
               <div>عمر المبني</div>
               <div>{{ property1.age }}</div>
               <div>{{ property2.age }}</div>
@@ -359,23 +232,10 @@
             </li>
 
             <li>
-              <div>التدفية</div>
-              <div>{{ property1.heating }}</div>
-              <div>{{ property2.heating }}</div>
-              <div>{{ property3.heating }}</div>
-            </li>
-
-            <li>
-              <div>جراج</div>
-              <div><span [ngClass]="{'available': property1.parking, 'not-available': !property1.parking}"></span></div>
-              <div><span [ngClass]="{'available': property2.parking, 'not-available': !property2.parking}"></span></div>
-              <div><span [ngClass]="{'available': property3.parking, 'not-available': !property3.parking}"></span></div>
-            </li>
-            <li>
-              <div>صرف صحي</div>
-              <div>{{ property1. sewer }}</div>
-              <div>{{ property2. sewer }}</div>
-              <div>{{ property3. sewer }}</div>
+              <div>حالة المبني</div>
+              <div>{{ property1.quality }}</div>
+              <div>{{ property2.quality }}</div>
+              <div>{{ property3.quality }}</div>
             </li>
 
           </ul>

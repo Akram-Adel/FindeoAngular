@@ -1,0 +1,37 @@
+input:focus { border-color: #274abb; }
+input.ng-valid { border-color: #5f9025; }
+input.ng-invalid.ng-touched, input.ng-invalid.ng-dirty { border-color: #de5959; }
+
+form p.form-row:last-child,
+form p.form-row.login {
+  position: relative;
+}
+
+form input[type="submit"] {
+  transition: all 0.5s ease-out !important;
+}
+form input[type="submit"]:disabled {
+ background-color: gray;
+ cursor: no-drop;
+}
+p.form-row input.loading {
+  margin-left: 50px;
+}
+
+
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+p.form-row i.im.im-icon-Arrow-Around {
+  position: absolute; top: calc(50% - 15px);
+  font-size: 30px;
+  vertical-align: middle;
+  color: #274abb;
+  font-weight: 800;
+  animation-name: spin;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+p.form-row.login i.im.im-icon-Arrow-Around { position: absolute; top: calc(50% - 35px) }

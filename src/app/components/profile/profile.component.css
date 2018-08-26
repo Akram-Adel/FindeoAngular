@@ -1,0 +1,65 @@
+button:disabled,
+div.disabled {
+  background-color: gray;
+  cursor: no-drop;
+}
+
+input[type="email"] {
+  background-color: #eee;
+  cursor: no-drop;
+}
+
+button.border {
+  border: 1px solid #274abb;
+  color: #274abb;
+  background-color: transparent;
+}
+button.border:hover {
+  background-color: #274abb;
+  color: #fff;
+}
+button.border:disabled {
+  background-color: gray;
+  cursor: no-drop;
+  color: #fff;
+  border: 1px solid gray;
+}
+
+
+.autocomplete { position: relative; }
+
+.autocomplete ul.chosen-results {
+  position: absolute; width: 100%;
+  top: 100%; left: 0; right: 0;
+  color: #888;
+  z-index: 99;
+  overflow-x: hidden; overflow-y: hidden;
+  margin: 0 4px 0px 0;
+  padding: 0 4px 0 8px;
+  max-height: 300px;
+  margin-top: -1px;
+  border: 1px solid #e0e0e0;
+  background-color: #fcfcfc;
+  background: linear-gradient(to bottom, rgba(252,252,252,1) 0%,rgba(255,255,255,1) 100%);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.autocomplete ul.chosen-results>li {
+  display: list-item;
+  cursor: pointer;
+  margin: 0;
+  padding: 10px 10px;
+  list-style: none;
+  line-height: 15px;
+  word-wrap: break-word;
+}
+
+.autocomplete ul.chosen-results>li:last-child { margin-bottom: 8px; }
+
+.autocomplete ul.chosen-results>li:hover {
+  background-color: #274abb;
+  border-radius: 3px;
+  color: #fff;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}

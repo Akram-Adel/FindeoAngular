@@ -2,11 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule }    from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { LanguageService } from './services/language.service';
 import { CompareService } from './services/compare.service';
 import { ApiService } from './services/api.service';
+import { UserService } from './services/user.service';
+import { SearchService } from './services/search.service';
 
 import { ReversePipe } from './pipes/reverse.pipe';
 import { LimitPipe } from './pipes/limit.pipe';
@@ -32,7 +36,6 @@ import { BlogPostComponent } from './components/blog-post/blog-post.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { LoginsComponent } from './components/logins/logins.component';
-import { ErrHandlingService } from './services/err-handling.service';
 
 
 @NgModule({
@@ -64,9 +67,12 @@ import { ErrHandlingService } from './services/err-handling.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [LanguageService, CompareService, ErrHandlingService, ApiService],
+  providers: [LanguageService, CompareService, ApiService, UserService, SearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

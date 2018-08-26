@@ -14,36 +14,35 @@
 						<h2>اعثر علي منزل جديد</h2>
 
 						<!-- Row With Forms -->
-						<div class="row with-forms">
+						<form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
+							<div class="row with-forms">
 
-							<!-- Property Type -->
-							<div class="col-md-3">
-								<select data-placeholder="Any Type" class="chosen-select-no-single" >
-									<option>شقق</option>
-									<option>منازل</option>
-									<option>متاجر</option>
-									<option>جاراج</option>
-									<option>اراضي</option>
-								</select>
-							</div>
-
-							<!-- Status -->
-							<div class="col-md-3">
-								<select data-placeholder="Any Status" class="chosen-select-no-single" >
-									<option>للبيع</option>
-									<option>للإيجار</option>
-								</select>
-							</div>
-
-							<!-- Main Search Input -->
-							<div class="col-md-6">
-								<div class="main-search-input">
-									<input type="text" placeholder="ادخل العنوان, مثل الشارع, المدينة او المحافظة" value=""/>
-									<button class="button"><i class="fa fa-search"></i></button>
+								<!-- Status -->
+								<div class="col-md-3">
+									<select data-placeholder="Any Status" class="chosen-select-no-single api-updated-servicetype" formControlName="serviceType">
+										<option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
+									</select>
 								</div>
-							</div>
 
-						</div>
+								<!-- Property Type -->
+								<div class="col-md-3">
+									<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
+										<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
+									</select>
+								</div>
+
+								<!-- Main Search Input -->
+								<div class="col-md-6">
+									<div class="main-search-input">
+										<select class="chosen-select api-updated-cities">
+											<option *ngFor="let city of cityList">{{ city.name }}</option>
+										</select>
+										<button class="button" type="submit" [disabled]="!searchForm.valid"><i class="fa fa-search"></i></button>
+									</div>
+								</div>
+
+							</div>
+						</form>
 						<!-- Row With Forms / End -->
 
 						<!-- Announce -->
@@ -115,90 +114,9 @@
 	<!-- Fullwidth Section / End -->
 
 
-	<!-- Featured -->
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-12">
-				<h3 class="headline margin-bottom-25 margin-top-65">المميز</h3>
-			</div>
-
-			<!-- Carousel -->
-			<div class="col-md-12">
-				<div class="carousel" style="direction:ltr">
-
-					<!-- Listing Item -->
-					<div class="carousel-item" *ngFor="let property of featuredProperties">
-						<div class="listing-item compact">
-
-							<a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
-
-								<div class="listing-badges">
-									<span class="featured">مميز</span>
-									<span>{{ property.state | translate }}</span>
-								</div>
-
-								<div class="listing-img-content">
-									<span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-									<ul class="listing-hidden-content">
-										<li>المساحة <span>{{ property.area }}</span></li>
-										<li>الغرف <span>{{ property.rooms }}</span></li>
-										<li>السرائر <span>{{ property.beds }}</span></li>
-										<li>الحمامات <span>{{ property.baths }}</span></li>
-									</ul>
-								</div>
-
-								<img src="{{ property.image }}">
-							</a>
-
-						</div>
-					</div>
-					<!-- Listing Item / End -->
-
-				</div>
-			</div>
-			<!-- Carousel / End -->
-
-		</div>
-	</div>
-	<!-- Featured / End -->
-
-
-
-	<!-- Fullwidth Section -->
-	<section class="fullwidth margin-top-105 margin-bottom-0 padding-bottom-80 padding-top-95" data-background-color="#f7f7f7">
-
-		<!-- Box Headline -->
-		<h3 class="headline-box">ماذا يقول عملاؤنا</h3>
-
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-12">
-					<div class="testimonials-subtitle">قمنا بتجميع الاراء من عملائنا حتي يمكنك الحصول علي رائ صريح عن الشكل الحقيقي لأي شقة</div>
-				</div>
-
-				<div class="col-md-4" *ngFor="let testimonial of clientstestimonials | limit:3">
-					<div class="testimonial-box">
-						<div class="testimonial">{{ testimonial.testimonial }}</div>
-						<div class="testimonial-author">
-							<img src="{{ testimonial.profilePic }}">
-							<h4>{{ testimonial.name }} <span>{{ testimonial.type }}</span></h4>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</section>
-	<!-- Fullwidth Section / End -->
-
-
 
 	<!-- Parallax -->
-	<div class="parallax margin-bottom-70"
+	<div class="parallax"
 		data-background="assets/images/listings-parallax.jpg"
 		data-color="#36383e"
 		data-color-opacity="0.7"
@@ -224,130 +142,6 @@
 
 	</div>
 	<!-- Parallax / End -->
-
-
-
-	<!-- Container -->
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-12">
-				<h3 class="headline centered margin-bottom-35 margin-top-10">اكثر الاماكن شهرة <span>عقارات في اكثر الاماكن شهرة</span></h3>
-			</div>
-
-			<div class="col-md-4">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[0].area]" class="img-box" [attr.data-background-image]="popularPlaces[0].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[0].featured">مميز</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[0].place }} </h4>
-						<span>{{ popularPlaces[0].properties_num }} عقار</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-8">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[1].area]" class="img-box" [attr.data-background-image]="popularPlaces[1].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[1].featured">مميز</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[1].place }} </h4>
-						<span>{{ popularPlaces[1].properties_num }} عقار</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-8">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[2].area]" class="img-box" [attr.data-background-image]="popularPlaces[2].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[2].featured">مميز</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[2].place }} </h4>
-						<span>{{ popularPlaces[2].properties_num }} عقار</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-4">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[3].area]" class="img-box" [attr.data-background-image]="popularPlaces[3].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[3].featured">مميز</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[3].place }} </h4>
-						<span>{{ popularPlaces[3].properties_num }} عقار</span>
-					</div>
-				</a>
-
-			</div>
-
-		</div>
-	</div>
-	<!-- Container / End -->
-
-
-	<!-- Fullwidth Section -->
-	<section class="fullwidth margin-top-95 margin-bottom-0">
-
-		<!-- Box Headline -->
-		<h3 class="headline-box">مقالات و نصائح</h3>
-
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-4" *ngFor="let post of blog | limit:3">
-
-					<!-- Blog Post -->
-					<div class="blog-post">
-
-						<!-- Img -->
-						<a [routerLink]="['/en/blog-post', post.id]" class="post-img">
-							<img src="{{ post.image }}">
-						</a>
-
-						<!-- Content -->
-						<div class="post-content">
-							<h3><a>{{ post.title }}</a></h3>
-							<div [innerHTML]="post.post_header"></div>
-
-							<a [routerLink]="['/en/blog-post', post.id]" class="read-more">اقرا المزيد <i class="fa fa-angle-left"></i></a>
-						</div>
-
-					</div>
-					<!-- Blog Post / End -->
-
-				</div>
-
-			</div>
-		</div>
-	</section>
-	<!-- Fullwidth Section / End -->
 
 
 	<!-- Flip banner -->
@@ -379,36 +173,35 @@
 						<h2>Find New Home</h2>
 
 						<!-- Row With Forms -->
-						<div class="row with-forms">
+						<form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
+							<div class="row with-forms">
 
-							<!-- Property Type -->
-							<div class="col-md-3">
-								<select data-placeholder="Any Type" class="chosen-select-no-single" >
-									<option>Apartments</option>
-									<option>Houses</option>
-									<option>Commercial</option>
-									<option>Garages</option>
-									<option>Lots</option>
-								</select>
-							</div>
-
-							<!-- Status -->
-							<div class="col-md-3">
-								<select data-placeholder="Any Status" class="chosen-select-no-single" >
-									<option>For Sale</option>
-									<option>For Rent</option>
-								</select>
-							</div>
-
-							<!-- Main Search Input -->
-							<div class="col-md-6">
-								<div class="main-search-input">
-									<input type="text" placeholder="Enter address e.g. street, city or state" value=""/>
-									<button class="button"><i class="fa fa-search"></i></button>
+								<!-- Status -->
+								<div class="col-md-3">
+									<select data-placeholder="Any Status" class="chosen-select-no-single api-updated-servicetype" formControlName="serviceType">
+										<option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
+									</select>
 								</div>
-							</div>
 
-						</div>
+								<!-- Property Type -->
+								<div class="col-md-3">
+									<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
+										<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
+									</select>
+								</div>
+
+								<!-- Main Search Input -->
+								<div class="col-md-6">
+									<div class="main-search-input">
+										<select class="chosen-select api-updated-cities">
+											<option *ngFor="let city of cityList">{{ city.name }}</option>
+										</select>
+										<button class="button" type="submit" [disabled]="!searchForm.valid"><i class="fa fa-search"></i></button>
+									</div>
+								</div>
+
+							</div>
+						</form>
 						<!-- Row With Forms / End -->
 
 						<!-- Announce -->
@@ -480,90 +273,9 @@
 	<!-- Fullwidth Section / End -->
 
 
-	<!-- Featured -->
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-12">
-				<h3 class="headline margin-bottom-25 margin-top-65">Featured</h3>
-			</div>
-
-			<!-- Carousel -->
-			<div class="col-md-12">
-				<div class="carousel">
-
-					<!-- Listing Item -->
-					<div class="carousel-item" *ngFor="let property of featuredProperties">
-						<div class="listing-item compact">
-
-							<a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
-
-								<div class="listing-badges">
-									<span class="featured">Featured</span>
-									<span>{{ property.state }}</span>
-								</div>
-
-								<div class="listing-img-content">
-									<span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
-
-									<ul class="listing-hidden-content">
-										<li>Area <span>{{ property.area }}</span></li>
-										<li>Rooms <span>{{ property.rooms }}</span></li>
-										<li>Beds <span>{{ property.beds }}</span></li>
-										<li>Baths <span>{{ property.baths }}</span></li>
-									</ul>
-								</div>
-
-								<img src="{{ property.image }}">
-							</a>
-
-						</div>
-					</div>
-					<!-- Listing Item / End -->
-
-				</div>
-			</div>
-			<!-- Carousel / End -->
-
-		</div>
-	</div>
-	<!-- Featured / End -->
-
-
-
-	<!-- Fullwidth Section -->
-	<section class="fullwidth margin-top-105 margin-bottom-0 padding-bottom-80 padding-top-95" data-background-color="#f7f7f7">
-
-		<!-- Box Headline -->
-		<h3 class="headline-box">What Our Clients Say</h3>
-
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-12">
-					<div class="testimonials-subtitle">We collect reviews from our customers so you can get an honest opinion of what an apartment is really like!</div>
-				</div>
-
-				<div class="col-md-4" *ngFor="let testimonial of clientstestimonials | limit:3">
-					<div class="testimonial-box">
-						<div class="testimonial">{{ testimonial.testimonial }}</div>
-						<div class="testimonial-author">
-							<img src="{{ testimonial.profilePic }}">
-							<h4>{{ testimonial.name }} <span>{{ testimonial.type }}</span></h4>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</section>
-	<!-- Fullwidth Section / End -->
-
-
 
 	<!-- Parallax -->
-	<div class="parallax margin-bottom-70"
+	<div class="parallax"
 		data-background="assets/images/listings-parallax.jpg"
 		data-color="#36383e"
 		data-color-opacity="0.7"
@@ -589,130 +301,6 @@
 
 	</div>
 	<!-- Parallax / End -->
-
-
-
-	<!-- Container -->
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-12">
-				<h3 class="headline centered margin-bottom-35 margin-top-10">Most Popular Places <span>Properties In Most Popular Places</span></h3>
-			</div>
-
-			<div class="col-md-4">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[0].area]" class="img-box" [attr.data-background-image]="popularPlaces[0].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[0].featured">Featured</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[0].place }} </h4>
-						<span>{{ popularPlaces[0].properties_num }} Properties</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-8">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[1].area]" class="img-box" [attr.data-background-image]="popularPlaces[1].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[1].featured">Featured</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[1].place }} </h4>
-						<span>{{ popularPlaces[1].properties_num }} Properties</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-8">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[2].area]" class="img-box" [attr.data-background-image]="popularPlaces[2].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[2].featured">Featured</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[2].place }} </h4>
-						<span>{{ popularPlaces[2].properties_num }} Properties</span>
-					</div>
-				</a>
-
-			</div>
-
-			<div class="col-md-4">
-
-				<!-- Image Box -->
-				<a [routerLink]="['/en/listings', popularPlaces[3].area]" class="img-box" [attr.data-background-image]="popularPlaces[3].image">
-
-					<!-- Badge -->
-					<div class="listing-badges">
-						<span class="featured" *ngIf="popularPlaces[3].featured">Featured</span>
-					</div>
-
-					<div class="img-box-content visible">
-						<h4>{{ popularPlaces[3].place }} </h4>
-						<span>{{ popularPlaces[3].properties_num }} Properties</span>
-					</div>
-				</a>
-
-			</div>
-
-		</div>
-	</div>
-	<!-- Container / End -->
-
-
-	<!-- Fullwidth Section -->
-	<section class="fullwidth margin-top-95 margin-bottom-0">
-
-		<!-- Box Headline -->
-		<h3 class="headline-box">Articles & Tips</h3>
-
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-4" *ngFor="let post of blog | limit:3">
-
-					<!-- Blog Post -->
-					<div class="blog-post">
-
-						<!-- Img -->
-						<a [routerLink]="['/en/blog-post', post.id]" class="post-img">
-							<img src="{{ post.image }}">
-						</a>
-
-						<!-- Content -->
-						<div class="post-content">
-							<h3><a>{{ post.title }}</a></h3>
-							<div [innerHTML]="post.post_header"></div>
-
-							<a [routerLink]="['/en/blog-post', post.id]" class="read-more">Read More <i class="fa fa-angle-right"></i></a>
-						</div>
-
-					</div>
-					<!-- Blog Post / End -->
-
-				</div>
-
-			</div>
-		</div>
-	</section>
-	<!-- Fullwidth Section / End -->
 
 
 	<!-- Flip banner -->
