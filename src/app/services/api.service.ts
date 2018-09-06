@@ -13,6 +13,74 @@ export class ApiService {
     private router:Router) { }
 
   api = {
+    "featuredListings": [
+      {
+        "id": 1,
+        "state": "For Sale",
+        "name": "Eagle Apartments",
+        "price": "$275,000",
+        "area": "530 sq ft",
+        "rooms": "3",
+        "beds": "1",
+        "baths": "1",
+        "image": "assets/images/listing-01.jpg"
+      },
+      {
+        "id": 2,
+        "state": "For Sale",
+        "name": "Serene Uptown",
+        "price": "$900 / monthly",
+        "area": "440 sq ft",
+        "rooms": "3",
+        "beds": "1",
+        "baths": "1",
+        "image": "assets/images/listing-02.jpg"
+      },
+      {
+        "id": 3,
+        "state": "For Rent",
+        "name": "Meridian Villas",
+        "price": "$1700 / monthly",
+        "area": "1450 sq ft",
+        "rooms": "3",
+        "beds": "2",
+        "baths": "2",
+        "image": "assets/images/listing-03.jpg"
+      },
+      {
+        "id": 4,
+        "state": "For Sale",
+        "name": "Selway Apartments",
+        "price": "$420,000",
+        "area": "540 sq ft",
+        "rooms": "2",
+        "beds": "2",
+        "baths": "1",
+        "image": "assets/images/listing-04.jpg"
+      },
+      {
+        "id": 5,
+        "state": "For Sale",
+        "name": "Oak Tree Villas",
+        "price": "$535,000",
+        "area": "550 sq ft",
+        "rooms": "3",
+        "beds": "2",
+        "baths": "1",
+        "image": "assets/images/listing-05.jpg"
+      },
+      {
+        "id": 6,
+        "state": "For Sale",
+        "name": "Old Town Manchester",
+        "price": "$500 / monthly",
+        "area": "850 sq ft",
+        "rooms": "3",
+        "beds": "2",
+        "baths": "1",
+        "image": "assets/images/listing-06.jpg"
+      }
+    ],
     "blog": [
       {
         "id": 1,

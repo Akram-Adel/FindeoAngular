@@ -51,6 +51,9 @@ export class MainComponent implements OnInit,AfterViewInit {
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
+
+    //Get Featured Properties
+    this.featuredProperties = this.api.api.featuredListings;
   }
 
   ngAfterViewInit() {

@@ -2,3 +2,5 @@ form button:disabled {
   background-color: gray;
   cursor: no-drop;
 }
+
+.headline-box { z-index: 998 }

@@ -2,7 +2,7 @@
 <div *ngIf=" language == 'ar' ">
 	<!-- Banner
 	================================================== -->
-	<div class="parallax" data-background="assets/images/home-parallax-2.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600">
+	<div class="parallax" data-background="assets/imgs/baghdad2.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600">
 
 		<div class="container">
 			<div class="row">
@@ -64,48 +64,42 @@
 	<!-- Fullwidth Section -->
 	<section class="fullwidth border-bottom margin-top-0 margin-bottom-0 padding-top-50 padding-bottom-50" data-background-color="#ffffff">
 
+		<!-- Box Headline -->
+		<h3 class="headline-box">انها رحلتك. نحن هنا لمساعدتك</h3>
+
 		<!-- Content -->
-		<div class="container">
+		<div class="container margin-top-50">
 			<div class="row">
 
-				<div class="col-md-4">
+				<div class="col-md-2"></div>
+
+				<div class="col-md-3">
 					<!-- Icon Box -->
 					<div class="icon-box-1 alternative">
 
 						<div class="icon-container">
-							<i class="im im-icon-Checked-User"></i>
+							<i class="im im-icon-Home-2"></i>
 						</div>
 
-						<h3>اعثر علي السمسار</h3>
-						<p>اعثر علي الذي يتخصص في منطقتك ,لدية اكثر المراجعات و لدية الخبرة الصحيحةاللتي تلبي احتياجاتك </p>
+						<h3>بيوت</h3>
 					</div>
 				</div>
 
-				<div class="col-md-4">
+				<div class="col-md-2"></div>
+
+				<div class="col-md-3">
 					<!-- Icon Box -->
 					<div class="icon-box-1 alternative">
 
 						<div class="icon-container">
-							<i class="im im-icon-Cloud-Computer"></i>
+							<i class="im im-icon-Office"></i>
 						</div>
 
-						<h3>تكنولوجيا حديثة</h3>
-						<p>اكثر من 10,000 عميل يشتري او يبيع منزل معنا كل سنة. نحن نساعد الناس و المنازل علي ان يجدو بعضهم</p>
+						<h3>شقق</h3>
 					</div>
 				</div>
 
-				<div class="col-md-4">
-					<!-- Icon Box -->
-					<div class="icon-box-1 alternative">
-
-						<div class="icon-container">
-							<i class="im im-icon-Idea"></i>
-						</div>
-
-						<h3>افكار لتصميم المنازل</h3>
-						<p>اختصاصيونا يستطيعون مساعدتك علي بدا مشروع منزلك. اختيار الوان الطلاء, افضل المفارش و اكثر </p>
-					</div>
-				</div>
+				<div class="col-md-2"></div>
 
 			</div>
 		</div>
@@ -115,33 +109,54 @@
 
 
 
-	<!-- Parallax -->
-	<div class="parallax"
-		data-background="assets/images/listings-parallax.jpg"
-		data-color="#36383e"
-		data-color-opacity="0.7"
-		data-img-width="800"
-		data-img-height="505">
+	<!-- Featured -->
+	<div class="container margin-bottom-50">
+		<div class="row">
 
-		<!-- Infobox -->
-		<div class="text-content white-font">
-			<div class="container">
-
-				<div class="row">
-					<div class="col-lg-6 col-sm-8">
-						<h2>انها رحلتك. نحن هنا لمساعدتك</h2>
-						<p>نحن خدمة متكاملة, سماسرة محليين يعرفون كيفية ملائمة الناس مع المنازل. نحن نستعمل الادوات بطرق بحث لا تضاهي وذلك لجعلك اكثر ذكاء و اكثر سرعة</p>
-						<a [routerLink]="['/ar/listings/default']" class="button margin-top-25">ابدا الان</a>
-					</div>
-				</div>
-
+			<div class="col-md-12">
+				<h3 class="headline margin-bottom-25 margin-top-65">المميز</h3>
 			</div>
+
+			<!-- Carousel -->
+			<div class="col-md-12">
+				<div class="carousel" style="direction:ltr">
+
+					<!-- Listing Item -->
+					<div class="carousel-item" *ngFor="let property of featuredProperties">
+						<div class="listing-item compact">
+
+							<a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
+
+								<div class="listing-badges">
+									<span class="featured">مميز</span>
+									<span>{{ property.state | translate }}</span>
+								</div>
+
+								<div class="listing-img-content">
+									<span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+
+									<ul class="listing-hidden-content">
+										<li>المساحة <span>{{ property.area }}</span></li>
+										<li>الغرف <span>{{ property.rooms }}</span></li>
+										<li>السرائر <span>{{ property.beds }}</span></li>
+										<li>الحمامات <span>{{ property.baths }}</span></li>
+									</ul>
+								</div>
+
+								<img src="{{ property.image }}">
+							</a>
+
+						</div>
+					</div>
+					<!-- Listing Item / End -->
+
+				</div>
+			</div>
+			<!-- Carousel / End -->
+
 		</div>
-
-		<!-- Infobox / End -->
-
 	</div>
-	<!-- Parallax / End -->
+	<!-- Featured / End -->
 
 
 	<!-- Flip banner -->
@@ -161,7 +176,7 @@
 <div *ngIf=" language != 'ar' ">
 	<!-- Banner
 	================================================== -->
-	<div class="parallax" data-background="assets/images/home-parallax-2.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600">
+	<div class="parallax" data-background="assets/imgs/baghdad2.jpg" data-color="#36383e" data-color-opacity="0.5" data-img-width="2500" data-img-height="1600">
 
 		<div class="container">
 			<div class="row">
@@ -223,48 +238,42 @@
 	<!-- Fullwidth Section -->
 	<section class="fullwidth border-bottom margin-top-0 margin-bottom-0 padding-top-50 padding-bottom-50" data-background-color="#ffffff">
 
+		<!-- Box Headline -->
+		<h3 class="headline-box">It's your journy. We are here to help</h3>
+
 		<!-- Content -->
-		<div class="container">
+		<div class="container margin-top-50">
 			<div class="row">
 
-				<div class="col-md-4">
+				<div class="col-md-2"></div>
+
+				<div class="col-md-3">
 					<!-- Icon Box -->
 					<div class="icon-box-1 alternative">
 
 						<div class="icon-container">
-							<i class="im im-icon-Checked-User"></i>
+							<i class="im im-icon-Home-2"></i>
 						</div>
 
-						<h3>Agent Finder</h3>
-						<p>See who specializes in your area, has the most reviews and the right experience to meet your needs.</p>
+						<h3>Houses</h3>
 					</div>
 				</div>
 
-				<div class="col-md-4">
+				<div class="col-md-2"></div>
+
+				<div class="col-md-3">
 					<!-- Icon Box -->
 					<div class="icon-box-1 alternative">
 
 						<div class="icon-container">
-							<i class="im im-icon-Cloud-Computer"></i>
+							<i class="im im-icon-Office"></i>
 						</div>
 
-						<h3>Modern Technology</h3>
-						<p>More than 10,000 customers buy or sell a home with us each year. We help people and homes find each together.</p>
+						<h3>Appartments</h3>
 					</div>
 				</div>
 
-				<div class="col-md-4">
-					<!-- Icon Box -->
-					<div class="icon-box-1 alternative">
-
-						<div class="icon-container">
-							<i class="im im-icon-Idea"></i>
-						</div>
-
-						<h3>Home Designs Ideas</h3>
-						<p>Our specialists can help you get started on that home project. Find paint colors, that perfect tile and more. </p>
-					</div>
-				</div>
+				<div class="col-md-2"></div>
 
 			</div>
 		</div>
@@ -274,33 +283,54 @@
 
 
 
-	<!-- Parallax -->
-	<div class="parallax"
-		data-background="assets/images/listings-parallax.jpg"
-		data-color="#36383e"
-		data-color-opacity="0.7"
-		data-img-width="800"
-		data-img-height="505">
+	<!-- Featured -->
+	<div class="container margin-bottom-50">
+		<div class="row">
 
-		<!-- Infobox -->
-		<div class="text-content white-font">
-			<div class="container">
-
-				<div class="row">
-					<div class="col-lg-6 col-sm-8">
-						<h2>It's your journey. We're here to help.</h2>
-						<p>We’re full-service, local agents who know how to find people and home each together. We use online tools with an unmatched search capability to make you smarter and faster.</p>
-						<a [routerLink]="['/en/listings/default']" class="button margin-top-25">Get Started</a>
-					</div>
-				</div>
-
+			<div class="col-md-12">
+				<h3 class="headline margin-bottom-25 margin-top-65">Featured</h3>
 			</div>
+
+			<!-- Carousel -->
+			<div class="col-md-12">
+				<div class="carousel">
+
+					<!-- Listing Item -->
+					<div class="carousel-item" *ngFor="let property of featuredProperties">
+						<div class="listing-item compact">
+
+							<a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
+
+								<div class="listing-badges">
+									<span class="featured">Featured</span>
+									<span>{{ property.state }}</span>
+								</div>
+
+								<div class="listing-img-content">
+									<span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+
+									<ul class="listing-hidden-content">
+										<li>Area <span>{{ property.area }}</span></li>
+										<li>Rooms <span>{{ property.rooms }}</span></li>
+										<li>Beds <span>{{ property.beds }}</span></li>
+										<li>Baths <span>{{ property.baths }}</span></li>
+									</ul>
+								</div>
+
+								<img src="{{ property.image }}">
+							</a>
+
+						</div>
+					</div>
+					<!-- Listing Item / End -->
+
+				</div>
+			</div>
+			<!-- Carousel / End -->
+
 		</div>
-
-		<!-- Infobox / End -->
-
 	</div>
-	<!-- Parallax / End -->
+	<!-- Featured / End -->
 
 
 	<!-- Flip banner -->

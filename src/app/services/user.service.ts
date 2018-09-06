@@ -60,10 +60,14 @@ export class UserService {
   makeAgentProfile(agent) {
     let agentData = agent[0];
     // console.log(agentData);
-    (agent.length == 0) ? this.isAgent = false : this.isAgent = true;
-    this.agentId = agentData.id;
-    this.description = agentData.description;
-    this.agentLocation = agentData.location;
+    if(agent.length == 0) {
+      this.isAgent = false;
+    } else {
+      this.isAgent = true;
+      this.agentId = agentData.id;
+      this.description = agentData.description;
+      this.agentLocation = agentData.location;
+    }
 
 
     this.userUpdated();

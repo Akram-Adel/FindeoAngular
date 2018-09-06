@@ -20,7 +20,7 @@ export class SearchService {
   /* ------------------------------------------------------------------- */
   /*  Main Listings Search
   ---------------------------------------------------------------------- */
-  public searchResult:any[];
+  public searchResult:any[] = [];
   public newSearch(data) { this.searchResult = data }
 
   public getSearchImages() {

@@ -20,7 +20,7 @@ import { LoginsComponent } from './components/logins/logins.component';
 
 const routes: Routes = [
   { path: ':lng/main', component: MainComponent, data: { depth: 1 } },
-  { path: ':lng/listings/:area', component: ListingsComponent, data: { depth: 2 } },
+  { path: ':lng/listings/:serviceType', component: ListingsComponent, data: { depth: 2 } },
   { path: ':lng/single-property/:id', component: SinglePropertyComponent, data: { depth: 3 } },
   { path: ':lng/profile', component: ProfileComponent, data: { depth: 4 } },
   { path: ':lng/bookmarks', component: BookmarksComponent, data: { depth: 5 } },

@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import 'rxjs/add/operator/map';
+
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
 import { CompareService } from '../../services/compare.service';
@@ -64,7 +66,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
     $('app-footer').css('display','none');
 
     //Get all listings if search was made
-    if(this.searchService.searchResult) this.searchService.getSearchImages();
+    (this.searchService.searchResult.length > 0) ? this.searchService.getSearchImages() : this.route.paramMap.map(paraMap => paraMap.get('serviceType')).subscribe(serviceType => this.saleRent(serviceType));
     this.subscribtion = this.searchService.searchImages$.subscribe(res => this.getAds());
   }
 
@@ -83,6 +85,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
 
   ngOnDestroy() {
     $('app-footer').css('display','block');
+    this.searchService.searchResult = [];
     this.subscribtion.unsubscribe();
   }
 
@@ -490,7 +493,6 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
     scale: 1,
     anchor: new google.maps.Point(19,50)
   }
-
   locationData(locationURL,locationPrice,locationPriceDetails,locationImg,locationTitle,locationAddress) {
     return('<a href="'+ this.route.snapshot.paramMap.get('lng')+'/single-property/'+locationURL +'" class="listing-img-container"><div class="infoBox-close"><i class="fa fa-times"></i></div><div class="listing-img-content"><span class="listing-price">'+ locationPrice +'<i>' + locationPriceDetails +'</i></span></div><img src="'+locationImg+'" alt=""></a><div class="listing-content"><div class="listing-title"><h4><a href="#">'+locationTitle+'</a></h4><p>'+locationAddress+'</p></div></div>')
   }
@@ -767,6 +769,32 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
       ])
     }
     this.initMap(this.apiLocations);
+  }
+
+  saleRent(serviceType) {
+    this.listingResults = []; this.apiLocations = [];
+
+    let httpOptions;
+    if(serviceType == 'forSale') {
+      httpOptions = {
+        params: new HttpParams()
+          .set( 'serviceType.in',  'SALE' )
+          .set( 'size', '1000')
+      }
+
+    } else if(serviceType == 'forRent') {
+      httpOptions = {
+        params: new HttpParams()
+          .set( 'serviceType.in',  'RENTAL' )
+          .set( 'size', '1000')
+      }
+
+    } else { return }
+
+    this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe({
+      next: res => { this.searchService.newSearch(res); this.searchService.getSearchImages(); },
+      error: err => this.api.API_ERROR(err, this.language)
+    })
   }
 
 

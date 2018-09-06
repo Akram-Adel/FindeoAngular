@@ -13,10 +13,7 @@
 
 					<!-- Logo -->
 					<div id="logo" class="margin-top-10">
-						<a [routerLink]="['en/main']"><img src="assets/images/logo.png" alt=""></a>
-
-						<!-- Logo for Sticky Header -->
-						<a [routerLink]="['en/main']" class="sticky-logo"><img src="assets/images/logo2.png" alt=""></a>
+						<a [routerLink]="['en/main']"><img src="assets/imgs/screenshot-1.png" alt=""></a>
 					</div>
 
 					<!-- Mobile Navigation -->
@@ -35,22 +32,16 @@
 				<div class="right-side">
 					<ul class="header-widget">
 						<li>
-							<i class="sl sl-icon-call-in"></i>
+							<span class="icon-img-wrapper">
+								<img src="assets/imgs/contact-us-icon.png" alt="contact-us" width="100%">
+							</span>
 							<div class="widget-content">
-								<span class="title">Questions?</span>
+								<span class="title">Call Us</span>
 								<span class="data">(123) 123-456 </span>
 							</div>
 						</li>
 
-						<li>
-							<i class="sl sl-icon-location"></i>
-							<div class="widget-content">
-								<span class="title">Our Office</span>
-								<span class="data">45 Park Avenue, NY</span>
-							</div>
-						</li>
-
-						<li class="with-btn"><a [routerLink]="['/en/submit-property']" class="button border">Submit Property</a></li>
+						<li class="with-btn"><a [routerLink]="['/en/submit-property']" class="button">Submit Property Free</a></li>
 					</ul>
 				</div>
 				<!-- Right Side Content / End -->
@@ -64,9 +55,10 @@
 
 							<li><a routerLinkActive="current" [routerLink]="['/en/main']">Home</a> </li>
 
-							<li><a routerLinkActive="current" [routerLink]="['/en/listings/default']">Listings</a> </li>
+							<li><a routerLinkActive="current" [routerLink]="['/en/listings/forSale']">For Sale</a> </li>
+							<li><a routerLinkActive="current" [routerLink]="['/en/listings/forRent']">For Rent</a> </li>
 
-							<li><a [routerLink]="['/en/agents']">Agents List</a></li>
+							<li><a [routerLink]="['/en/agents']">Agents</a></li>
 
 							<!-- <li><a>Pages</a>
 								<ul>
@@ -126,10 +118,7 @@
 
 					<!-- Logo -->
 					<div id="logo" class="margin-top-10">
-						<a [routerLink]="['ar/main']"><img src="assets/images/logo.png" alt=""></a>
-
-						<!-- Logo for Sticky Header -->
-						<a [routerLink]="['ar/main']" class="sticky-logo"><img src="assets/images/logo2.png" alt=""></a>
+						<a [routerLink]="['ar/main']"><img src="assets/imgs/screenshot-1.png" alt=""></a>
 					</div>
 
 					<!-- Mobile Navigation -->
@@ -148,22 +137,16 @@
 				<div class="right-side">
 					<ul class="header-widget">
 						<li>
-							<i class="sl sl-icon-call-in"></i>
+							<span class="icon-img-wrapper">
+								<img src="assets/imgs/contact-us-icon.png" alt="contact-us" width="100%">
+							</span>
 							<div class="widget-content">
-								<span class="title">اسئلة ؟</span>
+								<span class="title">اتصل بنا</span>
 								<span class="data">(123) 123-456 </span>
 							</div>
 						</li>
 
-						<li>
-							<i class="sl sl-icon-location"></i>
-							<div class="widget-content">
-								<span class="title">مكتبنا</span>
-								<span class="data">45 Park Avenue, NY</span>
-							</div>
-						</li>
-
-						<li class="with-btn"><a [routerLink]="['/ar/submit-property']" class="button border">اضف عقار</a></li>
+						<li class="with-btn"><a [routerLink]="['/ar/submit-property']" class="button">اضف عقارك مجانا</a></li>
 					</ul>
 				</div>
 				<!-- Right Side Content / End -->
@@ -177,9 +160,10 @@
 
 							<li><a routerLinkActive="current" [routerLink]="['/ar/main']">الرئيسية</a></li>
 
-							<li><a routerLinkActive="current" [routerLink]="['/ar/listings/default']">المعروضات</a></li>
+							<li><a routerLinkActive="current" [routerLink]="['/ar/listings/forSale']">للبيع</a></li>
+							<li><a routerLinkActive="current" [routerLink]="['/ar/listings/forRent']">للإيجار</a></li>
 
-							<li><a [routerLink]="['/ar/agents']">قائمة السماسرة</a></li>
+							<li><a [routerLink]="['/ar/agents']">المكاتب العقارية</a></li>
 
 							<!-- <li><a>الصفح</a>
 								<ul>
