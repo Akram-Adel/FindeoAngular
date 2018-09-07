@@ -1,0 +1,356 @@
+<!-- English Section -->
+<div *ngIf=" language != 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>My Profile</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/en/main']">Home</a></li>
+              <li>My Profile</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Account</li>
+              <li><a [routerLink]="['/en/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> My Profile</a></li>
+              <li><a [routerLink]="['/en/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> Add Agent</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> Agent Profile</span>
+              </a></li>
+              <li><a [routerLink]="['/en/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> Bookmarked Listings</a></li>
+              <li><a [routerLink]="['/en/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> My Searches</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">Manage Listings</li>
+              <li><a [routerLink]="['/en/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> My Properties</a></li>
+              <li><a [routerLink]="['/en/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> Submit New Property</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/en/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> Change Password</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="row">
+
+
+          <div class="col-md-8 my-profile">
+            <!-- I want Agent -->
+            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
+              <span class="trigger "><a href="#">I want to become an agent<i class="sl sl-icon-plus"></i></a></span>
+              <div class="toggle-container">
+                <h5 style="color:#274abb">Fill all the data to complete your request</h5>
+
+                <label>Agent Name</label>
+                <input type="text" [(ngModel)]="profileInfo.agentName">
+
+                <label class="margin-top-50 margin-bottom-25">About Me</label>
+                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+                <div class="margin-top-50">
+                  <!-- City -->
+                  <label>City</label>
+                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                    <option *ngFor="let city of cityList">{{ city.arabicName }}</option>
+                  </select>
+
+                  <label>Area</label>
+                  <div class="autocomplete">
+                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                    <ul class="chosen-results" [hidden]="!isAutofill">
+                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                    </ul>
+                  </div>
+
+                  <label>Street</label>
+                  <input type="text" [(ngModel)]="street">
+                </div>
+
+                <!-- Google Maps -->
+                <div class="google-map-container">
+                  <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+                </div>
+                <!-- Google Maps / End -->
+
+
+                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">Become an agent</button>
+              </div>
+            </div>
+
+
+            <!-- I am Agent -->
+            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
+              <h4 class="margin-bottom-30">Agent Data</h4>
+
+              <label>Agent Name</label>
+              <input type="text" [(ngModel)]="profileInfo.agentName">
+
+              <label class="margin-top-50 margin-bottom-25">About Me</label>
+              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+              <div class="margin-top-50">
+                <!-- City -->
+                <label>City</label>
+                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                  <option *ngFor="let city of cityList">{{ city.arabicName }}</option>
+                </select>
+
+                <label>Area</label>
+                <div class="autocomplete">
+                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                  <ul class="chosen-results" [hidden]="!isAutofill">
+                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                  </ul>
+                </div>
+
+                <label>Street</label>
+                <input type="text" [(ngModel)]="street">
+              </div>
+
+              <!-- Google Maps -->
+              <div class="google-map-container">
+                <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+              </div>
+              <!-- Google Maps / End -->
+            </div>
+
+
+            <button *ngIf="profileInfo.isAgent" class="button margin-top-50 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">Save Changes</button>
+            <div class="margin-top-50"></div>
+          </div>
+
+          <div class="col-md-4">
+            <!-- Avatar -->
+            <div class="edit-profile-photo">
+              <img [src]="profileInfo.imageUrl">
+              <div class="change-photo-btn" [ngClass]="{disabled: isConnecting}">
+                <div class="photoUpload">
+                    <span><i class="fa fa-upload"></i> Upload Logo</span>
+                    <input type="file" accept="image/*" class="upload" [disabled]="isConnecting" (change)="photoChange($event.target.files)"/>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- English Section / End -->
+
+
+
+<!-- Arabic Section -->
+<div *ngIf=" language == 'ar' ">
+  <!-- Titlebar
+  ================================================== -->
+  <div id="titlebar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+          <h2>صفحتي الشخصية</h2>
+
+          <!-- Breadcrumbs -->
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a [routerLink]="['/ar/main']">الرائيسية</a></li>
+              <li>صفحتي الشخصية</li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Content
+  ================================================== -->
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Widget -->
+      <div class="col-md-4">
+        <div class="sidebar left">
+
+          <div class="my-account-nav-container">
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر الحساب</li>
+              <li><a [routerLink]="['/ar/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> صفحتي الشخصية</a></li>
+              <li><a [routerLink]="['/ar/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> اضف مكتبك العقاري</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> مكتبك العقاري</span>
+              </a></li>
+              <li><a [routerLink]="['/ar/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+              <li><a [routerLink]="['/ar/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> البحث </a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li class="sub-nav-title">ادر العقارات</li>
+              <li><a [routerLink]="['/ar/properties']" routerLinkActive="current"><i class="sl sl-icon-docs"></i> عقاراتي</a></li>
+              <li><a [routerLink]="['/ar/submit-property']" routerLinkActive="current"><i class="sl sl-icon-action-redo"></i> اضف عقار جديد</a></li>
+            </ul>
+
+            <ul class="my-account-nav">
+              <li><a [routerLink]="['/ar/change-password']" routerLinkActive="current"><i class="sl sl-icon-lock"></i> تغيير كلمة السر</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="row">
+
+
+          <div class="col-md-8 my-profile">
+            <!-- I want Agent -->
+            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
+              <span class="trigger "><a href="#">اريد ان اضيف مكتب عقاري<i class="sl sl-icon-plus"></i></a></span>
+              <div class="toggle-container">
+                <h5 style="color:#274abb">قم بملئ كل البيانات لنتمكن من تنفيز طلبك</h5>
+
+                <label>اسم المكتب العقاري</label>
+                <input type="text" [(ngModel)]="profileInfo.agentName">
+
+                <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
+                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+                <div class="margin-top-50">
+                  <!-- City -->
+                  <label>المدينة</label>
+                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                    <option *ngFor="let city of cityList">{{ city.arabicName }}</option>
+                  </select>
+
+                  <label>المنطقة</label>
+                  <div class="autocomplete">
+                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                    <ul class="chosen-results" [hidden]="!isAutofill">
+                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                    </ul>
+                  </div>
+
+                  <label>الشارع</label>
+                  <input type="text" [(ngModel)]="street">
+                </div>
+
+                <!-- Google Maps -->
+                <div class="google-map-container">
+                  <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+                </div>
+                <!-- Google Maps / End -->
+
+
+                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">اضف المكتب العقاري</button>
+              </div>
+            </div>
+
+
+            <!-- I am Agent -->
+            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
+              <h4 class="margin-bottom-30">بيانات المكتب العقاري</h4>
+
+              <label>اسم المكتب العقاري</label>
+              <input type="text" [(ngModel)]="profileInfo.agentName">
+
+              <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
+              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
+
+              <div class="margin-top-50">
+                <!-- City -->
+                <label>المدينة</label>
+                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
+                  <option *ngFor="let city of cityList">{{ city.arabicName }}</option>
+                </select>
+
+                <label>المنطقة</label>
+                <div class="autocomplete">
+                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
+                  <ul class="chosen-results" [hidden]="!isAutofill">
+                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+                  </ul>
+                </div>
+
+                <label>الشارع</label>
+                <input type="text" [(ngModel)]="street">
+              </div>
+
+              <!-- Google Maps -->
+              <div class="google-map-container">
+                <div id="propertyMap" data-latitude="40.7427837" data-longitude="-73.11445617675781"></div>
+              </div>
+              <!-- Google Maps / End -->
+            </div>
+
+
+            <button *ngIf="profileInfo.isAgent" class="button margin-top-20 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">احفظ التغيرات</button>
+          </div>
+
+          <div class="col-md-4">
+            <!-- Avatar -->
+            <div class="edit-profile-photo">
+              <img [src]="profileInfo.imageUrl">
+              <div class="change-photo-btn" [ngClass]="{disabled: isConnecting}">
+                <div class="photoUpload">
+                    <span><i class="fa fa-upload"></i> حمل صورة</span>
+                    <input type="file" accept="image/*" class="upload" [disabled]="isConnecting" (change)="photoChange($event.target.files)"/>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Arabic Section / End -->

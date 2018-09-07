@@ -72,11 +72,6 @@ $(document).ready(function(){
 		$(window).resize(function() { mmenuInit(); });
 	});
 
-    /*  User Menu */
-    $('.user-menu').on('click', function(){
-		$(this).toggleClass('active');
-	});
-
 
 	/*----------------------------------------------------*/
 	/* Top Bar Dropdown Menu

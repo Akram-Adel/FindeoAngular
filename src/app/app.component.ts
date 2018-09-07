@@ -6,6 +6,7 @@ import { trigger, transition, query, style, animate } from '@angular/animations'
 
 import { UserService } from './services/user.service';
 import { ApiService } from './services/api.service';
+import { TranslatorService } from './services/translator.service';
 
 declare let $:any;
 
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private userService:UserService,
     private http:HttpClient,
-    private api:ApiService) {}
+    private api:ApiService,
+    private translator:TranslatorService) {}
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
@@ -52,6 +54,7 @@ export class AppComponent implements OnInit {
       // ------------------- ROUTER NAVIGATION ----------------------- //
     });
 
+    this.translator.getTranslatorObj()
     this.getRememberedUser();
   }
 

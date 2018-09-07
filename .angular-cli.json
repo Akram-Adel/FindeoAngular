@@ -23,6 +23,7 @@
         "assets/css/style.css",
         "assets/css/colors-main.css",
         "assets/css/rtl-config.css",
+        "assets/css/jquery.modal.min.css",
         "../node_modules/toastr/build/toastr.min.css"
       ],
       "scripts": [
@@ -42,6 +43,7 @@
         "assets/scripts/rtl-config.js",
         "assets/scripts/infobox.min.js",
         "assets/scripts/markerclusterer.js",
+        "assets/scripts/jquery.modal.min.js",
         "../node_modules/toastr/build/toastr.min.js"
       ],
       "environmentSource": "environments/environment.ts",

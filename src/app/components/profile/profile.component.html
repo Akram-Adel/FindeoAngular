@@ -38,7 +38,12 @@
             <ul class="my-account-nav">
               <li class="sub-nav-title">Manage Account</li>
               <li><a [routerLink]="['/en/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> My Profile</a></li>
+              <li><a [routerLink]="['/en/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> Add Agent</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> Agent Profile</span>
+              </a></li>
               <li><a [routerLink]="['/en/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> Bookmarked Listings</a></li>
+              <li><a [routerLink]="['/en/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> My Searches</a></li>
             </ul>
 
             <ul class="my-account-nav">
@@ -74,70 +79,6 @@
 
             <label>Phone</label>
             <input [(ngModel)]="profileInfo.phone" type="text">
-
-
-            <!-- I want Agent -->
-            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
-              <span class="trigger "><a href="#">I want to become an agent<i class="sl sl-icon-plus"></i></a></span>
-              <div class="toggle-container">
-                <h5 style="color:#274abb">Fill all the data to complete your request</h5>
-
-                <label class="margin-top-50 margin-bottom-25">About Me</label>
-                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
-
-                <div class="margin-top-50">
-                  <!-- City -->
-                  <label>City</label>
-                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
-                    <option *ngFor="let city of cityList">{{ city.name }}</option>
-                  </select>
-
-                  <label>Area</label>
-                  <div class="autocomplete">
-                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
-                    <ul class="chosen-results" [hidden]="!isAutofill">
-                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
-                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
-                    </ul>
-                  </div>
-
-                  <label>Street</label>
-                  <input type="text" [(ngModel)]="street">
-                </div>
-
-
-                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">Become an agent</button>
-              </div>
-            </div>
-
-
-            <!-- I am Agent -->
-            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
-              <h4 class="margin-bottom-30">Agent Data</h4>
-
-              <label class="margin-top-50 margin-bottom-25">About Me</label>
-              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
-
-              <div class="margin-top-50">
-                <!-- City -->
-                <label>City</label>
-                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
-                  <option *ngFor="let city of cityList">{{ city.name }}</option>
-                </select>
-
-                <label>Area</label>
-                <div class="autocomplete">
-                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
-                  <ul class="chosen-results" [hidden]="!isAutofill">
-                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
-                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
-                  </ul>
-                </div>
-
-                <label>Street</label>
-                <input type="text" [(ngModel)]="street">
-              </div>
-            </div>
 
 
             <button class="button margin-top-50 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">Save Changes</button>
@@ -210,7 +151,12 @@
             <ul class="my-account-nav">
               <li class="sub-nav-title">ادر الحساب</li>
               <li><a [routerLink]="['/ar/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> صفحتي الشخصية</a></li>
+              <li><a [routerLink]="['/ar/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> اضف مكتبك العقاري</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> مكتبك العقاري</span>
+              </a></li>
               <li><a [routerLink]="['/ar/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+              <li><a [routerLink]="['/ar/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> البحث</a></li>
             </ul>
 
             <ul class="my-account-nav">
@@ -246,70 +192,6 @@
 
             <label>التليفون</label>
             <input [(ngModel)]="profileInfo.phone" type="text">
-
-
-            <!-- I want Agent -->
-            <div class="toggle-wrap margin-top-50" *ngIf="!profileInfo.isAgent">
-              <span class="trigger "><a href="#">اريد ان اصبح سمسار<i class="sl sl-icon-plus"></i></a></span>
-              <div class="toggle-container">
-                <h5 style="color:#274abb">قم بملئ كل البيانات لنتمكن من تنفيز طلبك</h5>
-
-                <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
-                <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
-
-                <div class="margin-top-50">
-                  <!-- City -->
-                  <label>المدينة</label>
-                  <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
-                    <option *ngFor="let city of cityList">{{ city.name }}</option>
-                  </select>
-
-                  <label>المنطقة</label>
-                  <div class="autocomplete">
-                      <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
-                    <ul class="chosen-results" [hidden]="!isAutofill">
-                      <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
-                      <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
-                    </ul>
-                  </div>
-
-                  <label>الشارع</label>
-                  <input type="text" [(ngModel)]="street">
-                </div>
-
-
-                <button class="button border margin-top-50" [disabled]="isConnecting" (click)="becomeAgent()">اجعلني سمسار</button>
-              </div>
-            </div>
-
-
-            <!-- I am Agent -->
-            <div class="margin-top-50" *ngIf="profileInfo.isAgent">
-              <h4 class="margin-bottom-30">بيانات السمسار</h4>
-
-              <label class="margin-top-50 margin-bottom-25">نبزة عني</label>
-              <textarea name="about" id="about" cols="30" rows="10" [(ngModel)]="profileInfo.about"></textarea>
-
-              <div class="margin-top-50">
-                <!-- City -->
-                <label>المدينة</label>
-                <select class="chosen-select api-updated-cities" [(ngModel)]="selectedName">
-                  <option *ngFor="let city of cityList">{{ city.name }}</option>
-                </select>
-
-                <label>المنطقة</label>
-                <div class="autocomplete">
-                    <input #areaInput id="areaInput" type="text" (keyup)="search(areaInput.value)" (blur)="areaBlur()" [(ngModel)]="area">
-                  <ul class="chosen-results" [hidden]="!isAutofill">
-                    <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
-                    <li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
-                  </ul>
-                </div>
-
-                <label>الشارع</label>
-                <input type="text" [(ngModel)]="street">
-              </div>
-            </div>
 
 
             <button class="button margin-top-20 margin-bottom-20" [disabled]="isConnecting" (click)="saveProfile()">احفظ التغيرات</button>

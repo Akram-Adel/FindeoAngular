@@ -6,7 +6,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2><i class="fa fa-plus-circle"></i> Add Property</h2>
+          <h2><i class="fa fa-plus-circle"></i> Edit Property</h2>
         </div>
       </div>
     </div>
@@ -45,8 +45,8 @@
 
           <!-- Type -->
           <div class="col-md-6">
-            <h5>Property Type <i class="tip" data-tip-content="Fill Service-type first to fill this area"></i></h5>
-            <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty" formControlName="propertyType">
+            <h5>Property Type</h5>
+            <select class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
               <option label="blank"></option>
               <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
             </select>
@@ -68,14 +68,14 @@
 
           <!-- Price -->
           <div class="col-md-6">
-            <h5>Price <i class="tip" data-tip-content="Fill Property-type and Service-type first to fill this area"></i></h5>
+            <h5>Price</h5>
             <input type="text" class="search-field" formControlName="price">
           </div>
 
           <!-- Currency -->
           <div class="col-md-3">
             <h5>Currency</h5>
-            <select class="chosen-select-no-single api-updated-currency" [disabled]="!isTypes" formControlName="currency">
+            <select class="chosen-select-no-single api-updated-currency" formControlName="currency">
               <option label="blank"></option>
               <option *ngFor="let currency of currencyList" [value]="currency.key">{{ currency.value }}</option>
             </select>
@@ -84,7 +84,7 @@
           <!-- Price Type -->
           <div class="col-md-3">
             <h5>Price Type</h5>
-            <select class="chosen-select-no-single api-updated-priceType" [disabled]="!isTypes" formControlName="priceType">
+            <select class="chosen-select-no-single api-updated-priceType" formControlName="priceType">
               <option label="blank"></option>
               <option *ngFor="let price of pricetypeList" [value]="price.key">{{ price.value }}</option>
             </select>
@@ -99,14 +99,14 @@
 
           <!-- Area -->
           <div class="col-md-6">
-            <h5>Area <i class="tip" data-tip-content="Fill Property-type and Service-type first to fill this area"></i></h5>
+            <h5>Area</h5>
             <input type="text" class="search-field" formControlName="landSize">
           </div>
 
           <!-- Measure Type -->
           <div class="col-md-3">
             <h5>Measure Type</h5>
-            <select class="chosen-select-no-single api-updated-measuretype" [disabled]="!isTypes" formControlName="landSizeMeasureType">
+            <select class="chosen-select-no-single api-updated-measuretype" formControlName="landSizeMeasureType">
               <option label="blank"></option>
               <option *ngFor="let measure of measuretypeList" [value]="measure.key">{{ measure.value }}</option>
             </select>
@@ -247,7 +247,7 @@
       <div class="submit-wrapper">
         <i class="im im-icon-Arrow-Around"></i>
         <button type="button" class="button preview margin-top-5" [ngClass]="{loading: isConnecting}" [disabled]="!submitForm.valid || isConnecting" (click)="submit(submitForm.value)">
-          Submit
+          Edit
           <i class="fa fa-arrow-circle-right"></i>
         </button>
       </div>
@@ -272,7 +272,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2><i class="fa fa-plus-circle"></i> إضافة إعلان - عقار للبيع أو للإيجار </h2>
+          <h2><i class="fa fa-plus-circle"></i> تعديل إعلان - عقار للبيع أو للإيجار </h2>
         </div>
       </div>
     </div>
@@ -312,8 +312,8 @@
 
             <!-- Type -->
             <div class="col-md-6">
-              <h5>نوع العقار <i class="tip" data-tip-content="اكتب نوع الخدمة اولا لتتمكن من كتابة هذة الخانة"></i></h5>
-              <select class="chosen-select-no-single-ar api-updated-propertytype" [disabled]="!isProperty" formControlName="propertyType">
+              <h5>نوع العقار</h5>
+              <select class="chosen-select-no-single-ar api-updated-propertytype" formControlName="propertyType">
                 <option label="blank"></option>
                 <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
               </select>
@@ -335,14 +335,14 @@
 
             <!-- Price -->
             <div class="col-md-6">
-              <h5>السعر <i class="tip" data-tip-content="قم بكتابة النوع اولا لتتمكن من كتابة هذة الخانة"></i></h5>
+              <h5>السعر</h5>
               <input type="text" class="search-field" formControlName="price">
             </div>
 
             <!-- Currency -->
             <div class="col-md-3">
               <h5>العملة</h5>
-              <select class="chosen-select-no-single-ar api-updated-currency" [disabled]="!isTypes" formControlName="currency">
+              <select class="chosen-select-no-single-ar api-updated-currency" formControlName="currency">
                 <option label="blank"></option>
                 <option *ngFor="let currency of currencyList" [value]="currency.key">{{ currency.value }}</option>
               </select>
@@ -351,7 +351,7 @@
             <!-- Price Type -->
             <div class="col-md-3">
               <h5>نوع السعر</h5>
-              <select class="chosen-select-no-single-ar api-updated-priceType" [disabled]="!isTypes" formControlName="priceType">
+              <select class="chosen-select-no-single-ar api-updated-priceType" formControlName="priceType">
                 <option label="blank"></option>
                 <option *ngFor="let price of pricetypeList" [value]="price.key">{{ price.value }}</option>
               </select>
@@ -366,14 +366,14 @@
 
             <!-- Area -->
             <div class="col-md-6">
-              <h5>المساحة <i class="tip" data-tip-content="قم بكتابة النوع اولا لتتمكن من كتابة هذة الخانة"></i></h5>
+              <h5>المساحة</h5>
               <input type="text" class="search-field" formControlName="landSize">
             </div>
 
             <!-- Measure Type -->
             <div class="col-md-3">
               <h5>وحدة القياس</h5>
-              <select class="chosen-select-no-single-ar api-updated-measuretype" [disabled]="!isTypes" formControlName="landSizeMeasureType">
+              <select class="chosen-select-no-single-ar api-updated-measuretype" formControlName="landSizeMeasureType">
                 <option label="blank"></option>
                 <option *ngFor="let measure of measuretypeList" [value]="measure.key">{{ measure.value }}</option>
               </select>
@@ -507,7 +507,7 @@
         <div class="submit-wrapper">
           <i class="im im-icon-Arrow-Around"></i>
           <button type="button" class="button preview margin-top-5" [ngClass]="{loading: isConnecting}" [disabled]="!submitForm.valid || isConnecting" (click)="submit(submitForm.value)">
-            سجل الاعلان
+            تعديل
             <i class="fa fa-arrow-circle-left"></i>
           </button>
         </div>
@@ -522,3 +522,5 @@
   <div class="padding-top-55"></div>
 </div>
 <!-- Arabic Section / End -->
+
+<div class="overlay"></div>

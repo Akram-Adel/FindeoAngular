@@ -2,14 +2,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
 import { CompareService } from '../../services/compare.service';
 import { SearchService } from '../../services/search.service';
+import { TranslatorService } from '../../services/translator.service';
+import { UserService } from '../../services/user.service';
+
+import * as _ from 'lodash';
 
 declare var google:any;
 declare var $:any;
+declare var toastr:any;
 
 @Component({
   selector: 'app-single-property',
@@ -19,8 +26,13 @@ declare var $:any;
 export class SinglePropertyComponent implements OnInit, OnDestroy {
 
   language:string;
-  listingResults:any;
-  subsciption:any;
+  subscription:any;
+  emailForm:FormGroup;
+
+  gotIncrement:any = { featuredProperties:false, listingResults:false }
+  featuredProperties:any = [];
+  listingResults:any = [];
+
 
   constructor(
     private route:ActivatedRoute,
@@ -29,7 +41,22 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
     private sanitizer:DomSanitizer,
     private compareService:CompareService,
     private http:HttpClient,
-    private searchService:SearchService) { }
+    private searchService:SearchService,
+    private location:Location,
+    private fb:FormBuilder,
+    private translator:TranslatorService,
+    private userService:UserService) {
+
+      this.emailForm = this.fb.group({
+        email: [null, Validators.required],
+        emailMeSimilarProperties: [true, Validators.required],
+        message: [null, Validators.required],
+        mobile: [null, Validators.required],
+        name: [null, Validators.required],
+        propertyId: [null, Validators.required],
+        userId: [null, Validators.required]
+      })
+    }
 
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
@@ -38,9 +65,13 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
     //Get Single Property Pre-Data
     this.listingResults = { images: [ "assets/images/single-property-01.jpg" ] };
 
+    //Get Featured Properties
+    this.searchService.getFeaturedProperties();
+
+    //Get Listing property
     let id = this.route.snapshot.paramMap.get('id');
     this.http.get(this.api.link+'/api/public/properties/'+id).subscribe(res => {this.searchService.newProperty(res); this.searchService.getPropertyImages()})
-    this.subsciption = this.searchService.searchImages$.subscribe(res => this.gotListing())
+    this.subscription = this.searchService.searchImages$.subscribe(res => {this.gotListing(); this.gotFeatured(); this.hideOverlay();})
   }
 
   MY_ngAfterViewInit() {
@@ -56,7 +87,7 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subsciption.unsubscribe()
+    this.subscription.unsubscribe();
   }
 
 
@@ -379,16 +410,6 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
         e.preventDefault();
     });
 
-
-    /*----------------------------------------------------*/
-    /*  Like Icon Trigger
-    /*----------------------------------------------------*/
-    $('.like-icon, .widget-button').on('click', function(e){
-    	e.preventDefault();
-      $(this).toggleClass('liked');
-      $(this).children('.like-icon').toggleClass('liked');
-    });
-
     /*----------------------------------------------------*/
     /*  Slide to anchor
     /*----------------------------------------------------*/
@@ -422,7 +443,7 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
       center: myLatLng,
       scrollwheel: false,
       zoomControl: false,
-      mapTypeControl: false,
+      // mapTypeControl: false,
       scaleControl: false,
       panControl: false,
       navigationControl: false,
@@ -486,6 +507,7 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
       id: pr.id,
       name: pr.title,
       state: (pr.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
+      type: pr.propertyType,
       adress: pr.location.city +' '+ pr.location.street,
       price: pr.price,
       priceDetail: pr.currency,
@@ -495,11 +517,19 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
       bathrooms: pr.bathrooms,
       description: "<p> ",
       details: [],
+      detailsAr: [],
       latitude: pr.location.lat,
       longitude: pr.location.lng,
+      clientImage: 'https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png',
+      clientName: pr.ad.user.firstName +' '+ pr.ad.user.lastName,
+      clientPhone: 999555111,
+      clientId: pr.ad.user.id,
+      similarProperties: [],
+      bookmark: false,
+      bookmarkId: null
     }
     // images
-    if(pr.images.length == 0) this.listingResults.images.push("assets/images/single-property-01.jpg");
+    if(pr.images.length == 0) this.listingResults.images.push(this.searchService.dummyImg);
     for(let i=0; i<pr.images.length; i++) {
       this.listingResults.images.push(
         pr.images[i].image.s3Path
@@ -510,11 +540,95 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
     // details
     this.listingResults.details.push( "Building Quality: <span>"+pr.buildingQuality+"</span>" )
     this.listingResults.details.push( "Building Age: <span>"+pr.ageType+"</span>" )
+    // detailsAr
+    this.listingResults.detailsAr.push( "حالة البناء: <span>"+pr.buildingQuality+"</span>" )
+    this.listingResults.detailsAr.push( "عمر البناء: <span>"+pr.ageType+"</span>" )
+    // similar properties
+    this.listingResults.similarProperties = this.api.api.similarProperties;
+    // see bookmarks
+    if(this.userService['id']) {
+      this.http.get<any>(this.api.link+'/api/bookmarks?propertyId.equals='+pr.id, this.api.userHeader()).subscribe({
+        next: res => {
+          if(res.length != 0) {
+            this.listingResults.bookmark = true;
+            this.listingResults.bookmarkId = res[0].id;
+          }
+        },
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+    }
+    // translation
+    this.translate(pr)
+    this.translator.translator$.subscribe(res => this.translate(pr))
+    // send message form
+    this.emailForm.controls.message.setValue('مرحبا. لقد عثرت علي عقارك مرجع رقم '+this.listingResults.id+'. الرجاء التواصل معي. شكرا')
+    this.emailForm.controls.propertyId.setValue(this.listingResults.id);
+    this.emailForm.controls.userId.setValue(this.listingResults.clientId);
+    this.emailForm.updateValueAndValidity();
 
-    setTimeout(() => {
-      this.MY_ngAfterViewInit();
-      $('.overlay').fadeOut();
-    }, 100);
+    this.gotIncrement.listingResults = true;
+  }
+  translate(pr, featuredId?) {
+    if(featuredId) {
+      let index = _.findIndex(this.featuredProperties, ['id', featuredId])
+      if( find(this, pr.currency) )                   this.featuredProperties[index].price = pr.price+' '+find(this, pr.currency)['value']
+      if( find(this, pr.landSizeMeasureType, 'All') ) this.featuredProperties[index].area = pr.landSize +' '+ find(this, pr.landSizeMeasureType, 'All')['value']
+      return;
+    }
+
+    if( find(this, pr.currency) )                   this.listingResults.priceDetail = find(this, pr.currency)['value']
+    if( find(this, pr.propertyType) )               this.listingResults.type = find(this, pr.propertyType)['value']
+    if( find(this, pr.landSizeMeasureType, 'All') ) this.listingResults.area = pr.landSize +' '+ find(this, pr.landSizeMeasureType, 'All')['value']
+    this.listingResults.detailsAr = [];
+    if( find(this, pr.buildingQuality, 'All') )     this.listingResults.detailsAr.push( "حالة البناء: <span>"+find(this, pr.buildingQuality, 'All')['value']+"</span>" )
+    if( find(this, pr.ageType, 'All') )             this.listingResults.detailsAr.push( "عمر البناء: <span>"+find(this, pr.ageType, 'All')['value']+"</span>" )
+
+    function find($this, value, service=pr.serviceType) {
+      return _.find($this.translator.translatorObj[service], ['key', value])
+    }
+  }
+  gotFeatured() {
+    this.featuredProperties = [];
+    //sales
+    for(let i=0; i<this.searchService.featuredProperties.saleListing.length; i++) {
+      let p = this.searchService.featuredProperties.saleListing[i];
+      this.featuredProperties.push({
+        id: p.id,
+        state: "For Sale",
+        name: p.title,
+        price: p.price+' '+p.currency,
+        area: p.landSize+' '+p.landSizeMeasureType,
+        beds: p.bedrooms,
+        baths: p.bathrooms,
+        image: (p && p.images && p.images[0]) ? p.images[0].image.s3Path : this.searchService.dummyImg,
+      })
+      this.translate(p, p.id);
+    }
+    //rent
+    for(let i=0; i<this.searchService.featuredProperties.rentalListing.length; i++) {
+      let p = this.searchService.featuredProperties.rentalListing[i];
+      this.featuredProperties.push({
+        id: p.id,
+        state: "For Rent",
+        name: p.title,
+        price: p.price+' '+p.currency,
+        area: p.landSize+' '+p.landSizeMeasureType,
+        beds: p.bedrooms,
+        baths: p.bathrooms,
+        image: (p && p.images && p.images[0]) ? p.images[0].image.s3Path : this.searchService.dummyImg,
+      })
+      this.translate(p, p.id);
+    }
+
+    this.gotIncrement.featuredProperties = true;
+  }
+  hideOverlay() {
+    if(this.gotIncrement.featuredProperties && this.gotIncrement.listingResults) {
+      setTimeout(() => {
+        this.MY_ngAfterViewInit();
+        $('.overlay').fadeOut();
+      }, 1000);
+    }
   }
 
 
@@ -549,6 +663,50 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
     }
 
     this.compareService.addProperty(property);
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  sendEmail(form) {
+    this.http.post(this.api.link+'/api/communication/email-property', {
+      "email": form.email,
+      "emailMeSimilarProperties": form.emailMeSimilarProperties,
+      "message": form.message,
+      "mobile": form.mobile,
+      "name": form.name,
+      "propertyId": form.propertyId,
+      "userId": form.userId
+
+      }, this.api.userHeader()).subscribe({
+        next: res => toastr.success('Message successfull sent', 'Success'),
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+  }
+
+  bookmark(listing) {
+    if(listing.bookmark) {
+      this.http.delete(this.api.link+'/api/bookmarks/'+listing.bookmarkId, this.api.userHeader()).subscribe({
+        next: res => {
+          this.listingResults.bookmark = false;
+          this.listingResults.bookmarkId = null;
+        },
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+
+    } else {
+      this.http.post<any>(this.api.link+'/api/bookmarks',{
+        propertyId: listing.id,
+        userId: this.userService['id']
+      }, this.api.userHeader()).subscribe({
+        next: res => {
+          this.listingResults.bookmark = true;
+          this.listingResults.bookmarkId = res.id;
+        },
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+    }
   }
 
 }

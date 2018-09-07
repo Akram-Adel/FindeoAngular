@@ -19,9 +19,12 @@ declare let toastr:any;
 export class ChangePasswordComponent implements OnInit,AfterViewInit {
 
   language:string;
+  profileInfo = { isAgent: false }
 
   isConnecting:boolean = false;
   passwordForm:FormGroup;
+
+
 
   constructor(
     private route:ActivatedRoute,
@@ -43,6 +46,9 @@ export class ChangePasswordComponent implements OnInit,AfterViewInit {
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
+
+    this.profileInfo.isAgent = this.userService['isAgent'];
+    this.userService.userUpdate$.subscribe(res => this.profileInfo.isAgent = this.userService['isAgent']);
   }
 
   ngAfterViewInit() {

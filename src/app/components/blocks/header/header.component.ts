@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
 
   userMenu() {
     $('#responsive .user-menu').toggleClass('active');
-    console.log( $('#responsive .user-menu') )
+    // console.log( $('#responsive .user-menu') )
   }
 
   updateUser() {

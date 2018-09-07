@@ -44,8 +44,7 @@
             <p>{{ agent.about }}</p>
 
             <ul class="agent-contact-details">
-              <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
-              <li><i class="fa fa-envelope-o "></i><a>{{ agent.email }}</a></li>
+              <li><i class="im im-icon-Address-Book"></i>{{ agent.adress }}</li>
             </ul>
           </div>
 
@@ -157,79 +156,36 @@
       <div class="col-lg-4 col-md-4">
         <div class="sidebar sticky right">
 
+
           <!-- Widget -->
-          <div class="widget margin-bottom-40">
-            <h3 class="margin-top-0 margin-bottom-35">Find New Home</h3>
+          <div class="widget">
 
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Status -->
-              <div class="col-md-12">
-                <select class="chosen-select-no-single api-updated-servicetype">
-                  <option label="blank"></option>
-                  <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Type -->
-              <div class="col-md-12">
-                <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
-                  <option label="blank"></option>
-                  <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-
-              <!-- Min Area -->
-              <div class="col-md-6">
-                <select data-placeholder="Beds" class="chosen-select-no-single chosen-bedrooms" >
-                  <option label="blank"></option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+            <!-- Agent Widget -->
+            <div class="agent-widget">
+              <div class="agent-title">
+                <div class="agent-details" style="margin:0">
+                  <h4><a>Call Agent</a></h4>
+                </div>
+                <div class="clearfix"></div>
               </div>
 
-              <!-- Max Area -->
-              <div class="col-md-6">
-                <select data-placeholder="Baths" class="chosen-select-no-single chosen-bathrooms" >
-                  <option label="blank"></option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+              <form [formGroup]="emailForm" (ngSubmit)="sendEmail(emailForm.value)">
+                <input type="text" placeholder="Your Email" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
+                <input type="text" placeholder="Your Name"  formControlName="name">
+                <input type="text" placeholder="Your Phone" formControlName="mobile">
+                <select formControlName="messageType" (change)="selectChange($event.target.value)">
+                  <option value="null">اختر نوع الاستفسار</option>
+                  <option>ابحث عن عقارات للبيع</option>
+                  <option>ابحث عن عقارات للإيجار</option>
+                  <option>لدي عقار للبيع</option>
+                  <option>لدي عقار للإيجار</option>
+                  <option>اخري</option>
                 </select>
-              </div>
-
+                <textarea formControlName="message"></textarea>
+                <button class="button fullwidth margin-top-5" [disabled]="!emailForm.valid">Send Message</button>
+              </form>
             </div>
-            <!-- Row / End -->
-
-            <br>
-
-            <!-- Price Range -->
-            <div class="range-slider">
-              <label>Price Range</label>
-              <div id="price-range" data-min="0" data-max="400000" data-unit=""></div>
-              <div class="clearfix"></div>
-            </div>
-
-            <form [formGroup]="searchForm">
-              <button class="button fullwidth margin-top-30" [disabled]="!searchForm.valid" (click)="search()">Search</button>
-            </form>
-
+            <!-- Agent Widget / End -->
 
           </div>
           <!-- Widget / End -->
@@ -294,8 +250,7 @@
             <p>{{ agent.about }}</p>
 
             <ul class="agent-contact-details">
-              <li><i class="sl sl-icon-call-in"></i>{{ agent.phone }}</li>
-              <li><i class="fa fa-envelope-o "></i><a>{{ agent.email }}</a></li>
+              <li><i class="im im-icon-Address-Book"></i>{{ agent.adress }}</li>
             </ul>
           </div>
 
@@ -407,79 +362,36 @@
       <div class="col-lg-4 col-md-4">
         <div class="sidebar sticky left">
 
+
           <!-- Widget -->
-          <div class="widget margin-bottom-40">
-            <h3 class="margin-top-0 margin-bottom-35">ابحث عن منزل جديد</h3>
+          <div class="widget">
 
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Status -->
-              <div class="col-md-12">
-                <select class="chosen-select-no-single api-updated-servicetype">
-                  <option label="blank"></option>
-                  <option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-              <!-- Type -->
-              <div class="col-md-12">
-                <select class="chosen-select-no-single api-updated-propertytype" [disabled]="!isProperty">
-                  <option label="blank"></option>
-                  <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
-                </select>
-              </div>
-            </div>
-            <!-- Row / End -->
-
-
-            <!-- Row -->
-            <div class="row with-forms">
-
-              <!-- Min Area -->
-              <div class="col-md-6">
-                <select data-placeholder="Beds" class="chosen-select-no-single chosen-bedrooms" >
-                  <option label="blank"></option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+            <!-- Agent Widget -->
+            <div class="agent-widget">
+              <div class="agent-title">
+                <div class="agent-details" style="margin:0">
+                  <h4><a>اتصل بالمكتب العقاري</a></h4>
+                </div>
+                <div class="clearfix"></div>
               </div>
 
-              <!-- Max Area -->
-              <div class="col-md-6">
-                <select data-placeholder="Baths" class="chosen-select-no-single chosen-bathrooms" >
-                  <option label="blank"></option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+              <form [formGroup]="emailForm" (ngSubmit)="sendEmail(emailForm.value)">
+                <input type="text" placeholder="البريد الالكتروني" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
+                <input type="text" placeholder="اسمك"  formControlName="name">
+                <input type="text" placeholder="رقم الهاتف" formControlName="mobile">
+                <select formControlName="messageType" (change)="selectChange($event.target.value)">
+                  <option value="null">اختر نوع الاستفسار</option>
+                  <option>ابحث عن عقارات للبيع</option>
+                  <option>ابحث عن عقارات للإيجار</option>
+                  <option>لدي عقار للبيع</option>
+                  <option>لدي عقار للإيجار</option>
+                  <option>اخري</option>
                 </select>
-              </div>
-
+                <textarea formControlName="message"></textarea>
+                <button class="button fullwidth margin-top-5" [disabled]="!emailForm.valid">ارسل رسالة</button>
+              </form>
             </div>
-            <!-- Row / End -->
-
-            <br>
-
-            <!-- Price Range -->
-            <div class="range-slider">
-              <label>مدي السعر</label>
-              <div id="price-range" data-min="0" data-max="400000" data-unit=""></div>
-              <div class="clearfix"></div>
-            </div>
-
-            <form [formGroup]="searchForm">
-              <button class="button fullwidth margin-top-30" [disabled]="!searchForm.valid" (click)="search()">ابحث</button>
-            </form>
-
+            <!-- Agent Widget / End -->
 
           </div>
           <!-- Widget / End -->

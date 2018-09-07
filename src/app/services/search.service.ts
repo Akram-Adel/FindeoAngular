@@ -13,6 +13,8 @@ export class SearchService {
 
 
 
+  public dummyImg:string = 'https://s3.eu-central-1.amazonaws.com/aliraqhomes-dev/media/assets/default-house.jpg';
+
   private doneWithImages = new Subject<number>();
   public searchImages$:Observable<number> = this.doneWithImages.asObservable();
 
@@ -20,6 +22,7 @@ export class SearchService {
   /* ------------------------------------------------------------------- */
   /*  Main Listings Search
   ---------------------------------------------------------------------- */
+  public searchQuery:any;
   public searchResult:any[] = [];
   public newSearch(data) { this.searchResult = data }
 
@@ -104,7 +107,7 @@ export class SearchService {
       })
     })
   }
-  public getProfilePropertiesImages() {
+  private getProfilePropertiesImages() {
     if(this.profileProperties.saleListing.length == 0) this.getProfilePropertiesImages2();
     for(let i=0; i<this.profileProperties.saleListing.length; i++) {
       this.http.get(this.api.link+'/api/public/property-images?propertyId.equals='+this.profileProperties.saleListing[i].id).subscribe(res => {
@@ -121,6 +124,69 @@ export class SearchService {
         this.profileProperties.rentalListing[i].images = res;
 
         if(i == this.profileProperties.rentalListing.length-1) setTimeout(() => this.doneWithImages.next( Math.random() ), 100);
+      })
+    }
+  }
+
+
+  /* ------------------------------------------------------------------- */
+  /*  Featured Properties
+  ---------------------------------------------------------------------- */
+  public featuredProperties:any = {
+    saleListing: null, rentalListing:null
+  }
+  public getFeaturedProperties() {
+    this.http.get(this.api.link+'/api/public/properties?serviceType.in=SALE&featured.equals=true').subscribe(res => {
+      this.featuredProperties.saleListing = res;
+
+      this.http.get(this.api.link+'/api/public/properties?serviceType.in=RENTAL&featured.equals=true').subscribe(res => {
+        this.featuredProperties.rentalListing = res;
+        this.getFeaturedImages();
+      })
+    })
+  }
+  private getFeaturedImages() {
+    if(this.featuredProperties.saleListing.length == 0) this.getFeaturedImages2();
+    for(let i=0; i<this.featuredProperties.saleListing.length; i++) {
+      this.http.get(this.api.link+'/api/public/property-images?propertyId.equals='+this.featuredProperties.saleListing[i].id).subscribe(res => {
+        this.featuredProperties.saleListing[i].images = res;
+
+        if(i == this.featuredProperties.saleListing.length-1) this.getFeaturedImages2();
+      })
+    }
+  }
+  private getFeaturedImages2() {
+    if(this.featuredProperties.rentalListing.length == 0) setTimeout(() => this.doneWithImages.next( Math.random() ), 100);
+    for(let i=0; i<this.featuredProperties.rentalListing.length; i++) {
+      this.http.get(this.api.link+'/api/public/property-images?propertyId.equals='+this.featuredProperties.rentalListing[i].id).subscribe(res => {
+        this.featuredProperties.rentalListing[i].images = res;
+
+        if(i == this.featuredProperties.rentalListing.length-1) setTimeout(() => this.doneWithImages.next( Math.random() ), 100);
+      })
+    }
+  }
+
+
+  /* ------------------------------------------------------------------- */
+  /*  Bookmarked Properties
+  ---------------------------------------------------------------------- */
+  public bookmarkedProperties:any = [];
+  public getBookmarkedProperties(bookmarks, header) {
+    this.bookmarkedProperties = [];
+    bookmarks.forEach(item => {
+      this.http.get(this.api.link+'/api/properties/'+item.propertyId, header).subscribe(res => {
+        this.bookmarkedProperties.push(res);
+        this.getBookmarkedPropertiesImages();
+      })
+    });
+  }
+  private getBookmarkedPropertiesImages() {
+    if(this.bookmarkedProperties.length == 0) setTimeout(() => this.doneWithImages.next( Math.random() ), 100);
+    for(let i=0; i<this.bookmarkedProperties.length; i++) {
+      this.http.get(this.api.link+'/api/public/property-images?propertyId.equals='+this.bookmarkedProperties[i].id).subscribe(res => {
+        this.bookmarkedProperties[i].images = res;
+
+        if(i == this.bookmarkedProperties.length-1) setTimeout(() => this.doneWithImages.next( Math.random() ), 100);
       })
     }
   }

@@ -87,7 +87,7 @@ html.mm-opening .rtl-config .mm-menu.mm-opened~.mm-slideout { -webkit-transform:
 .rtl-config .chosen-container .chosen-drop { left: auto; right: -9999px; }
 .rtl-config .chosen-container-single.chosen-container-single-nosearch .chosen-search { left: auto; right: -9999px; }
 .rtl-config .chosen-container.chosen-with-drop .chosen-drop { right: 0; }
-.rtl-config .sort-by label, .sort-by .sort-by-select{ float: right; }
+.rtl-config .sort-by label, .rtl-config .sort-by .sort-by-select{ float: right; }
 .rtl-config .sort-by .chosen-container-active .chosen-single, .sort-by .chosen-container-active .chosen-choices, .sort-by .chosen-container-active.chosen-with-drop .chosen-single, .sort-by .chosen-container-single .chosen-single { padding-left: 0; padding-right: 10px; }
 .rtl-config .sort-by .chosen-container-single .chosen-single div{ margin-left: 0; margin-right: 15px; }
 .rtl-config .chosen-container-single .chosen-single div { right: auto; left: 0; }
@@ -168,6 +168,12 @@ body.rtl-config .carousel { left: auto; right: -15px; }
 .rtl-config p.form-row input.loading, .submit-wrapper button[type="button"].loading { margin-left: 0; margin-right: 50px; }
 .rtl-config .user-menu ul { right: auto !important; left: 0 !important;}
 .rtl-config button.button, .rtl-config input[type="button"], .rtl-config input[type="submit"], .rtl-config a.button.border, .rtl-config a.button { margin-right: 0; margin-left: 6px; }
+.rtl-config .agent-details { margin-left: 0; margin-right: 92px; }
+.rtl-config .agent-title .agent-photo { float: right; }
+.rtl-config .accordion h3 .sl-icon-plus, .rtl-config .trigger .sl-icon-plus { right: auto; left: 0; }
+.rtl-config .ui-accordion .ui-accordion-header i, .rtl-config .trigger a i { margin: 0 0 0 4px; padding-right: 0; padding-left: 3px; }
+.rtl-config .accordion h3.ui-accordion-header-active .sl-icon-plus, .rtl-config .trigger.active .sl-icon-plus { margin-top: 0; margin-bottom: 2px; }
+.rtl-config .save-search-modal label { text-align: right; }
 
 .rtl-config .icon-img-wrapper { padding-left: 10px !important; padding-right: 0 !important; float: none !important; display: inline-block !important; }
 
@@ -175,6 +181,7 @@ body.rtl-config .carousel { left: auto; right: -15px; }
 .translate:hover .tip-content { opacity: 1; visibility: visible; transform: translate(-120%, 7px); background-color: #fff; color: #333; }
 .translate .tip-content:after { font-family: "FontAwesome"; content: "\f0da"; position: absolute; top: 50%; bottom: auto; left: auto; right: -4px; font-size: 17px; color: #fff; transform: translate(0%,-50%); }
 
+.rtl-config .col-fs-12, .rtl-config .col-fs-11, .rtl-config .col-fs-10, .rtl-config .col-fs-9, .rtl-config .col-fs-8, .rtl-config .col-fs-7, .rtl-config .col-fs-6, .rtl-config .col-fs-5, .rtl-config .col-fs-4, .rtl-config .col-fs-3, .rtl-config .col-fs-2, .rtl-config .col-fs-1 { float: right; }
 @media (min-width: 1260px) {
   .rtl-config .col-lg-1, .rtl-config .col-lg-2, .rtl-config .col-lg-3, .rtl-config .col-lg-4, .rtl-config .col-lg-5, .rtl-config .col-lg-6, .rtl-config .col-lg-7, .rtl-config .col-lg-8, .rtl-config .col-lg-9, .rtl-config .col-lg-10, .rtl-config .col-lg-11, .rtl-config .col-lg-12 { float: right; }
 }

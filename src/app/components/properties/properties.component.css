@@ -7,3 +7,4 @@
 }
 
 a { cursor: pointer; }
+td.disabled a { color: #eee !important; cursor: no-drop; }

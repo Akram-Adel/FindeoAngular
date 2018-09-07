@@ -8,7 +8,6 @@
         <div class="col-md-12">
 
           <h2>Agents</h2>
-          <span>List of Our Agents</span>
 
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
@@ -82,7 +81,7 @@
       </div>
 
 
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="numOfPages > 1">
         <div class="clearfix"></div>
         <!-- Pagination -->
         <div class="pagination-container margin-top-20">
@@ -118,8 +117,7 @@
       <div class="row">
         <div class="col-md-12">
 
-          <h2>السماسرة</h2>
-          <span>قائمة السماسرة</span>
+          <h2>المكاتب العقارية</h2>
 
           <!-- Breadcrumbs -->
           <nav id="breadcrumbs">
@@ -163,7 +161,7 @@
                 <div class="agent-avatar">
                   <a [routerLink]="['/ar/agent-page', agent.id]">
                     <img src="{{ agent.image }}">
-                    <span class="view-profile-btn">تفحص صفحتة</span>
+                    <span class="view-profile-btn">تفاصيل المكتب</span>
                   </a>
                 </div>
 
@@ -190,7 +188,7 @@
       </div>
 
 
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="numOfPages > 1">
         <div class="clearfix"></div>
         <!-- Pagination -->
         <div class="pagination-container margin-top-20">

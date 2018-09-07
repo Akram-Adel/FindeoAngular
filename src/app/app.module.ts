@@ -11,6 +11,7 @@ import { CompareService } from './services/compare.service';
 import { ApiService } from './services/api.service';
 import { UserService } from './services/user.service';
 import { SearchService } from './services/search.service';
+import { TranslatorService } from './services/translator.service';
 
 import { ReversePipe } from './pipes/reverse.pipe';
 import { LimitPipe } from './pipes/limit.pipe';
@@ -36,6 +37,10 @@ import { BlogPostComponent } from './components/blog-post/blog-post.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { LoginsComponent } from './components/logins/logins.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { EditPropertyComponent } from './components/edit-property/edit-property.component';
+import { AgentComponent } from './components/agent/agent.component';
+import { MySearchesComponent } from './components/my-searches/my-searches.component';
 
 
 @NgModule({
@@ -62,7 +67,11 @@ import { LoginsComponent } from './components/logins/logins.component';
     ReversePipe,
     LimitPipe,
     TranslatePipe,
-    LoginsComponent
+    LoginsComponent,
+    AboutUsComponent,
+    EditPropertyComponent,
+    AgentComponent,
+    MySearchesComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +81,7 @@ import { LoginsComponent } from './components/logins/logins.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [LanguageService, CompareService, ApiService, UserService, SearchService],
+  providers: [LanguageService, CompareService, ApiService, UserService, SearchService, TranslatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,32 +1,36 @@
-form button:disabled {
+button:disabled,
+div.disabled {
   background-color: gray;
   cursor: no-drop;
 }
 
-.headline-box { z-index: 998 }
-
-.icon-box-1:hover .icon-container i {
-  opacity: 0;
-  transform: translate3d(0,0,0)  scale(1.16);
+input[type="email"] {
+  background-color: #eee;
+  cursor: no-drop;
 }
 
-.icon-box-1.alternative:hover:after { opacity: 0 }
-
-
-
-.autocomplete {
-  position: relative;
-  display: inline-block;
-  padding-left: 1%;
-  width: 49%;
-  vertical-align: bottom;
+button.border {
+  border: 1px solid #274abb;
+  color: #274abb;
+  background-color: transparent;
+}
+button.border:hover {
+  background-color: #274abb;
+  color: #fff;
+}
+button.border:disabled {
+  background-color: gray;
+  cursor: no-drop;
+  color: #fff;
+  border: 1px solid gray;
 }
 
-.autocomplete > input { height: 57px }
+
+.autocomplete { position: relative; }
 
 .autocomplete ul.chosen-results {
-  position: absolute; width: 95%;
-  top: 100%; left: auto; right: 0;
+  position: absolute; width: 100%;
+  top: 100%; left: 0; right: 0;
   color: #888;
   z-index: 99;
   overflow-x: hidden; overflow-y: hidden;
@@ -59,5 +63,3 @@ form button:disabled {
   color: #fff;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
-
-.icon-links a { cursor: pointer }

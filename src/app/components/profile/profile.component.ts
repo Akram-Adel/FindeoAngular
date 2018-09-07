@@ -30,9 +30,8 @@ export class ProfileComponent implements OnInit,AfterViewInit {
     firstName: null,
     lastName: null,
     email: null,
-    imageUrl: "assets/images/agent-03.jpg",
+    imageUrl: "https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png",
     phone: '',
-    about: null,
     isAgent: false
   }
   cityList:any = [];
@@ -64,20 +63,12 @@ export class ProfileComponent implements OnInit,AfterViewInit {
     if(!this.userService.userToken) this.router.navigate([this.language, 'login']);
     this.synchProfileInfo();
     this.userService.userUpdate$.subscribe(res => { this.synchProfileInfo() });
-
-    this.areas$ = this.searchTerm
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((term:string) => this.searchArea(term))
-      );
   }
 
   ngAfterViewInit() {
     this.fotterPadding();
     this.eventListeners();
     this.chosenPlugin();
-    this.chosenCities();
   }
 
 
@@ -186,22 +177,6 @@ export class ProfileComponent implements OnInit,AfterViewInit {
     this.profileInfo.phone = this.userService['phone'];
     this.profileInfo.imageUrl = this.userService['imageUrl'];
     this.profileInfo.isAgent = this.userService['isAgent'];
-    this.profileInfo.about = this.userService['description'];
-
-    if(this.profileInfo.isAgent) this.synchAgentInfo()
-  }
-  synchAgentInfo() {
-    setTimeout(() => {
-      this.chosenPlugin();
-      this.chosenCities();
-      this.area = this.userService['agentLocation']['city'];
-      this.street = this.userService['agentLocation']['street'];
-      setTimeout(() => {
-        this.selectedCity = _.find(this.cityList, ['id', this.userService['agentLocation']['regionId']]);
-        this.selectedName = this.selectedCity.name;
-        setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
-      }, 500);
-    }, 50);
   }
 
 
@@ -229,55 +204,9 @@ export class ProfileComponent implements OnInit,AfterViewInit {
         avatarId: self.userService['imageId'],
         userId: self.userService['id']
       }, self.api.userHeader()).subscribe({
-        next: res => (self.profileInfo.isAgent) ? agentChange() : saveSuccess(),
+        next: res => saveSuccess(),
         error: err => { self.isConnecting = false; self.api.API_ERROR(err, self.language); }
       })
-    }
-
-    // agent changes
-    function agentChange() {
-      let info = self.profileInfo;
-      if(info.firstName == null
-        || info.firstName == ''
-        || info.about == null
-        || info.about == ''
-        || info.phone == null
-        || info.phone == ''
-        || !self.area
-        || self.area == ''
-        || !self.street
-        || self.street == '') { toastr.error('Please fill all the agent data', 'Error!'); return; };
-
-      // location id request
-      self.http.post(self.api.link+'/api/locations', {
-        city: self.area,
-        street: self.street,
-        lat: self.lat,
-        lng: self.lng,
-        regionId: self.regionId,
-        regionCityId: self.regionCityId
-      }, self.api.userHeader()).subscribe({
-        next: res => postAgent(res),
-        error: err => self.api.API_ERROR(err, self.language)
-      })
-
-      // agent request
-      function postAgent(location) {
-        let locationId = location.id;
-        self.http.put(self.api.link+'/api/agents', {
-          id: self.userService['agentId'],
-          name: self.profileInfo.firstName,
-          description: self.profileInfo.about,
-          phone: self.profileInfo.phone,
-          email: self.profileInfo.email,
-          logoId: self.userService['imageId'],
-          userId: self.userService['id'],
-          locationId: locationId
-        }, self.api.userHeader()).subscribe({
-          next: res => saveSuccess(),
-          error: err => self.api.API_ERROR(err, self.language)
-        })
-      }
     }
 
     // success save changes
@@ -297,7 +226,7 @@ export class ProfileComponent implements OnInit,AfterViewInit {
     let self = this;
     this.isConnecting = true;
 
-    let url = 'http://iq-staging.eu-west-1.elasticbeanstalk.com/api/images/upload-image/users',
+    let url = this.api.link+'/api/images/upload-image/users',
     photo = photoFiles[0];
 
     const formData = new FormData();
@@ -329,120 +258,6 @@ export class ProfileComponent implements OnInit,AfterViewInit {
         self.api.getAgentProfile();
 
         self.saveProfile(); // <-- to update agent photo
-      });
-    }
-  }
-
-
-  chosenCities() {
-    let self = this;
-
-    // attach a change event
-    $('.api-updated-cities').on('change', (ev, params) => {
-      self.selectedCity = _.find(self.cityList, {name: params.selected});
-      self.lat = self.selectedCity.lat;
-      self.lng = self.selectedCity.lng;
-      self.regionId = self.selectedCity.id;
-      self.regionCityId = null; self.area = '';
-    });
-
-    // get city array
-    const httpOptions = {
-      params: new HttpParams()
-        .set( 'parentId.specified', 'false' )
-    }
-    this.http.get(this.api.link+'/api/public/regions', httpOptions).subscribe({
-      next: res => putCityArray(res),
-      error: err => this.api.API_ERROR(err, this.language)
-    })
-
-    // add city array to the DOM and update the chosenPlugin()
-    function putCityArray(cities) {
-      self.cityList = cities;
-      self.selectedCity = cities[0];
-      self.lat = self.selectedCity.lat;
-      self.lng = self.selectedCity.lng;
-      self.regionId = self.selectedCity.id;
-      setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
-    }
-  }
-
-  search(term:string): void {
-    this.searchTerm.next(term);
-  }
-  searchArea(term): Observable<any[]> {
-    if(!term.trim() || term.trim().length < 4) {
-      return of([]);
-    }
-    this.isAutofill = true;
-    return this.http.get<any[]>(this.api.link+'/api/public/regions/search/'+this.selectedCity.id+'/'+term)
-  }
-  autofill(area) {
-    this.area = area.arabicName;
-    this.lat = area.lat;
-    this.lng = area.lng;
-    this.regionCityId = area.id;
-  }
-  areaBlur() {
-    setTimeout(() => this.isAutofill = false, 200);
-  }
-
-  becomeAgent() {
-    let this$ = this;
-
-    let info = this.profileInfo;
-    if(info.firstName == null
-      || info.firstName == ''
-      || info.about == null
-      || info.about == ''
-      || info.phone == null
-      || info.phone == ''
-      || !this.area
-      || this.area == ''
-      || !this.street
-      || this.street == '') { toastr.error('Please fill all the above data to become an agent', 'Error!'); return; };
-
-    this.isConnecting = true;
-
-    // location id request
-    this.http.post(this.api.link+'/api/locations', {
-      city: this.area,
-      street: this.street,
-      lat: this.lat,
-      lng: this.lng,
-      regionId: this.regionId,
-      regionCityId: this.regionCityId
-    }, this.api.userHeader()).subscribe({
-      next: res => postAgent(res),
-      error: err => this.api.API_ERROR(err, this.language)
-    })
-
-    // agent request
-    function postAgent(location) {
-      let locationId = location.id;
-      this$.http.post(this$.api.link+'/api/agents', {
-        name: this$.profileInfo.firstName,
-        description: this$.profileInfo.about,
-        phone: this$.profileInfo.phone,
-        email: this$.profileInfo.email,
-        logoId: this$.userService['imageId'],
-        userId: this$.userService['id'],
-        locationId: locationId
-      }, this$.api.userHeader()).subscribe({
-        next: res => saveSuccess(),
-        error: err => this$.api.API_ERROR(err, this$.language)
-      })
-    }
-
-    // success save changes
-    function saveSuccess() {
-      this$.isConnecting = false;
-      toastr.success('You are now an agent', 'Success');
-      $('html, body').animate({ scrollTop: 0 }, 500);
-      this$.http.get(this$.api.link+'/api/account', this$.api.userHeader()) .subscribe( res => {
-        this$.userService.createUser(res);
-        this$.api.getUserProfile();
-        this$.api.getAgentProfile();
       });
     }
   }

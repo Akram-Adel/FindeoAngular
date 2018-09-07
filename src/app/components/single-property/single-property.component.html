@@ -7,9 +7,12 @@
       <div class="row">
         <div class="col-md-12">
 
-          <a [routerLink]="['/en/listings/default']" class="back-to-listings"></a>
+          <a (click)="goBack()" class="back-to-listings"></a>
           <div class="property-title">
-            <h2>{{ listingResults.name }} <span class="property-badge">{{ listingResults.state }}</span></h2>
+            <h2>{{ listingResults.name }}
+              <span class="property-badge">{{ listingResults.state }}</span>
+              <span class="property-type-badge property-type-badge-garages">{{ listingResults.type }}</span>
+            </h2>
             <span>
               <a href="#location" class="listing-address">
                 <i class="fa fa-map-marker"></i>
@@ -85,8 +88,68 @@
           <h3 class="desc-headline no-border" id="location">Location</h3>
           <div id="propertyMap-container">
             <div id="propertyMap" [attr.data-latitude]="listingResults.latitude" [attr.data-longitude]="listingResults.longitude"></div>
-            <a href="#" id="streetView">Street View</a>
+            <!-- <a href="#" id="streetView">Street View</a> -->
           </div>
+
+
+          <!-- Similar Listings Container -->
+          <h3 class="desc-headline no-border margin-bottom-35 margin-top-60">Similar Properties</h3>
+
+          <!-- Layout Switcher -->
+
+          <div class="layout-switcher hidden"><a href="#" class="list"><i class="fa fa-th-list"></i></a></div>
+          <div class="listings-container list-layout">
+
+            <!-- Listing Item -->
+            <div class="listing-item" *ngFor="let property of listingResults.similarProperties">
+
+              <a class="listing-img-container">
+
+                <div class="listing-badges">
+                  <span>{{ property.state }}</span>
+                </div>
+
+                <div class="listing-img-content">
+                  <span class="listing-price">{{ property.price }} <i>{{ property.priceDetail }}</i></span>
+                  <span class="like-icon"></span>
+                </div>
+
+                <img src="{{ property.image }}">
+
+              </a>
+
+              <div class="listing-content">
+
+                <div class="listing-title">
+                  <h4><a href="#">{{ property.title }}</a></h4>
+                  <a href="{{ property.mapUrl }}" class="listing-address popup-gmaps">
+                    <i class="fa fa-map-marker"></i>
+                    {{ property.adress }}
+                  </a>
+
+                  <a [routerLink]="['/en/single-property', property.id]" class="details button border">Details</a>
+                </div>
+
+                <ul class="listing-details">
+                  <li>{{ property.area }} sq ft</li>
+                  <li>{{ property.bedrooms }} Bedrooms</li>
+                  <li>{{ property.rooms }} Rooms</li>
+                  <li>{{ property.bathrooms }} Bathrooms</li>
+                </ul>
+
+                <div class="listing-footer">
+                  <a [routerLink]="['/agent-page']"><i class="fa fa-user"></i> {{ property.client }}</a>
+                  <span><i class="fa fa-calendar-o"></i> {{ property.date }} days ago</span>
+                </div>
+
+              </div>
+              <!-- Listing Item / End -->
+
+            </div>
+            <!-- Listing Item / End -->
+
+          </div>
+          <!-- Similar Listings Container / End -->
 
         </div>
       </div>
@@ -99,8 +162,7 @@
 
           <!-- Widget -->
           <div class="widget margin-bottom-30">
-            <button class="widget-button with-tip" data-tip-content="Add to Bookmarks"><i class="fa fa-star-o"></i></button>
-            <button class="widget-button with-tip compare-widget-button" data-tip-content="Add to Compare" (click)="addProperty()"><i class="icon-compare"></i></button>
+            <button class="widget-button with-tip" data-tip-content="Add to Bookmarks" [ngClass]="{liked: listingResults.bookmark}" (click)="bookmark(listingResults)"><i class="fa fa-star-o"></i></button>
             <div class="clearfix"></div>
           </div>
           <!-- Widget / End -->
@@ -108,35 +170,67 @@
 
           <!-- Widget -->
           <div class="widget">
-            <h3 class="margin-bottom-30 margin-top-30">Mortgage Calculator</h3>
 
-            <!-- Mortgage Calculator -->
-            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" [attr.data-calc-currency]="listingResults.priceDetail">
-              <div class="calc-input">
-                <div class="pick-price tip" data-tip-content="Set This Property Price"></div>
-                  <input type="text" id="amount" name="amount" placeholder="Sale Price" required>
-                  <label for="amount" class="fa fa-usd"></label>
+            <!-- Agent Widget -->
+            <div class="agent-widget">
+              <div class="agent-title">
+                <div class="agent-photo"><img src="{{ listingResults.clientImage }}"/></div>
+                <div class="agent-details">
+                  <h4><a>{{ listingResults.clientName }}</a></h4>
+                  <span><i class="sl sl-icon-call-in"></i>{{ listingResults.clientPhone }}</span>
+                </div>
+                <div class="clearfix"></div>
               </div>
 
-              <div class="calc-input">
-                  <input type="text" id="downpayment" placeholder="Down Payment">
-                  <label for="downpayment" class="fa fa-usd"></label>
-              </div>
+              <form [formGroup]="emailForm" (ngSubmit)="sendEmail(emailForm.value)">
+                <input type="text" placeholder="Your Email" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
+                <input type="text" placeholder="Your Name"  formControlName="name">
+                <input type="text" placeholder="Your Phone" formControlName="mobile">
+                <textarea formControlName="message"></textarea>
+                <input type="checkbox" id="sendme" formControlName="emailMeSimilarProperties">
+                <label for="sendme">ارسل لي عقارات مشابهة</label>
+                <button class="button fullwidth margin-top-5" [disabled]="!emailForm.valid">Send Message</button>
+              </form>
+            </div>
+            <!-- Agent Widget / End -->
 
-              <div class="calc-input">
-                <input type="text" id="years" placeholder="Loan Term (Years)" required>
-                <label for="years" class="fa fa-calendar-o"></label>
-              </div>
+          </div>
+          <!-- Widget / End -->
 
-              <div class="calc-input">
-                <input type="text" id="interest" placeholder="Interest Rate" required>
-                <label for="interest" class="fa fa-percent"></label>
-              </div>
 
-              <button class="button calc-button" formvalidate (click)="mortgageCalc()">Calculate</button>
-              <div class="calc-output-container"><div class="notification success">Monthly Payment: <strong class="calc-output"></strong></div></div>
-            </form>
-            <!-- Mortgage Calculator / End -->
+          <!-- Widget -->
+          <div class="widget">
+            <h3 class="margin-bottom-35">Featured Properties</h3>
+
+            <div class="listing-carousel outer">
+              <!-- Item -->
+              <div class="item" *ngFor="let property of featuredProperties">
+                <div class="listing-item compact">
+
+                  <a [routerLink]="['/en/single-property', property.id]" class="listing-img-container">
+
+                    <div class="listing-badges">
+                      <span class="featured">Featured</span>
+                      <span>{{ property.state }}</span>
+                    </div>
+
+                    <div class="listing-img-content">
+                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+
+                      <ul class="listing-hidden-content">
+                        <li>Area <span>{{ property.area }}</span></li>
+                        <li>Beds <span>{{ property.beds }}</span></li>
+                        <li>Baths <span>{{ property.baths }}</span></li>
+                      </ul>
+                    </div>
+
+                    <img src="{{ property.image }}">
+                  </a>
+
+                </div>
+              </div>
+              <!-- Item / End -->
+            </div>
 
           </div>
           <!-- Widget / End -->
@@ -162,9 +256,13 @@
       <div class="row">
         <div class="col-md-12">
 
-          <a [routerLink]="['/ar/listings/default']" class="back-to-listings"></a>
+          <a (click)="goBack()" class="back-to-listings"></a>
           <div class="property-title">
-            <h2>{{ listingResults.name }} <span class="property-badge">{{ listingResults.state | translate }}</span></h2>
+            <h2>
+              {{ listingResults.name }}
+              <span class="property-badge">{{ listingResults.state | translate }}</span>
+              <span class="property-type-badge property-type-badge-garages">{{ listingResults.type }}</span>
+            </h2>
             <span>
               <a href="#location" class="listing-address">
                 <span style="direction:ltr"> {{ listingResults.adress }}</span>
@@ -232,7 +330,7 @@
           <!-- Details -->
           <h3 class="desc-headline">التفاصيل</h3>
           <ul class="property-features margin-top-0">
-            <li *ngFor="let detail of listingResults.details" [innerHTML]="detail"></li>
+            <li *ngFor="let detail of listingResults.detailsAr" [innerHTML]="detail"></li>
           </ul>
 
 
@@ -240,8 +338,68 @@
           <h3 class="desc-headline no-border" id="location">المكان</h3>
           <div id="propertyMap-container">
             <div id="propertyMap" [attr.data-latitude]="listingResults.latitude" [attr.data-longitude]="listingResults.longitude"></div>
-            <a href="#" id="streetView">Street View</a>
+            <!-- <a href="#" id="streetView">Street View</a> -->
           </div>
+
+
+          <!-- Similar Listings Container -->
+          <h3 class="desc-headline no-border margin-bottom-35 margin-top-60">عقارات مشابهة</h3>
+
+          <!-- Layout Switcher -->
+
+          <div class="layout-switcher hidden"><a href="#" class="list"><i class="fa fa-th-list"></i></a></div>
+          <div class="listings-container list-layout">
+
+            <!-- Listing Item -->
+            <div class="listing-item" *ngFor="let property of listingResults.similarProperties">
+
+              <a class="listing-img-container">
+
+                <div class="listing-badges">
+                  <span>{{ property.state | translate }}</span>
+                </div>
+
+                <div class="listing-img-content">
+                  <span class="listing-price">{{ property.price }} <i>{{ property.priceDetail }}</i></span>
+                  <span class="like-icon"></span>
+                </div>
+
+                <img src="{{ property.image }}">
+
+              </a>
+
+              <div class="listing-content">
+
+                <div class="listing-title">
+                  <h4><a href="#">{{ property.title }}</a></h4>
+                  <a href="{{ property.mapUrl }}" class="listing-address popup-gmaps">
+                    <i class="fa fa-map-marker"></i>
+                    <bdo dir="ltr"> {{ property.adress }} </bdo>
+                  </a>
+
+                  <a [routerLink]="['/ar/single-property', property.id]" class="details button border">تفاصيل</a>
+                </div>
+
+                <ul class="listing-details">
+                  <li>{{ property.area }} sq ft</li>
+                  <li>{{ property.bedrooms }} سرير</li>
+                  <li>{{ property.rooms }} غرف</li>
+                  <li>{{ property.bathrooms }} حمام</li>
+                </ul>
+
+                <div class="listing-footer">
+                  <a [routerLink]="['/agent-page']"><i class="fa fa-user"></i> {{ property.client }}</a>
+                  <span><i class="fa fa-calendar-o"></i> {{ property.date }} days ago</span>
+                </div>
+
+              </div>
+              <!-- Listing Item / End -->
+
+            </div>
+            <!-- Listing Item / End -->
+
+          </div>
+          <!-- Similar Listings Container / End -->
 
         </div>
       </div>
@@ -253,8 +411,7 @@
 
           <!-- Widget -->
           <div class="widget margin-bottom-30">
-            <button class="widget-button with-tip" data-tip-content="Add to Bookmarks"><i class="fa fa-star-o"></i></button>
-            <button class="widget-button with-tip compare-widget-button" data-tip-content="Add to Compare"><i class="icon-compare"></i></button>
+            <button class="widget-button with-tip" data-tip-content="اضف إلي المفضلة" [ngClass]="{liked: listingResults.bookmark}" (click)="bookmark(listingResults)"><i class="fa fa-star-o"></i></button>
             <div class="clearfix"></div>
           </div>
           <!-- Widget / End -->
@@ -262,35 +419,67 @@
 
           <!-- Widget -->
           <div class="widget">
-            <h3 class="margin-bottom-30 margin-top-30">حساب الرهن العقاري</h3>
 
-            <!-- Mortgage Calculator -->
-            <form action="javascript:void(0);" autocomplete="off" class="mortgageCalc" [attr.data-calc-currency]="listingResults.priceDetail">
-              <div class="calc-input">
-                <div class="pick-price tip" data-tip-content="Set This Property Price"></div>
-                  <input type="text" id="amount" name="amount" placeholder="سعر البيع" required>
-                  <label for="amount" class="fa fa-usd"></label>
+            <!-- Agent Widget -->
+            <div class="agent-widget">
+              <div class="agent-title">
+                <div class="agent-photo"><img src="{{ listingResults.clientImage }}"/></div>
+                <div class="agent-details">
+                  <h4><a>{{ listingResults.clientName }}</a></h4>
+                  <span><i class="sl sl-icon-call-in"></i>{{ listingResults.clientPhone }}</span>
+                </div>
+                <div class="clearfix"></div>
               </div>
 
-              <div class="calc-input">
-                  <input type="text" id="downpayment" placeholder="الدفع المبدائي">
-                  <label for="downpayment" class="fa fa-usd"></label>
-              </div>
+              <form [formGroup]="emailForm" (ngSubmit)="sendEmail(emailForm.value)">
+                <input type="text" placeholder="البريد الالكتروني" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$">
+                <input type="text" placeholder="الاسم"  formControlName="name">
+                <input type="text" placeholder="رقم الهاتف" formControlName="mobile">
+                <textarea formControlName="message"></textarea>
+                <input type="checkbox" id="sendme" formControlName="emailMeSimilarProperties">
+                <label for="sendme">ارسل لي عقارات مشابهة</label>
+                <button class="button fullwidth margin-top-5" [disabled]="!emailForm.valid">ارسل رسالة</button>
+              </form>
+            </div>
+            <!-- Agent Widget / End -->
 
-              <div class="calc-input">
-                <input type="text" id="years" placeholder="فترة السداد (اعوام )" required>
-                <label for="years" class="fa fa-calendar-o"></label>
-              </div>
+          </div>
+          <!-- Widget / End -->
 
-              <div class="calc-input">
-                <input type="text" id="interest" placeholder="الفائدة" required>
-                <label for="interest" class="fa fa-percent"></label>
-              </div>
 
-              <button class="button calc-button" formvalidate (click)="mortgageCalc()">احسب</button>
-              <div class="calc-output-container"><div class="notification success">الدفع الشهري: <strong class="calc-output"></strong></div></div>
-            </form>
-            <!-- Mortgage Calculator / End -->
+          <!-- Widget -->
+          <div class="widget" style="direction:ltr">
+            <h3 class="margin-bottom-35">عقارات مميزة</h3>
+
+            <div class="listing-carousel outer">
+              <!-- Item -->
+              <div class="item" *ngFor="let property of featuredProperties">
+                <div class="listing-item compact">
+
+                  <a [routerLink]="['/ar/single-property', property.id]" class="listing-img-container">
+
+                    <div class="listing-badges">
+                      <span class="featured">مميز</span>
+                      <span>{{ property.state | translate }}</span>
+                    </div>
+
+                    <div class="listing-img-content">
+                      <span class="listing-compact-title">{{ property.name }} <i>{{ property.price }}</i></span>
+
+                      <ul class="listing-hidden-content">
+                        <li>المساحة <span>{{ property.area }}</span></li>
+                        <li>السرائر <span>{{ property.beds }}</span></li>
+                        <li>الحمامات <span>{{ property.baths }}</span></li>
+                      </ul>
+                    </div>
+
+                    <img src="{{ property.image }}">
+                  </a>
+
+                </div>
+              </div>
+              <!-- Item / End -->
+            </div>
 
           </div>
           <!-- Widget / End -->

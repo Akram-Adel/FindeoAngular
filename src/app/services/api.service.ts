@@ -13,72 +13,54 @@ export class ApiService {
     private router:Router) { }
 
   api = {
-    "featuredListings": [
+    "similarProperties": [
       {
         "id": 1,
-        "state": "For Sale",
-        "name": "Eagle Apartments",
-        "price": "$275,000",
-        "area": "530 sq ft",
-        "rooms": "3",
-        "beds": "1",
-        "baths": "1",
-        "image": "assets/images/listing-01.jpg"
+        "state": "For Rent",
+        "price": "$1700",
+        "priceDetail": "monthly",
+        "image": "assets/images/listing-03.jpg",
+        "title": "Meridian Villas",
+        "mapUrl": "https://maps.google.com/maps?q=221B+Baker+Street,+London,+United+Kingdom&hl=en&t=v&hnear=221B+Baker+St,+London+NW1+6XE,+United+Kingdom",
+        "adress": "778 Country St. Panama City, FL",
+        "area": 1450,
+        "bedrooms": 1,
+        "rooms": 2,
+        "bathrooms": 2,
+        "client": "Chester Miller",
+        "date": 4
       },
       {
         "id": 2,
         "state": "For Sale",
-        "name": "Serene Uptown",
-        "price": "$900 / monthly",
-        "area": "440 sq ft",
-        "rooms": "3",
-        "beds": "1",
-        "baths": "1",
-        "image": "assets/images/listing-02.jpg"
-      },
-      {
-        "id": 3,
-        "state": "For Rent",
-        "name": "Meridian Villas",
-        "price": "$1700 / monthly",
-        "area": "1450 sq ft",
-        "rooms": "3",
-        "beds": "2",
-        "baths": "2",
-        "image": "assets/images/listing-03.jpg"
-      },
-      {
-        "id": 4,
-        "state": "For Sale",
-        "name": "Selway Apartments",
         "price": "$420,000",
-        "area": "540 sq ft",
-        "rooms": "2",
-        "beds": "2",
-        "baths": "1",
-        "image": "assets/images/listing-04.jpg"
+        "priceDetail": "$770 / sq ft",
+        "image": "assets/images/listing-04.jpg",
+        "title": "Selway Apartments",
+        "mapUrl": "https://maps.google.com/maps?q=221B+Baker+Street,+London,+United+Kingdom&hl=en&t=v&hnear=221B+Baker+St,+London+NW1+6XE,+United+Kingdom",
+        "adress": "33 William St. Northbrook, IL",
+        "area": 540,
+        "bedrooms": 1,
+        "rooms": 2,
+        "bathrooms": 3,
+        "client": "Kristen Berry",
+        "date": 3
       },
       {
-        "id": 5,
+        "id": 1,
         "state": "For Sale",
-        "name": "Oak Tree Villas",
         "price": "$535,000",
-        "area": "550 sq ft",
-        "rooms": "3",
-        "beds": "2",
-        "baths": "1",
-        "image": "assets/images/listing-05.jpg"
-      },
-      {
-        "id": 6,
-        "state": "For Sale",
-        "name": "Old Town Manchester",
-        "price": "$500 / monthly",
-        "area": "850 sq ft",
-        "rooms": "3",
-        "beds": "2",
-        "baths": "1",
-        "image": "assets/images/listing-06.jpg"
+        "priceDetail": "$640 / sq ft",
+        "image": "assets/images/listing-05.jpg",
+        "title": "Oak Tree Villas",
+        "mapUrl": "https://maps.google.com/maps?q=221B+Baker+Street,+London,+United+Kingdom&hl=en&t=v&hnear=221B+Baker+St,+London+NW1+6XE,+United+Kingdom",
+        "adress": "71 Lower River Dr. Bronx, NY",
+        "area": 350,
+        "bedrooms": 1,
+        "rooms": 2,
+        "bathrooms": 1,
+        "client": "Mabel Gagnon",
+        "date": 4
       }
     ],
     "blog": [
@@ -135,36 +117,6 @@ export class ApiService {
         "post": "<p>Nam nisl lacus, dignissim ac tristique ut, scelerisque eu massa. Vestibulum ligula nunc, rutrum in malesuada vitae, tempus sed augue. Curabitur quis lectus quis augue dapibus facilisis. Vivamus tincidunt orci est, in vehicula nisi eleifend ut. Vestibulum sagittis varius orci vitae.</p><div class='post-quote'><span class='icon'></span><blockquote>Mauris aliquet ultricies ante, non faucibus ante gravida sed. Sed ultrices pellentesque purus, vulputate volutpat ipsum hendrerit sed neque sed sapien rutrum.</blockquote></div><p>In ut odio libero, at vulputate urna. Nulla tristique mi a massa convallis cursus. Nulla eu mi magna. Etiam suscipit commodo gravida. Cras suscipit, quam vitae adipiscing faucibus, risus nibh laoreet odio, a porttitor metus eros ut enim. Morbi augue velit, tempus mattis dignissim nec, porta sed risus. Donec eget magna eu lorem tristique pellentesque eget eu dui. Fusce lacinia tempor malesuada. Ut lacus sapien, placerat a ornare nec, elementum sit amet felis. Maecenas pretium lorem hendrerit eros sagittis fermentum.</p><p>Phasellus enim magna, varius et commodo ut, ultricies vitae velit. Ut nulla tellus, eleifend euismod pellentesque vel, sagittis vel justo. In libero urna, venenatis sit amet ornare non, suscipit nec risus. Sed consequat justo non mauris pretium at tempor justo sodales. Quisque tincidunt laoreet malesuada. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer vitae ante enim. Fusce sed elit est. Suspendisse sit amet mauris in quam pretium faucibus et aliquam odio. </p>",
         "image": "assets/images/blog-post-03.jpg",
         "comments": 3
-      }
-    ],
-    "bookmarks": [
-      {
-        "id": 1,
-        "image": "assets/images/listing-05.jpg",
-        "title": "Oak Tree Villas",
-        "adress": "71 Lower River Dr. Bronx, NY",
-        "price": "$535,000",
-      },
-      {
-        "id": 2,
-        "image": "assets/images/listing-06.jpg",
-        "title": "Old Town Manchester",
-        "adress": "7843 Durham Avenue, MD",
-        "price": "$420,000",
-      },
-      {
-        "id": 3,
-        "image": "assets/images/listing-02.jpg",
-        "title": "Serene Uptown",
-        "adress": "6 Bishop Ave. Perkasie, PA",
-        "price": "$900 / monthly",
-      },
-      {
-        "id": 4,
-        "image": "assets/images/listing-04.jpg",
-        "title": "Selway Apartments",
-        "adress": "33 William St. Northbrook, IL",
-        "price": "$420,000",
       }
     ],
     "popularPosts": [

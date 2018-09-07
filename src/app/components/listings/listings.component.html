@@ -13,7 +13,7 @@
           </div>
 
           <!-- Map Navigation -->
-        <a href="#" id="geoLocation" title="Your location"></a>
+        <!-- <a href="#" id="geoLocation" title="Your location"></a> -->
         <ul id="mapnav-buttons" class="top">
             <li><a href="#" id="prevpoint" title="Previous point on map">Prev</a></li>
             <li><a href="#" id="nextpoint" title="Next point on mp">Next</a></li>
@@ -59,8 +59,32 @@
                       </select>
                     </div>
 
-                  </div>
+                  <!-- </div> -->
                   <!-- Row With Forms / End -->
+
+
+                  <!-- Row With Forms -->
+                  <!-- <div class="row with-forms"> -->
+
+                    <!-- Status -->
+                    <div class="col-fs-3">
+                      <select class="chosen-select-no-single api-updated-cities">
+                        <option value="null">اي مدينة</option>
+                        <option *ngFor="let city of cityList" [value]="city.name">{{ city.arabicName }}</option>
+                      </select>
+                    </div>
+
+                    <!-- Property Type -->
+                    <div class="col-fs-3 autocomplete">
+                      <input #areaInput id="areaInput" type="text" placeholder="اي منطقة" [disabled]="!selectedCity.id" (keyup)="searchInput(areaInput.value)" (blur)="areaBlur()" autocomplete="off">
+                      <ul class="chosen-results" [hidden]="!isAutofill">
+                        <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                        <li *ngIf="areaInput.value.length > 3"> "لا يوجد نتيجة بحث"</li>
+                      </ul>
+                    </div>
+
+                    </div>
+                    <!-- Row With Forms / End -->
 
 
                   <!-- Row With Forms -->
@@ -75,27 +99,27 @@
                         <input type="text" placeholder="اقل سعر" formControlName="1">
                         <select>
                           <option>اقل سعر</option>
-                          <option>1,000</option>
-                          <option>2,000</option>
-                          <option>3,000</option>
-                          <option>4,000</option>
-                          <option>5,000</option>
-                          <option>10,000</option>
-                          <option>15,000</option>
-                          <option>20,000</option>
-                          <option>30,000</option>
-                          <option>40,000</option>
-                          <option>50,000</option>
-                          <option>60,000</option>
-                          <option>70,000</option>
-                          <option>80,000</option>
-                          <option>90,000</option>
-                          <option>100,000</option>
-                          <option>110,000</option>
-                          <option>120,000</option>
-                          <option>130,000</option>
-                          <option>140,000</option>
-                          <option>150,000</option>
+                          <option>1000</option>
+                          <option>2000</option>
+                          <option>3000</option>
+                          <option>4000</option>
+                          <option>5000</option>
+                          <option>10000</option>
+                          <option>15000</option>
+                          <option>20000</option>
+                          <option>30000</option>
+                          <option>40000</option>
+                          <option>50000</option>
+                          <option>60000</option>
+                          <option>70000</option>
+                          <option>80000</option>
+                          <option>90000</option>
+                          <option>100000</option>
+                          <option>110000</option>
+                          <option>120000</option>
+                          <option>130000</option>
+                          <option>140000</option>
+                          <option>150000</option>
                         </select>
                       </div>
                       <!-- Select Input / End -->
@@ -111,27 +135,62 @@
                         <input type="text" placeholder="اكبر سعر" formControlName="2">
                         <select>
                           <option>اكبر سعر</option>
-                          <option>1,000</option>
-                          <option>2,000</option>
-                          <option>3,000</option>
-                          <option>4,000</option>
-                          <option>5,000</option>
-                          <option>10,000</option>
-                          <option>15,000</option>
-                          <option>20,000</option>
-                          <option>30,000</option>
-                          <option>40,000</option>
-                          <option>50,000</option>
-                          <option>60,000</option>
-                          <option>70,000</option>
-                          <option>80,000</option>
-                          <option>90,000</option>
-                          <option>100,000</option>
-                          <option>110,000</option>
-                          <option>120,000</option>
-                          <option>130,000</option>
-                          <option>140,000</option>
-                          <option>150,000</option>
+                          <option>1000</option>
+                          <option>2000</option>
+                          <option>3000</option>
+                          <option>4000</option>
+                          <option>5000</option>
+                          <option>10000</option>
+                          <option>15000</option>
+                          <option>20000</option>
+                          <option>30000</option>
+                          <option>40000</option>
+                          <option>50000</option>
+                          <option>60000</option>
+                          <option>70000</option>
+                          <option>80000</option>
+                          <option>90000</option>
+                          <option>100000</option>
+                          <option>110000</option>
+                          <option>120000</option>
+                          <option>130000</option>
+                          <option>140000</option>
+                          <option>150000</option>
+                        </select>
+                      </div>
+                      <!-- Select Input / End -->
+
+                    </div>
+
+                    <!-- Max Price -->
+                    <div class="col-fs-3">
+
+                      <!-- Select Input -->
+                      <div class="select-input disabled-first-option">
+                        <input type="text" placeholder="اقل مساحة" formControlName="3">
+                        <select>
+                          <option>اقل مساجة</option>
+                          <option>100</option>
+                          <option>200</option>
+                          <option>300</option>
+                          <option>400</option>
+                          <option>500</option>
+                          <option>1000</option>
+                          <option>1500</option>
+                          <option>2000</option>
+                          <option>3000</option>
+                          <option>4000</option>
+                          <option>5000</option>
+                          <option>6000</option>
+                          <option>7000</option>
+                          <option>8000</option>
+                          <option>9000</option>
+                          <option>10000</option>
+                          <option>11000</option>
+                          <option>12000</option>
+                          <option>13000</option>
+                          <option>14000</option>
+                          <option>15000</option>
                         </select>
                       </div>
                       <!-- Select Input / End -->
@@ -146,13 +205,13 @@
                   <button class="button fs-map-btn" [disabled]="!searchForm.valid || isConnecting" (click)="search(searchForm.value)">حدث</button>
 
                   <!-- More Search Options -->
-                  <a href="#" class="more-search-options-trigger margin-top-20" data-open-title="اختيارات اكثر" data-close-title="اختيارات اقل" [hidden]="isLand"></a>
+                  <a href="#" class="more-search-options-trigger margin-top-20" data-open-title="اختيارات اكثر" data-close-title="اختيارات اقل"></a>
 
-                  <div class="more-search-options relative" [hidden]="isLand">
+                  <div class="more-search-options relative">
                     <div class="more-search-options-container margin-top-30">
 
                       <!-- Row With Forms -->
-                      <div class="row with-forms">
+                      <div class="row with-forms" [hidden]="isLand">
 
                         <!-- Min Area -->
                         <div class="col-fs-3">
@@ -181,6 +240,25 @@
                       </div>
                       <!-- Row With Forms / End -->
 
+                      <!-- Row With Forms -->
+                      <div class="row with-forms">
+                        <!-- Max Area -->
+                        <!-- <div class="col-fs-3">
+                          <select data-placeholder="عمر البناء" class="chosen-select-no-single api-updated-agetype">
+                            <option label="blank"></option>
+                            <option *ngFor="let agetype of agetypeList" [value]="agetype.key">{{ agetype.value }}</option>
+                          </select>
+                        </div> -->
+
+                        <!-- Max Area -->
+                        <!-- <div class="col-fs-3">
+                          <select data-placeholder="حالة البناء" class="chosen-select-no-single api-updated-qualitytype">
+                            <option label="blank"></option>
+                            <option *ngFor="let qualitytype of qualitytypeList" [value]="qualitytype.key">{{ qualitytype.value }}</option>
+                          </select>
+                        </div> -->
+                      </div>
+
                     </div>
 
                   </div>
@@ -203,15 +281,44 @@
 
           <div class="col-md-6">
             <!-- Showing Results -->
-            <p class="showing-results">{{ resultsNum }} نتيجة بحث </p>
+            <!-- <p class="showing-results">{{ resultsNum }} نتيجة بحث </p> -->
+            <!-- Sort by -->
+            <div class="sort-by">
+              <label>ترتيب:</label>
+
+              <div class="sort-by-select">
+                <select data-placeholder="Default order" class="chosen-select-no-single chosen-sort" >
+                  <option>الترتيب الافتراضي</option>
+                  <option>العقارات المميزة</option>
+                  <option>الاحدث</option>
+                  <option>الاقدم</option>
+                  <option>الارخص</option>
+                  <option>الاغلي</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="col-md-6">
             <!-- Layout Switcher -->
-            <div class="layout-switcher">
+            <!-- <div class="layout-switcher">
               <a href="#" class="list"><i class="fa fa-th-list"></i></a>
               <a href="#" class="grid"><i class="fa fa-th-large"></i></a>
-            </div>
+            </div> -->
+            <a class="button medium" style="float:left" (click)="saveSearch()"> <i class="fa fa-bookmark"></i> احفظ البحث </a>
+          </div>
+          <div class="save-search-modal modal">
+            <div class="title">احفظ البحث</div>
+
+            <form [formGroup]="saveSearchForm">
+              <label for="name">اسم البحث الجديد</label>
+              <input type="text" id="name" required formControlName="name">
+
+              <input type="checkbox" value="true" formControlName="notification"> <span> تنبية البريد الالكتروني </span>
+
+              <br>
+              <button class="button fs-map-btn" [disabled]="!saveSearchForm.valid || isConnecting" (click)="saveSearch(saveSearchForm.value)">احفظ البحث</button>
+            </form>
           </div>
         </div>
 
@@ -223,17 +330,18 @@
           <!-- Listing Item -->
           <div class="listing-item" *ngFor="let listing of listingResults | slice:startSlice:endSlice">
 
+            <!-- <a [routerLink]="['/ar/single-property', listing.id]" class="listing-img-container"> -->
             <a class="listing-img-container">
 
               <div class="listing-badges">
                 <span class="featured" *ngIf="listing.featured">مميز</span>
+                <span class="featured sold" *ngIf="listing.status">مباع</span>
                 <span>{{ listing.state | translate }}</span>
               </div>
 
               <div class="listing-img-content">
                 <span class="listing-price">{{ listing.price }} <i>{{ listing.priceDetail }}</i></span>
-                <span class="like-icon with-tip" data-tip-content="اضف للمفضلة"></span>
-                <span class="compare-button with-tip" data-tip-content="اضف للمقارنة" (click)="addProperty(listing)"></span>
+                <span class="like-icon with-tip" data-tip-content="اضف للمفضلة" [ngClass]="{liked: listing.bookmark}" (click)="bookmark(listing)"></span>
               </div>
 
               <img src="{{ listing.image }}" alt="">
@@ -254,9 +362,15 @@
               <ul class="listing-details">
                 <li>{{ listing.area }}</li>
                 <li></li>
-                <li>{{ listing.beds }} السرائر</li>
-                <li>{{ listing.bathrooms }} الحمامات</li>
+                <li>{{ listing.beds }} غرف النوم</li>
+                <li>{{ listing.bathrooms }} حمامات</li>
               </ul>
+
+              <div class="listing-footer">
+                <a *ngIf="listing.agentId == null"><i class="fa fa-user"></i>{{ listing.user }}</a>
+                <a *ngIf="listing.agentId != null" [routerLink]="[listing.agentId]"><i class="fa fa-user"></i>{{ listing.user }}</a>
+                <span><i class="fa fa-calendar-o"></i> {{ listing.date }} ايام مضت</span>
+              </div>
 
             </div>
 
@@ -313,7 +427,7 @@
           </div>
 
           <!-- Map Navigation -->
-        <a href="#" id="geoLocation" title="Your location"></a>
+        <!-- <a href="#" id="geoLocation" title="Your location"></a> -->
         <ul id="mapnav-buttons" class="top">
             <li><a href="#" id="prevpoint" title="Previous point on map">Prev</a></li>
             <li><a href="#" id="nextpoint" title="Next point on mp">Next</a></li>
@@ -357,6 +471,30 @@
                         <option label="blank"></option>
                         <option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
                       </select>
+                    </div>
+
+                  </div>
+                  <!-- Row With Forms / End -->
+
+
+                  <!-- Row With Forms -->
+                  <div class="row with-forms">
+
+                    <!-- Status -->
+                    <div class="col-fs-3">
+                      <select class="chosen-select-no-single api-updated-cities">
+                        <option value="null">Any City</option>
+                        <option *ngFor="let city of cityList" [value]="city.name">{{ city.arabicName }}</option>
+                      </select>
+                    </div>
+
+                    <!-- Property Type -->
+                    <div class="col-fs-3 autocomplete">
+                      <input #areaInput id="areaInput" type="text" placeholder="Any Region" [disabled]="!selectedCity.id" (keyup)="searchInput(areaInput.value)" (blur)="areaBlur()" autocomplete="off">
+                      <ul class="chosen-results" [hidden]="!isAutofill">
+                        <li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+                        <li *ngIf="areaInput.value.length > 3"> "no search result"</li>
+                      </ul>
                     </div>
 
                   </div>
@@ -438,6 +576,41 @@
 
                     </div>
 
+                    <!-- Max Price -->
+                    <div class="col-fs-3">
+
+                      <!-- Select Input -->
+                      <div class="select-input disabled-first-option">
+                        <input type="text" placeholder="Min Area" formControlName="3">
+                        <select>
+                          <option>Min Area</option>
+                          <option>100</option>
+                          <option>200</option>
+                          <option>300</option>
+                          <option>400</option>
+                          <option>500</option>
+                          <option>1000</option>
+                          <option>1500</option>
+                          <option>2000</option>
+                          <option>3000</option>
+                          <option>4000</option>
+                          <option>5000</option>
+                          <option>6000</option>
+                          <option>7000</option>
+                          <option>8000</option>
+                          <option>9000</option>
+                          <option>10000</option>
+                          <option>11000</option>
+                          <option>12000</option>
+                          <option>13000</option>
+                          <option>14000</option>
+                          <option>15000</option>
+                        </select>
+                      </div>
+                      <!-- Select Input / End -->
+
+                    </div>
+
                   </div>
                   <!-- Row With Forms / End -->
 
@@ -446,13 +619,13 @@
                   <button class="button fs-map-btn" [disabled]="!searchForm.valid || isConnecting" (click)="search(searchForm.value)">Update</button>
 
                   <!-- More Search Options -->
-                  <a href="#" class="more-search-options-trigger margin-top-20" data-open-title="More Options" data-close-title="Less Options" [hidden]="isLand"></a>
+                  <a href="#" class="more-search-options-trigger margin-top-20" data-open-title="More Options" data-close-title="Less Options"></a>
 
-                  <div class="more-search-options relative" [hidden]="isLand">
+                  <div class="more-search-options relative">
                     <div class="more-search-options-container margin-top-30">
 
                       <!-- Row With Forms -->
-                      <div class="row with-forms">
+                      <div class="row with-forms" [hidden]="isLand">
 
                         <!-- Min Area -->
                         <div class="col-fs-3">
@@ -481,6 +654,28 @@
                       </div>
                       <!-- Row With Forms / End -->
 
+                      <!-- Row With Forms -->
+                      <div class="row with-forms">
+
+                        <!-- Max Area -->
+                        <!-- <div class="col-fs-3">
+                          <select data-placeholder="Age Type" class="chosen-select-no-single api-updated-agetype">
+                            <option label="blank"></option>
+                            <option *ngFor="let agetype of agetypeList" [value]="agetype.key">{{ agetype.value }}</option>
+                          </select>
+                        </div> -->
+
+                        <!-- Max Area -->
+                        <!-- <div class="col-fs-3">
+                          <select data-placeholder="Quality Type" class="chosen-select-no-single api-updated-qualitytype">
+                            <option label="blank"></option>
+                            <option *ngFor="let qualitytype of qualitytypeList" [value]="qualitytype.key">{{ qualitytype.value }}</option>
+                          </select>
+                        </div> -->
+
+                      </div>
+                      <!-- Row With Forms / End -->
+
                     </div>
 
                   </div>
@@ -503,15 +698,44 @@
 
           <div class="col-md-6">
             <!-- Showing Results -->
-            <p class="showing-results">{{ resultsNum }} Results Found </p>
+            <!-- <p class="showing-results">{{ resultsNum }} Results Found </p> -->
+            <!-- Sort by -->
+            <div class="sort-by">
+              <label>Sort by:</label>
+
+              <div class="sort-by-select">
+                <select data-placeholder="Default order" class="chosen-select-no-single chosen-sort" >
+                  <option>Default Order</option>
+                  <option>Featured</option>
+                  <option>Most recent</option>
+                  <option>Oldest</option>
+                  <option>Cheaper</option>
+                  <option>Most expensive</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="col-md-6">
             <!-- Layout Switcher -->
-            <div class="layout-switcher">
+            <!-- <div class="layout-switcher">
               <a href="#" class="list"><i class="fa fa-th-list"></i></a>
               <a href="#" class="grid"><i class="fa fa-th-large"></i></a>
-            </div>
+            </div> -->
+            <a class="button medium" style="float:right" (click)="saveSearch()"> <i class="fa fa-bookmark"></i> Save Search </a>
+          </div>
+          <div class="save-search-modal modal">
+            <div class="title">Save Search</div>
+
+            <form [formGroup]="saveSearchForm">
+              <label for="name">Name the search</label>
+              <input type="text" id="name" required formControlName="name">
+
+              <input type="checkbox" value="true" formControlName="notification"> <span> Enable notifications </span>
+
+              <br>
+              <button class="button fs-map-btn" [disabled]="!saveSearchForm.valid || isConnecting" (click)="saveSearch(saveSearchForm.value)">Save Search</button>
+            </form>
           </div>
         </div>
 
@@ -523,17 +747,18 @@
           <!-- Listing Item -->
           <div class="listing-item" *ngFor="let listing of listingResults | slice:startSlice:endSlice">
 
+            <!-- <a [routerLink]="['/en/single-property', listing.id]" class="listing-img-container"> -->
             <a class="listing-img-container">
 
               <div class="listing-badges">
-                <span class="featured" *ngIf="listing.featured">Featured</span>
+                <span class="featured" *ngIf="listing.featured && !listing.status">Featured</span>
+                <span class="featured sold" *ngIf="listing.status">SOLD</span>
                 <span>{{ listing.state }}</span>
               </div>
 
               <div class="listing-img-content">
                 <span class="listing-price">{{ listing.price }} <i>{{ listing.priceDetail }}</i></span>
-                <span class="like-icon with-tip" data-tip-content="Add to Bookmarks" (click)="bookmark(listing)"></span>
-                <span class="compare-button with-tip" data-tip-content="Add to Compare" (click)="addProperty(listing)"></span>
+                <span class="like-icon with-tip" data-tip-content="Add to Bookmarks" [ngClass]="{liked: listing.bookmark}" (click)="bookmark(listing)"></span>
               </div>
 
               <img src="{{ listing.image }}" alt="">
@@ -557,6 +782,12 @@
                 <li>{{ listing.beds }} Bedroom</li>
                 <li>{{ listing.bathrooms }} Bathroom</li>
               </ul>
+
+              <div class="listing-footer">
+                <a *ngIf="listing.agentId == null"><i class="fa fa-user"></i>{{ listing.user }}</a>
+                <a *ngIf="listing.agentId != null" [routerLink]="[listing.agentId]"><i class="fa fa-user"></i>{{ listing.user }}</a>
+                <span><i class="fa fa-calendar-o"></i> {{ listing.date }} days ago</span>
+              </div>
 
             </div>
 

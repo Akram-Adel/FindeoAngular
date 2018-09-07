@@ -10,3 +10,61 @@ form button:disabled {
 [hidden] { display: none !important; }
 
 a.next, a.prev { cursor: pointer }
+
+.listing-badges .featured.sold { background-color: rgb(199, 10, 10) }
+
+
+.autocomplete { position: relative; }
+
+.autocomplete ul.chosen-results {
+  position: absolute; width: calc(100% - 20px);
+  top: calc(100% - 18px); left: 10px; right: 0;
+  color: #888;
+  z-index: 110;
+  overflow-x: hidden; overflow-y: hidden;
+  margin: 0 4px 0px 0;
+  padding: 0 4px 0 8px;
+  max-height: 300px;
+  margin-top: -1px;
+  border: 1px solid #e0e0e0;
+  background-color: #fcfcfc;
+  background: linear-gradient(to bottom, rgba(252,252,252,1) 0%,rgba(255,255,255,1) 100%);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.autocomplete ul.chosen-results>li {
+  display: list-item;
+  cursor: pointer;
+  margin: 0;
+  padding: 10px 10px;
+  list-style: none;
+  line-height: 15px;
+  word-wrap: break-word;
+}
+
+.autocomplete ul.chosen-results>li:last-child { margin-bottom: 8px; }
+
+.autocomplete ul.chosen-results>li:hover {
+  background-color: #274abb;
+  border-radius: 3px;
+  color: #fff;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.fs-switcher { margin-bottom: 30px }
+
+.save-search-modal .title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.save-search-modal input[type="text"] { width: 80% }
+.save-search-modal input[type="checkbox"] { width: auto; height: auto; }
+.save-search-modal button {
+  margin: 20px auto;
+  float: none; display: block;
+
+}

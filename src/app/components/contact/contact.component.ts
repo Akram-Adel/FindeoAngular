@@ -1,10 +1,12 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../services/language.service';
+import { ApiService } from '../../services/api.service';
 
 declare var google:any;
-declare var ZoomControl:any;
 declare var $:any;
 
 @Component({
@@ -15,10 +17,25 @@ declare var $:any;
 export class ContactComponent implements OnInit,AfterViewInit {
 
   language:string;
+  contactForm:FormGroup;
+
+
 
   constructor(
     private route:ActivatedRoute,
-    private languageService:LanguageService) { }
+    private languageService:LanguageService,
+    private http:HttpClient,
+    private api:ApiService,
+    private fb:FormBuilder) {
+
+      this.contactForm = this.fb.group({
+        email: [null, Validators.required],
+        message: [null, Validators.required],
+        messageType: [null, Validators.required],
+        mobile: [null, Validators.required],
+        name: [null, Validators.required]
+      })
+    }
 
   ngOnInit() {
     this.languageService.language$.subscribe( language => this.language = language );
@@ -125,6 +142,28 @@ export class ContactComponent implements OnInit,AfterViewInit {
       single_map.getStreetView().setOptions({visible:true,position:myLatLng});
       $(this).css('display', 'none')
    });
+  }
+
+
+
+  selectChange(e) {
+    if(e == 'null') {
+      this.contactForm.controls.messageType.setValue(null);
+      this.contactForm.updateValueAndValidity();
+    }
+  }
+  sendEmail(form) {
+    this.http.post(this.api.link+'/api/communication/email-admin', {
+      "email": form.email,
+      "message": form.message,
+      "messageType": form.messageType,
+      "mobile": form.mobile,
+      "name": form.name
+
+    }, this.api.userHeader()).subscribe({
+      next: res => console.log(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
   }
 
 }

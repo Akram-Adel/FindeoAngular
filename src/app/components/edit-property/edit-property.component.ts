@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,22 +13,30 @@ import * as _ from 'lodash';
 import { LanguageService } from '../../services/language.service';
 import { UserService } from '../../services/user.service';
 import { ApiService } from '../../services/api.service';
+import { SearchService } from '../../services/search.service';
 
 declare var $:any;
 declare var google:any;
 declare var toastr:any;
+declare var Dropzone:any;
 
-class Image { id:number; name:string; }
+class Image { id:number; name:string; status:string; }
 
 @Component({
-  selector: 'app-submit-property',
-  templateUrl: './submit-property.component.html',
-  styleUrls: ['./submit-property.component.css']
+  selector: 'app-edit-property',
+  templateUrl: './edit-property.component.html',
+  styleUrls: ['./edit-property.component.css']
 })
-export class SubmitPropertyComponent implements OnInit,AfterViewInit {
+export class EditPropertyComponent implements OnInit,AfterViewInit,OnDestroy {
 
   language:string;
   isLogged = true;
+
+  myDropzone:any;
+
+  subscription:any;
+  propertyId:number;
+  property:any;
 
   gMap:any; gMarker:any;
   cityList:any = [];
@@ -61,11 +69,13 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     private userService:UserService,
     private http:HttpClient,
     private fb:FormBuilder,
-    private api:ApiService) {
+    private api:ApiService,
+    private searchService:SearchService) {
 
       this.submitForm = this.fb.group({
         locationAd: this.fb.group({
           city: [null, Validators.required],
+          id: [null],
           street: [null, Validators.required],
           lat: [null, Validators.required],
           lng: [null, Validators.required],
@@ -73,21 +83,23 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
           regionCityId: [null]
         }),
 
+        id: [null],
         adId: [null],
         ageType: [null],
         bathrooms: [null],
         bedrooms: [null],
-        propertyType: [null, Validators.required],
-        serviceType: [null, Validators.required],
+        propertyType: [{value: null, disabled: true}, Validators.required],
+        serviceType: [{value: null, disabled: true}, Validators.required],
         qualityType: [null],
         currency: [null, Validators.required],
-        price: [{value: null, disabled: true}, [Validators.required, Validators.pattern(this.numberPattern)]],
+        price: [null, [Validators.required, Validators.pattern(this.numberPattern)]],
         priceType: [null, Validators.required],
         description: [null, Validators.required],
-        landSize: [{value: null, disabled: true}, [Validators.required, Validators.pattern(this.numberPattern)]],
+        landSize: [null, [Validators.required, Validators.pattern(this.numberPattern)]],
         landSizeMeasureType: [null, Validators.required],
         locationId: [null],
         title: [null, Validators.required],
+        featured: [null, Validators.required],
       })
     }
 
@@ -96,7 +108,11 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
 
     this.userService['email'] ? this.isLogged = true : this.isLogged = false;
-    this.userService.userUpdate$.subscribe( res => this.userService['email'] ? this.isLogged = true : this.isLogged = false )
+    this.userService.userUpdate$.subscribe( res => this.userService['email'] ? this.isLogged = true : this.isLogged = false );
+
+    this.propertyId = +this.route.snapshot.paramMap.get('id');
+    (this.userService['id']) ? this.searchService.getProfileProperties(this.userService['id']) : this.userService.userUpdate$.subscribe(res => this.searchService.getProfileProperties(this.userService['id']))
+    this.subscription = this.searchService.searchImages$.subscribe(res => this.gotProperties());
 
     this.areas$ = this.searchTerm
       .pipe(
@@ -119,11 +135,16 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     this.initMap();
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 
 
   dropzoneInit() {
     let self = this;
-    $(".dropzone").dropzone({
+    // $(".dropzone").dropzone({
+    this.myDropzone = new Dropzone("form.dropzone", {
       url: this.api.link+"/api/images/upload-image/properties",
       paramName: 'imageFile',
       headers: { 'Authorization' : 'Bearer '+self.userService.userToken },
@@ -146,24 +167,15 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       self.image.push({
         id: res.id,
         name: file.name,
+        status: 'new'
       });
     }
 
     // Image Remove
     function remove(file) {
-      let objectId = _.find(self.image, ['name', file.name]).id;
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Authorization':  'Bearer '+self.userService.userToken,
-        })
-      }
-      self.http.delete(self.api.link+'/api/images/'+objectId, httpOptions).subscribe({
-        next: res => console.log(res),
-        error: err => self.api.API_ERROR(err, this.language)
-      })
-
       let index = _.findIndex(self.image, ['name', file.name]);
-      self.image.splice(index, 1);
+      self.image[index].status = 'remove';
+      console.log(self.image)
     }
   }
   tips() {
@@ -285,9 +297,9 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     // add city array to the DOM and update the chosenPlugin()
     function putCityArray(cities) {
       self.cityList = cities;
-      self.selectedCity = cities[0];
-      self.submitForm.controls.locationAd.patchValue({regionId: self.selectedCity.id});
-      mapCenter(); self.submitForm.controls.locationAd.patchValue({lat:self.selectedCity.lat, lng:self.selectedCity.lng});
+      // self.selectedCity = cities[0];
+      // self.submitForm.controls.locationAd.patchValue({regionId: self.selectedCity.id});
+      // mapCenter(); self.submitForm.controls.locationAd.patchValue({lat:self.selectedCity.lat, lng:self.selectedCity.lng});
       setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
       setTimeout(() => self.validationStyles(), 110);
     }
@@ -353,10 +365,10 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       error: err => this.api.API_ERROR(err, this.language)
     })
 
-    // add property type array to the DOM and update the chosenPlugin() + reset other dependet fields {price, currency, ..}
+    // add property type array to the DOM and update the chosenPlugin()
     function putPropertytypeArray(propertytype) {
       self.propertytypeList = propertytype;
-      self.submitForm.controls.propertyType.setValue(null); resetall()
+      self.submitForm.controls.propertyType.setValue(null);
       setTimeout(() => $('.api-updated-propertytype').trigger("chosen:updated"), 100);
       setTimeout(() => self.validationStyles(), 110);
     }
@@ -368,15 +380,6 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       self.commonEnable();
       setTimeout(() => self.validationStyles(), 110);
     })
-
-    // reset price, currency, ...
-    function resetall() {
-      self.submitForm.controls.price.setValue(null);
-      self.chosenCurrency([]);
-      self.chosenPriceType([]);
-      self.submitForm.controls.landSize.setValue(null);
-      self.chosenMeasureType([]);
-    }
 
     // require and not require
     function require(action:boolean) {
@@ -422,7 +425,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
 
     // add currency array to the DOM and update the chosenPlugin()
     this.currencyList = currency;
-    self.submitForm.controls.currency.setValue(null);
+    // self.submitForm.controls.currency.setValue(null);
     setTimeout(() => $('.api-updated-currency').trigger("chosen:updated"), 100);
     setTimeout(() => self.validationStyles(), 110);
 
@@ -437,7 +440,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
 
     // add currency array to the DOM and update the chosenPlugin()
     this.pricetypeList = priceType;
-    self.submitForm.controls.priceType.setValue(null);
+    // self.submitForm.controls.priceType.setValue(null);
     setTimeout(() => $('.api-updated-priceType').trigger("chosen:updated"), 100);
     setTimeout(() => self.validationStyles(), 110);
 
@@ -452,7 +455,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
 
     // add currency array to the DOM and update the chosenPlugin()
     this.measuretypeList = measureType;
-    self.submitForm.controls.landSizeMeasureType.setValue(null);
+    // self.submitForm.controls.landSizeMeasureType.setValue(null);
     setTimeout(() => $('.api-updated-measuretype').trigger("chosen:updated"), 100);
     setTimeout(() => self.validationStyles(), 110);
 
@@ -476,8 +479,6 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
   }
   commonEnable() {
     this.isTypes = true;
-    this.submitForm.controls.price.enable();
-    this.submitForm.controls.landSize.enable();
 
     // get Currency
     this.http.get(this.api.link+'/api/public/properties/currency-types/ar/'+this.submitForm.controls.serviceType.value).subscribe({
@@ -562,36 +563,201 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
   }
 
 
+
+  gotProperties() {
+    let self = this;
+    $('.overlay').fadeOut();
+
+    this.property = _.find(this.searchService.profileProperties.saleListing, ['id', this.propertyId])
+    if(!this.property) this.property = _.find(this.searchService.profileProperties.rentalListing, ['id', this.propertyId]);
+
+    ////////////////////
+    ////// Service Type
+    this.submitForm.controls.serviceType.setValue(this.property.serviceType);
+    setTimeout(() => $('.api-updated-servicetype').trigger("chosen:updated"), 100);
+
+
+    ////////////////////
+    ////// Property Type
+    this.http.get(this.api.link+'/api/public/properties/property-types/ar/'+this.submitForm.controls.serviceType.value).subscribe({
+      next: res => putPropertytypeArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+    function putPropertytypeArray(propertytype) {
+      self.propertytypeList = propertytype;
+      self.submitForm.controls.propertyType.setValue(self.property.propertyType);
+      setTimeout(() => $('.api-updated-propertytype').trigger("chosen:updated"), 100);
+      self.commonEnable();
+      (self.property.propertyType == 'LAND' || self.property.propertyType == 'FARM') ? require(false) : require(true);
+    }
+      // require and not require
+    function require(action:boolean) {
+      if(action) {
+        self.isLand = false;
+        self.submitForm.controls.ageType.setValidators(Validators.required); self.submitForm.controls.ageType.updateValueAndValidity();
+        self.submitForm.controls.bathrooms.setValidators(Validators.required); self.submitForm.controls.bathrooms.updateValueAndValidity();
+        self.submitForm.controls.bedrooms.setValidators(Validators.required); self.submitForm.controls.bedrooms.updateValueAndValidity();
+        self.submitForm.controls.qualityType.setValidators(Validators.required); self.submitForm.controls.qualityType.updateValueAndValidity();
+      } else {
+        self.isLand = true;
+        self.submitForm.controls.ageType.clearValidators(); self.submitForm.controls.ageType.updateValueAndValidity();
+        self.submitForm.controls.bathrooms.clearValidators(); self.submitForm.controls.bathrooms.updateValueAndValidity();
+        self.submitForm.controls.bedrooms.clearValidators(); self.submitForm.controls.bedrooms.updateValueAndValidity();
+        self.submitForm.controls.qualityType.clearValidators(); self.submitForm.controls.qualityType.updateValueAndValidity();
+      }
+    }
+
+
+    ////////////////////
+    // Property Title
+    this.submitForm.controls.title.setValue(this.property.title);
+
+
+    ////////////////////
+    // Prices
+    this.submitForm.controls.price.setValue(this.property.price);
+      //
+    this.http.get(this.api.link+'/api/public/properties/currency-types/ar/'+this.submitForm.controls.serviceType.value).subscribe(
+      res => {
+        this.submitForm.controls.currency.setValue(this.property.currency);
+        setTimeout(() => $('.api-updated-currency').trigger("chosen:updated"), 100);
+      });
+      //
+    this.http.get(this.api.link+'/api/public/properties/price-types/ar/'+this.property.propertyType+'/'+this.submitForm.controls.serviceType.value).subscribe(
+      res => {
+        this.submitForm.controls.priceType.setValue(this.property.priceType);
+        setTimeout(() => $('.api-updated-priceType').trigger("chosen:updated"), 100);
+      })
+
+
+    ////////////////////
+    // Areas
+    this.submitForm.controls.landSize.setValue(this.property.landSize);
+      //
+    this.http.get(this.api.link+'/api/public/properties/land-measure-types/ar/'+this.property.propertyType).subscribe(
+      res => {
+        this.submitForm.controls.landSizeMeasureType.setValue(this.property.landSizeMeasureType);
+        setTimeout(() => $('.api-updated-measuretype').trigger("chosen:updated"), 100);
+      })
+
+
+    ////////////////////
+    // Description
+    this.submitForm.controls.description.setValue(this.property.description);
+
+
+    ////////////////////
+    // Building Age
+    if(this.property.ageType && this.property.ageType !== null) {
+      this.http.get(this.api.link+'/api/public/properties/age-types/ar').subscribe({
+        next: res => putAgetypeArray(res),
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+    }
+    function putAgetypeArray(agetype) {
+      self.agetypeList = agetype;
+      self.submitForm.controls.ageType.setValue(self.property.ageType);
+      setTimeout(() => $('.api-updated-agetype').trigger("chosen:updated"), 100);
+    }
+
+
+    ////////////////////
+    // Building Quality
+    if(this.property.buildingQuality && this.property.buildingQuality !== null) {
+      this.http.get(this.api.link+'/api/public/properties/building-qualities/ar').subscribe({
+        next: res => putqualitytypeArray(res),
+        error: err => this.api.API_ERROR(err, this.language)
+      })
+    }
+    function putqualitytypeArray(qualitytype) {
+      self.qualitytypeList = qualitytype;
+      self.submitForm.controls.qualityType.setValue(self.property.buildingQuality);
+      setTimeout(() => $('.api-updated-qualitytype').trigger("chosen:updated"), 100);
+    }
+
+
+    ////////////////////
+    // Bedrooms & Bathrooms
+    if(this.property.bedrooms && this.property.bedrooms !== null) {
+      this.submitForm.controls.bathrooms.setValue(this.property.bathrooms);
+      this.submitForm.controls.bedrooms.setValue(this.property.bedrooms);
+      setTimeout(() => $('.chosen-bathrooms').trigger("chosen:updated"), 100);
+      setTimeout(() => $('.chosen-bedrooms').trigger("chosen:updated"), 100);
+    }
+
+
+    ////////////////////
+    // Location
+    const httpOptions = {
+      params: new HttpParams()
+        .set( 'parentId.specified', 'false' )
+    }
+    this.http.get(this.api.link+'/api/public/regions', httpOptions).subscribe({
+      next: res => putCityArray(res),
+      error: err => this.api.API_ERROR(err, this.language)
+    })
+    function putCityArray(cities) {
+      self.cityList = cities;
+      self.selectedCity = _.find(cities, {id: self.property.location.regionId})
+      self.submitForm.controls.locationAd.patchValue({regionId: self.property.location.regionId});
+      setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
+    }
+      //
+    this.submitForm.controls.locationAd.patchValue({city: this.property.location.city});
+      //
+    this.submitForm.controls.locationAd.patchValue({street: this.property.location.street});
+      //
+    this.gMap ? this.gMap.setCenter({ lat:this.property.location.lat, lng:this.property.location.lng }) : false;
+    this.gMarker ? this.gMarker.setPosition({ lat:this.property.location.lat, lng:this.property.location.lng }) : false;
+    this.submitForm.controls.locationAd.patchValue({lat: this.property.location.lat});
+    this.submitForm.controls.locationAd.patchValue({lng: this.property.location.lng});
+
+
+    ////////////////////
+    // Gallery
+    for(let i=0; i<this.property.images.length; i++) {
+      let image = this.property.images[i];
+      if( !_.find(this.image, {id: image.image.id}) ) {
+        this.image.push({id: image.image.id, name: 'image'+image.image.id, status:'exists'});
+        let mockFile = { name: 'image'+image.image.id, size: 12345 };
+        this.myDropzone.emit('addedfile', mockFile);
+        this.myDropzone.emit("thumbnail", mockFile, this.property.images[i].image.s3Path);
+        this.myDropzone.emit("complete", mockFile);
+      }
+    }
+
+
+    ////////////////////
+    ////// Featured
+    this.submitForm.controls.featured.setValue(this.property.featured)
+
+
+    setTimeout(() => this.validationStyles(), 110);
+  }
+
+
+
   submit(form) {
     this.isConnecting = true;
     let self = this;
 
-    // create ad request
-    this.http.post(this.api.link+'/api/ads', { "userId": this.userService['id'] }, this.api.userHeader()).subscribe({
-      next: res => resolveAdResponse(res),
+    let pr = _.find(this.searchService.profileProperties.saleListing, ['id', this.propertyId])
+    this.submitForm.controls.id.setValue( pr.id )
+    this.submitForm.controls.adId.setValue( pr.ad.id )
+    this.submitForm.controls.locationAd.patchValue({id: pr.location.id});
+
+    // modify ad location
+    this.http.put(this.api.link+'/api/locations', JSON.stringify(form.locationAd), this.api.userJsonHeader()).subscribe({
+      next: res => resolveLocationResponse(res),
       error: err => this.api.API_ERROR(err, this.language)
     })
-
-    // resolve ad response { id, status,... }
-    function resolveAdResponse(adResponse) {
-      self.submitForm.controls.adId.setValue( adResponse.id )
-      adLocation();
-    }
-
-    // create ad location
-    function adLocation() {
-      self.http.post(self.api.link+'/api/locations', JSON.stringify(form.locationAd), self.api.userJsonHeader()).subscribe({
-        next: res => resolveLocationResponse(res),
-        error: err => self.api.API_ERROR(err, this.language)
-      })
-    }
 
     // resolve location response { id, city,... }
     function resolveLocationResponse(locationResponse) {
       self.isConnecting = false;
       self.submitForm.controls.locationId.setValue( locationResponse.id );
 
-      // submit the ad
+      // modify the ad
       switch (self.submitForm.controls.propertyType.value) {
         case "HOUSE":
           self.houseAd();
@@ -616,7 +782,8 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     }
   }
   houseAd() {
-    this.http.post(this.api.link+'/api/house-properties', {
+    this.http.put(this.api.link+'/api/house-properties', {
+      id: this.submitForm.controls.id.value,
       adId: this.submitForm.controls.adId.value,
       ageType: this.submitForm.controls.ageType.value,
       bathrooms: this.submitForm.controls.bathrooms.value,
@@ -632,6 +799,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       landSizeMeasureType: this.submitForm.controls.landSizeMeasureType.value,
       locationId: this.submitForm.controls.locationId.value,
       title: this.submitForm.controls.title.value,
+      featured: this.submitForm.controls.featured.value,
     }, this.api.userHeader()).subscribe({
 
       next: res => this.addImage(res),
@@ -639,7 +807,8 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     })
   }
   unitAd() {
-    this.http.post(this.api.link+'/api/unit-properties', {
+    this.http.put(this.api.link+'/api/unit-properties', {
+      id: this.submitForm.controls.id.value,
       adId: this.submitForm.controls.adId.value,
       ageType: this.submitForm.controls.ageType.value,
       bathrooms: this.submitForm.controls.bathrooms.value,
@@ -655,6 +824,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       locationId: this.submitForm.controls.locationId.value,
       propertyType: this.submitForm.controls.propertyType.value,
       title: this.submitForm.controls.title.value,
+      featured: this.submitForm.controls.featured.value,
     }, this.api.userHeader()).subscribe({
 
       next: res => this.addImage(res),
@@ -662,7 +832,8 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     })
   }
   landAd() {
-    this.http.post(this.api.link+'/api/land-properties', {
+    this.http.put(this.api.link+'/api/land-properties', {
+      id: this.submitForm.controls.id.value,
       adId: this.submitForm.controls.adId.value,
       currency: this.submitForm.controls.currency.value,
       description: this.submitForm.controls.description.value,
@@ -674,6 +845,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       propertyType: this.submitForm.controls.propertyType.value,
       serviceType: this.submitForm.controls.serviceType.value,
       title: this.submitForm.controls.title.value,
+      featured: this.submitForm.controls.featured.value,
     }, this.api.userHeader()).subscribe({
 
       next: res => this.addImage(res),
@@ -681,7 +853,8 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     })
   }
   farmAd() {
-    this.http.post(this.api.link+'/api/farm-properties', {
+    this.http.put(this.api.link+'/api/farm-properties', {
+      id: this.submitForm.controls.id.value,
       adId: this.submitForm.controls.adId.value,
       currency: this.submitForm.controls.currency.value,
       description: this.submitForm.controls.description.value,
@@ -693,6 +866,7 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
       propertyType: this.submitForm.controls.propertyType.value,
       serviceType: this.submitForm.controls.serviceType.value,
       title: this.submitForm.controls.title.value,
+      featured: this.submitForm.controls.featured.value,
     }, this.api.userHeader()).subscribe({
 
       next: res => this.addImage(res),
@@ -700,19 +874,35 @@ export class SubmitPropertyComponent implements OnInit,AfterViewInit {
     })
   }
   addImage(res) {
-    console.log('ad created',res);
-    toastr.success('Ad successfull created', 'Success');
+    console.log('ad edited',res);
+    toastr.success('Ad successfull edited', 'Success');
     let adId = res.id;
     if(this.image.length == 0) this.router.navigate([this.language, 'properties']);
     for(let i=0; i<this.image.length; i++) {
-      this.http.post(this.api.link+'/api/property-images', {
-        imageId: this.image[i].id,
-        position: i+1,
-        propertyId: adId
-      }, this.api.userHeader()).subscribe({
-        next: res => console.log('image added',res),
-        error: err => this.api.API_ERROR(err, this.language)
-      })
+
+      switch (this.image[i].status) {
+        case 'new':
+          this.http.post(this.api.link+'/api/property-images', {
+            imageId: this.image[i].id,
+            position: i+1,
+            propertyId: adId
+          }, this.api.userHeader()).subscribe({
+            next: res => console.log('image added',res),
+            error: err => this.api.API_ERROR(err, this.language)
+          })
+          break;
+
+        case 'remove':
+          this.http.delete(this.api.link+'/api/property-images/'+this.image[i].id, this.api.userHeader()).subscribe({
+            next: res => console.log('image deleted',res),
+            error: err => this.api.API_ERROR(err, this.language)
+          })
+          break;
+
+        default:
+          break;
+      }
+
     }
     this.router.navigate([this.language, 'properties']);
   }

@@ -17,25 +17,37 @@
 						<form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
 							<div class="row with-forms">
 
+								<!-- city & area -->
+								<div class="col-md-6">
+									<!-- City -->
+									<select class="chosen-select-width api-updated-cities">
+											<option value="null">اي مدينة</option>
+										<option *ngFor="let city of cityList" [value]="city.name">{{ city.arabicName }}</option>
+									</select>
+
+									<!-- Area -->
+									<span class="autocomplete" style="padding-left:0; padding-right:1%;">
+										<input #areaInput id="areaInput" type="text" placeholder="اي منطقة" [disabled]="!selectedCity.id" (keyup)="searchInput(areaInput.value)" (blur)="areaBlur()" autocomplete="off">
+										<ul class="chosen-results" [hidden]="!isAutofill">
+											<li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+											<li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+										</ul>
+									</span>
+								</div>
+
 								<!-- Status -->
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<select data-placeholder="Any Status" class="chosen-select-no-single api-updated-servicetype" formControlName="serviceType">
 										<option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
 									</select>
 								</div>
 
-								<!-- Property Type -->
-								<div class="col-md-3">
-									<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
-										<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
-									</select>
-								</div>
-
 								<!-- Main Search Input -->
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="main-search-input">
-										<select class="chosen-select api-updated-cities">
-											<option *ngFor="let city of cityList">{{ city.name }}</option>
+										<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
+											<option value="null">كل الانواع</option>
+											<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
 										</select>
 										<button class="button" type="submit" [disabled]="!searchForm.valid"><i class="fa fa-search"></i></button>
 									</div>
@@ -79,6 +91,10 @@
 
 						<div class="icon-container">
 							<i class="im im-icon-Home-2"></i>
+							<div class="icon-links">
+								<a (click)="journy('HOUSE', 'SALE')" title="للبيع">للبيع</a>
+								<a (click)="journy('HOUSE', 'RENTAL')" title="للإجار">للإجار</a>
+							</div>
 						</div>
 
 						<h3>بيوت</h3>
@@ -93,6 +109,10 @@
 
 						<div class="icon-container">
 							<i class="im im-icon-Office"></i>
+							<div class="icon-links">
+								<a (click)="journy('UNIT', 'SALE')" title="للبيع">للبيع</a>
+								<a (click)="journy('UNIT', 'RENTAL')" title="للإجار">للإجار</a>
+							</div>
 						</div>
 
 						<h3>شقق</h3>
@@ -137,7 +157,6 @@
 
 									<ul class="listing-hidden-content">
 										<li>المساحة <span>{{ property.area }}</span></li>
-										<li>الغرف <span>{{ property.rooms }}</span></li>
 										<li>السرائر <span>{{ property.beds }}</span></li>
 										<li>الحمامات <span>{{ property.baths }}</span></li>
 									</ul>
@@ -191,25 +210,37 @@
 						<form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
 							<div class="row with-forms">
 
+								<!-- city & area -->
+								<div class="col-md-6">
+									<!-- City -->
+									<select class="chosen-select-width api-updated-cities">
+										<option value="null">Any City</option>
+										<option *ngFor="let city of cityList" [value]="city.name">{{ city.arabicName }}</option>
+									</select>
+
+									<!-- Area -->
+									<span class="autocomplete">
+										<input #areaInput id="areaInput" type="text" placeholder="Any Region" [disabled]="!selectedCity.id" (keyup)="searchInput(areaInput.value)" (blur)="areaBlur()" autocomplete="off">
+										<ul class="chosen-results" [hidden]="!isAutofill">
+											<li *ngFor="let area of areas$ | async" (click)="autofill(area)"> {{ area.arabicName }} </li>
+											<li *ngIf="areaInput.value.length > 3"> "not in search" add {{ areaInput.value }} </li>
+										</ul>
+									</span>
+								</div>
+
 								<!-- Status -->
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<select data-placeholder="Any Status" class="chosen-select-no-single api-updated-servicetype" formControlName="serviceType">
 										<option *ngFor="let service of servicetypeList" [value]="service.key">{{ service.value }}</option>
 									</select>
 								</div>
 
-								<!-- Property Type -->
-								<div class="col-md-3">
-									<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
-										<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
-									</select>
-								</div>
-
 								<!-- Main Search Input -->
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="main-search-input">
-										<select class="chosen-select api-updated-cities">
-											<option *ngFor="let city of cityList">{{ city.name }}</option>
+										<select data-placeholder="Any Type" class="chosen-select-no-single api-updated-propertytype" formControlName="propertyType">
+											<option value="null">All Types</option>
+											<option *ngFor="let property of propertytypeList" [value]="property.key">{{ property.value }}</option>
 										</select>
 										<button class="button" type="submit" [disabled]="!searchForm.valid"><i class="fa fa-search"></i></button>
 									</div>
@@ -253,6 +284,10 @@
 
 						<div class="icon-container">
 							<i class="im im-icon-Home-2"></i>
+							<div class="icon-links">
+								<a (click)="journy('HOUSE', 'SALE')" title="For Sale">For Sale</a>
+								<a (click)="journy('HOUSE', 'RENTAL')" title="For Rent">For Rent</a>
+							</div>
 						</div>
 
 						<h3>Houses</h3>
@@ -267,6 +302,10 @@
 
 						<div class="icon-container">
 							<i class="im im-icon-Office"></i>
+							<div class="icon-links">
+								<a (click)="journy('UNIT', 'SALE')" title="For Sale">For Sale</a>
+								<a (click)="journy('UNIT', 'RENTAL')" title="For Rent">For Rent</a>
+							</div>
 						</div>
 
 						<h3>Appartments</h3>
@@ -311,7 +350,6 @@
 
 									<ul class="listing-hidden-content">
 										<li>Area <span>{{ property.area }}</span></li>
-										<li>Rooms <span>{{ property.rooms }}</span></li>
 										<li>Beds <span>{{ property.beds }}</span></li>
 										<li>Baths <span>{{ property.baths }}</span></li>
 									</ul>

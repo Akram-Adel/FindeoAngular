@@ -161,14 +161,15 @@ export class AgentsComponent implements OnInit, AfterViewInit {
   gotAgents(agents) {
     this.isConnecting = false;
     this.resultsNum = agents.length;
-    this.numOfPages = this.resultsNum / 6;
+    this.numOfPages = this.resultsNum / 12;
     this.agents = [];
 
     for(let i=0; i<agents.length; i++) {
       let a = agents[i];
+      if(!a.logo) continue;
       this.agents.push({
         id: a.id,
-        image: (a.logo.s3Path) ? a.logo.s3Path : "assets/images/agent-01.jpg",
+        image: (a.logo && a.logo.s3Path) ? a.logo.s3Path : "assets/images/agent-01.jpg",
         name: a.name,
         title: a.description,
         phone: a.phone,
@@ -183,15 +184,15 @@ export class AgentsComponent implements OnInit, AfterViewInit {
   }
 
   changedCity(city) {
-    console.log(city);
+    // console.log(city);
   }
 
 
   prevPage() {
     if(this.currentPage == 1) return;
     this.currentPage -= 1;
-    this.startSlice -= 6;
-    this.endSlice -= 6;
+    this.startSlice -= 12;
+    this.endSlice -= 12;
     $('.fs-inner-container:nth-child(2)>div').animate({
       scrollTop: 100
     }, 500)
@@ -200,8 +201,8 @@ export class AgentsComponent implements OnInit, AfterViewInit {
     if(this.numOfPages == 0) return;
     if(this.currentPage == Math.ceil(this.numOfPages)) return;
     this.currentPage += 1;
-    this.startSlice += 6;
-    this.endSlice += 6;
+    this.startSlice += 12;
+    this.endSlice += 12;
     $('.fs-inner-container:nth-child(2)>div').animate({
       scrollTop: 100
     }, 500)

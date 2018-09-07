@@ -62,31 +62,43 @@
 
           <div id="contact-message"></div>
 
-            <form method="post" action="contact.php" name="contactform" id="contactform" autocomplete="on">
+            <form [formGroup]="contactForm" (ngSubmit)="sendEmail(contactForm.value)" autocomplete="on">
 
             <div class="row">
               <div class="col-md-6">
                 <div>
-                  <input name="name" type="text" id="name" placeholder="Your Name" required="required" />
+                  <input type="text" placeholder="Your Name" formControlName="name" />
                 </div>
               </div>
 
               <div class="col-md-6">
                 <div>
-                  <input name="email" type="email" id="email" placeholder="Email Address" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" required="required" />
+                  <input type="email" placeholder="Email Address" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" />
                 </div>
               </div>
             </div>
 
             <div>
-              <input name="subject" type="text" id="subject" placeholder="Subject" required="required" />
+              <input type="text" placeholder="Number" formControlName="mobile" />
             </div>
 
             <div>
-              <textarea name="comments" cols="40" rows="3" id="comments" placeholder="Message" spellcheck="true" required="required"></textarea>
+              <select formControlName="messageType" (change)="selectChange($event.target.value)">
+                <option value="null">اخترالموضوع </option>
+                <option>اقتراح</option>
+                <option>الاعلانات</option>
+                <option>شكوي</option>
+                <option>خطأ او خلل في الموقع</option>
+                <option>اخري</option>
+              </select>
             </div>
 
-            <input type="submit" class="submit button" id="submit" value="Submit Message" />
+            <div>
+              <textarea cols="40" rows="3" placeholder="Message" spellcheck="true" formControlName="message"></textarea>
+            </div>
+
+            <button class="button margin-top-5" [disabled]="!contactForm.valid">Submit Message</button>
+            <div class="margin-bottom-50"></div>
 
             </form>
         </section>
@@ -168,31 +180,43 @@
 
           <div id="contact-message"></div>
 
-            <form method="post" action="contact.php" name="contactform" id="contactform" autocomplete="on">
+          <form [formGroup]="contactForm" (ngSubmit)="sendEmail(contactForm.value)" autocomplete="on">
 
             <div class="row">
               <div class="col-md-6">
                 <div>
-                  <input name="name" type="text" id="name" placeholder="اسمك" required="required" />
+                  <input type="text" placeholder="اسمك" formControlName="name" />
                 </div>
               </div>
 
               <div class="col-md-6">
                 <div>
-                  <input name="email" type="email" id="email" placeholder="البريد الالكتروني" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" required="required" />
+                  <input type="email" placeholder="البريد الالكتروني" formControlName="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" />
                 </div>
               </div>
             </div>
 
             <div>
-              <input name="subject" type="text" id="subject" placeholder="الموضوع" required="required" />
+              <input type="text" placeholder="رقم الهاتف" formControlName="mobile" />
             </div>
 
             <div>
-              <textarea name="comments" cols="40" rows="3" id="comments" placeholder="الرسالة" spellcheck="true" required="required"></textarea>
+              <select formControlName="messageType" (change)="selectChange($event.target.value)">
+                <option value="null">اخترالموضوع </option>
+                <option>اقتراح</option>
+                <option>الاعلانات</option>
+                <option>شكوي</option>
+                <option>خطأ او خلل في الموقع</option>
+                <option>اخري</option>
+              </select>
             </div>
 
-            <input type="submit" class="submit button" id="submit" value="ارسل الرسالة" />
+            <div>
+              <textarea cols="40" rows="3" placeholder="الرسالة" spellcheck="true" formControlName="message"></textarea>
+            </div>
+
+            <button class="button margin-top-5" [disabled]="!contactForm.valid">ارسل الرسالة</button>
+            <div class="margin-bottom-50"></div>
 
             </form>
         </section>

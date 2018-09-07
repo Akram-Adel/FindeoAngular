@@ -16,9 +16,10 @@ export class UserService {
   public phone:any;
   public profileId:number;
   public imageId:number;
-  public imageUrl:string = 'assets/images/agent-03.jpg';
+  public imageUrl:string = 'https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png';
   public isAgent:boolean;
   public agentId:number;
+  public agentName:string;
   public description:string;
   public agentLocation:Object;
 
@@ -65,6 +66,7 @@ export class UserService {
     } else {
       this.isAgent = true;
       this.agentId = agentData.id;
+      this.agentName = agentData.name;
       this.description = agentData.description;
       this.agentLocation = agentData.location;
     }

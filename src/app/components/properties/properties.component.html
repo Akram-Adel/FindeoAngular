@@ -38,7 +38,12 @@
             <ul class="my-account-nav">
               <li class="sub-nav-title">Manage Account</li>
               <li><a [routerLink]="['/en/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> My Profile</a></li>
+              <li><a [routerLink]="['/en/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> Add Agent</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> Agent Profile</span>
+              </a></li>
               <li><a [routerLink]="['/en/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> Bookmarked Listings</a></li>
+              <li><a [routerLink]="['/en/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> My Searches</a></li>
             </ul>
 
             <ul class="my-account-nav">
@@ -61,6 +66,7 @@
 
           <tr>
             <th><i class="fa fa-file-text"></i> Property</th>
+            <th class="expire-date"><i class="fa fa-calendar"></i> Start Date</th>
             <th></th>
           </tr>
 
@@ -74,9 +80,15 @@
                 <span class="table-property-price">{{ property.price }}</span>
               </div>
             </td>
-            <td class="action">
-              <!-- <a href="#"><i class="fa fa-pencil"></i> Edit</a> -->
-              <!-- <a href="#"><i class="fa  fa-eye-slash"></i> Hide</a> -->
+            <td class="expire-date">
+              <div>ad number: {{ property.id }}</div>
+              <div>ad status: {{ property.status }}</div>
+              <div>days left: {{ property.finishDate }}</div>
+            </td>
+            <td class="action" [ngClass]="{disabled: isConnecting}">
+              <a [routerLink]="['/en/edit-property', property.id]"><i class="fa fa-pencil"></i> Edit</a>
+              <a (click)="sold(property)" *ngIf="property.status != 'SOLD'"><i class="fa  fa-eye-slash"></i> Sold</a>
+              <a (click)="reactivate(property)" *ngIf="property.status == 'SOLD'"><i class="fa  fa-eye"></i> Reactivate</a>
               <a class="delete" (click)="delete(property)"><i class="fa fa-remove"></i> Delete</a>
             </td>
           </tr>
@@ -86,6 +98,7 @@
       </div>
 
     </div>
+    <div class="margin-bottom-50"></div>
   </div>
 </div>
 <!-- English Section / End -->
@@ -132,7 +145,12 @@
             <ul class="my-account-nav">
               <li class="sub-nav-title">ادر الحساب</li>
               <li><a [routerLink]="['/ar/profile']" routerLinkActive="current"><i class="sl sl-icon-user"></i> صفحتي الشخصية</a></li>
+              <li><a [routerLink]="['/ar/agent']" routerLinkActive="current">
+                <span *ngIf="!profileInfo.isAgent"><i class="sl sl-icon-user"></i> اضف مكتبك العقاري</span>
+                <span *ngIf="profileInfo.isAgent"><i class="sl sl-icon-user"></i> مكتبك العقاري</span>
+              </a></li>
               <li><a [routerLink]="['/ar/bookmarks']" routerLinkActive="current"><i class="sl sl-icon-star"></i> العقارات المرجعية</a></li>
+              <li><a [routerLink]="['/ar/mySearches']" routerLinkActive="current"><i class="sl sl-icon-star"></i> البحث </a></li>
             </ul>
 
             <ul class="my-account-nav">
@@ -155,6 +173,7 @@
 
           <tr>
             <th><i class="fa fa-file-text"></i> العقارات</th>
+            <th class="expire-date"><i class="fa fa-calendar"></i> تاريخ الاعلان</th>
             <th></th>
           </tr>
 
@@ -168,10 +187,15 @@
                 <span class="table-property-price">{{ property.price }}</span>
               </div>
             </td>
-            <td class="expire-date">{{ property.expireDate }}</td>
-            <td class="action">
-              <!-- <a href="#"><i class="fa fa-pencil"></i> عدل</a> -->
-              <!-- <a href="#"><i class="fa  fa-eye-slash"></i> اخفي</a> -->
+            <td class="expire-date">
+              <div>رقم الاعلان : {{ property.id }}</div>
+              <div>حالة الاعلان : {{ property.statusAr }}</div>
+              <div>الايام المتبقية : {{ property.finishDate }}</div>
+            </td>
+            <td class="action" [ngClass]="{disabled: isConnecting}">
+              <a [routerLink]="['/ar/edit-property', property.id]"><i class="fa fa-pencil"></i> تعديل</a>
+              <a (click)="sold(property)" *ngIf="property.status != 'SOLD'"><i class="fa  fa-eye-slash"></i> مباع</a>
+              <a (click)="reactivate(property)" *ngIf="property.status == 'SOLD'"><i class="fa  fa-eye"></i> اعادة تفعيل</a>
               <a class="delete" (click)="delete(property)"><i class="fa fa-remove"></i> امسح</a>
             </td>
           </tr>

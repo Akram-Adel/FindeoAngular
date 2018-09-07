@@ -72,7 +72,7 @@
 ---------------------------------------------------------------------- */
 @import url("bootstrap.css");					/* Default Reset, Typography, Forms, Responsive Grid etc. */
 @import url("icons.css");						/* Webfont Icons: FontAwesome, Line, Simple Line */
-@import url("http://fonts.googleapis.com/css?family=Varela+Round");
+@import url("https://fonts.googleapis.com/css?family=Varela+Round");
 
 
 /* ------------------------------------------------------------------- */
@@ -214,7 +214,9 @@ ul.top-bar-menu li i {
 ------------------------------------- */
 #logo { display: inline-block; margin-top: 1px; }
 
-#logo img { max-height: 43px; width: auto; transform: translate3d(0,0,0); }
+#logo img {
+	/* max-height: 43px; */
+	width: auto; transform: translate3d(0,0,0); }
 img.footer-logo { max-height: 43px; width: auto; transform: translate3d(0,0,0); }
 
 #header {
@@ -12011,3 +12013,24 @@ body .counter-boxes-inside-parallax .counter-box-icon i,
 	#reset a.button:hover { color: #333; background-color: #fff; }
 
 	@media only screen and (max-width: 1024px) {#style-switcher {display: none;}}
+
+
+
+
+#titlebar.property-titlebar span.property-type-badge, #property_preview .property-titlebar span.property-type-badge, #property_preview .property-titlebar span.property-badge, #titlebar.property-titlebar span.property-badge {
+	margin: 0;
+	padding: 4px 11px;
+	line-height: 24px;
+	border-radius: 3px;
+	background-color: #66676b;
+  color: #fff;
+  font-size: 13px;
+  position: relative;
+  top: -4px;
+  margin-left: 4px;
+}
+
+#titlebar.property-titlebar span.property-type-badge, #property_preview .property-titlebar span.property-type-badge {
+	background-color: #eaeaea;
+	color: #919191;
+}

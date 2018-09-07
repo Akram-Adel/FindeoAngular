@@ -7,7 +7,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-5 col-sm-6">
-          <img class="footer-logo" src="assets/images/logo.png" alt="">
+          <img class="footer-logo" src="assets/imgs/screenshot-1.png" alt="">
           <br><br>
           <p>Morbi convallis bibendum urna ut viverra. Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper.</p>
         </div>
@@ -15,37 +15,30 @@
         <div class="col-md-4 col-sm-6 ">
           <h4>Helpful Links</h4>
           <ul class="footer-links">
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Sign Up</a></li>
-            <li><a href="#">My Account</a></li>
-            <li><a href="#">Add Property</a></li>
-            <li><a href="#">Pricing</a></li>
+            <li><a [routerLink]="['/en/login']">Login</a></li>
+            <li><a [routerLink]="['/en/login']">Sign Up</a></li>
+            <li><a [routerLink]="['/en/profile']">My Account</a></li>
+            <li><a [routerLink]="['/en/submit-property']">Add Property</a></li>
             <li><a href="#">Privacy Policy</a></li>
           </ul>
 
           <ul class="footer-links">
             <li><a href="#">FAQ</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Our Agents</a></li>
-            <li><a href="#">How It Works</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a [routerLink]="['/en/agents']">Our Agents</a></li>
+            <li><a [routerLink]="['/en/about']">About Us</a></li>
           </ul>
           <div class="clearfix"></div>
         </div>
 
         <div class="col-md-3  col-sm-12">
-          <h4>Contact Us</h4>
+          <h4>Call Us</h4>
           <div class="text-widget">
-            <span>12345 Little Lonsdale St, Melbourne</span> <br>
             Phone: <span>(123) 123-456 </span><br>
-            E-Mail:<span> <a href="#">office@example.com</a> </span><br>
+            E-Mail:<span> <a [routerLink]="['/en/contact']">info@aliraqhomes.com</a> </span><br>
           </div>
 
           <ul class="social-icons margin-top-20">
-            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-            <li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+            <li><a class="facebook" href="https://www.facebook.com/%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82-203391123060911/" target="_blank"><i class="icon-facebook"></i></a></li>
           </ul>
 
         </div>
@@ -55,7 +48,10 @@
       <!-- Copyright -->
       <div class="row">
         <div class="col-md-12">
-          <div class="copyrights">© 2016 Findeo. All Rights Reserved.</div>
+          <div class="copyrights">
+            <span>2018 © aliraqhomes.com.</span> <br>
+            <span>ادارة الموقع غير مسئولة عن التعاملات العقارية والقانونية بين البائع والمشتري</span>
+        </div>
         </div>
       </div>
 
@@ -80,7 +76,7 @@
       <div class="row">
 
         <div class="col-md-5 col-sm-6">
-          <img class="footer-logo" src="assets/images/logo.png" alt="">
+          <img class="footer-logo" src="assets/imgs/screenshot-1.png" alt="">
           <br><br>
           <p>لضروري بالإنزال هو شيء, بل بعض حادثة الجنوبي, وتم الشهير السيطرة أم. مع أخذ العظمى وتنصيب, مايو مليون ابتدعها مع إيو, عرض عجّل قامت استراليا، ان. أملاً ألمانيا لم ضرب, قد بحث وقامت فاتّبع البشريةً. شيء أم دارت اتفاق, عدد غرّة، السفن أوراقهم هو. أي وسوء عسكرياً كلّ, ٣٠ حدى للصين طوكيو بالسيطرة.</p>
         </div>
@@ -88,37 +84,30 @@
         <div class="col-md-4 col-sm-6 ">
           <h4>روابط مفيدة</h4>
           <ul class="footer-links">
-            <li><a href="#">تسجيل الدخول</a></li>
-            <li><a href="#">التسجيل</a></li>
-            <li><a href="#">حسابي</a></li>
-            <li><a href="#">اضف عقار</a></li>
-            <li><a href="#">الاسعار</a></li>
+            <li><a [routerLink]="['/ar/login']">تسجيل الدخول</a></li>
+            <li><a [routerLink]="['/ar/login']">التسجيل</a></li>
+            <li><a [routerLink]="['/ar/profile']">حسابي</a></li>
+            <li><a [routerLink]="['/ar/submit-property']">اضف عقار</a></li>
             <li><a href="#">الخصوصوية</a></li>
           </ul>
 
           <ul class="footer-links">
             <li><a href="#">اسئلة و اجوبة</a></li>
-            <li><a href="#">المنتدي</a></li>
-            <li><a href="#">سماسرتنا</a></li>
-            <li><a href="#">كيف تعمل</a></li>
-            <li><a href="#">الاتصال</a></li>
+            <li><a [routerLink]="['/ar/agents']">المكاتب العقارية</a></li>
+            <li><a [routerLink]="['/ar/about']">الاتصال</a></li>
           </ul>
           <div class="clearfix"></div>
         </div>
 
         <div class="col-md-3  col-sm-12">
-          <h4>Contact Us</h4>
+          <h4>اتصل بنا</h4>
           <div class="text-widget">
-            <span style="direction:ltr">12345 Little Lonsdale St, Melbourne</span> <br>
             الهاتف: <span>(123) 123-456 </span><br>
-            البريد الالكتروني:<span> <a href="#">office@example.com</a> </span><br>
+            البريد الالكتروني:<span> <a [routerLink]="['/ar/contact']">info@aliraqhomes.com</a> </span><br>
           </div>
 
           <ul class="social-icons margin-top-20">
-            <li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-            <li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-            <li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-            <li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+            <li><a class="facebook" href="https://www.facebook.com/%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82-203391123060911/" target="_blank"><i class="icon-facebook"></i></a></li>
           </ul>
 
         </div>
@@ -128,7 +117,10 @@
       <!-- Copyright -->
       <div class="row">
         <div class="col-md-12">
-          <div class="copyrights">© 2016 Findeo. All Rights Reserved.</div>
+          <div class="copyrights">
+            <span>2018 © aliraqhomes.com.</span> <br>
+            <span>ادارة الموقع غير مسئولة عن التعاملات العقارية والقانونية بين البائع والمشتري</span>
+          </div>
         </div>
       </div>
 
