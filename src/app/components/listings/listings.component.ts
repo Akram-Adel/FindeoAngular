@@ -14,6 +14,7 @@ import { ApiService } from '../../services/api.service';
 import { CompareService } from '../../services/compare.service';
 import { SearchService } from '../../services/search.service';
 import { UserService } from '../../services/user.service';
+import { TranslatorService } from '../../services/translator.service';
 
 import * as _ from 'lodash';
 
@@ -52,7 +53,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
   listingResults:any = [];
   apiLocations:any = []; apiDisplayLocations:any = [];
 
-  serviceType:string; propertyType:string; cityId:string; regionId:string;
+  serviceType:string; propertyType:string; cityId:string; regionId:string; area:string;
 
   saveSearchForm:FormGroup;
 
@@ -67,7 +68,8 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
     private http:HttpClient,
     private fb:FormBuilder,
     private userService:UserService,
-    private router:Router) {
+    private router:Router,
+    private translator:TranslatorService) {
 
       this.Math = Math;
       this.searchForm = this.fb.group({
@@ -122,6 +124,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
     this.propertyType = localStorage.getItem('propertyType');
     this.cityId = localStorage.getItem('cityId');
     this.regionId = localStorage.getItem('regionId');
+    this.area = localStorage.getItem('area');
   }
 
   ngOnDestroy() {
@@ -176,7 +179,8 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
 
 		// if list layout is active
 		function listLayout() {
-      if ( $('.layout-switcher a').is(".list.active") ) {
+      // if ( $('.layout-switcher a').is(".list.active") ) {
+      if ( true ) { //<-- for no layout swither in the DOM
 
 				$(listingsContainer).each(function(){
 					$(this).removeClass("grid-layout grid-layout-three");
@@ -511,6 +515,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
         if(self.propertyType != 'null') {
           self.searchForm.controls.propertyType.setValue(self.propertyType);
           $('.api-updated-propertytype').val(self.propertyType);
+          (self.propertyType == 'LAND' || self.propertyType == 'FARM') ? self.isLand = true : self.isLand = false;
         }
       }, 50);
 
@@ -644,6 +649,7 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
           self.selectedCity = _.find(self.cityList, {id: +self.cityId});
           $('.api-updated-cities').val(self.selectedCity.name)
         }
+        if(self.area != 'null') $('#areaInput').val(self.area);
       }, 50);
 
       setTimeout(() => $('.api-updated-cities').trigger("chosen:updated"), 100);
@@ -922,18 +928,18 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
     console.log( this.searchService.searchResult[0] ) // <-- TESTING
     // update listing results
     for(let i=0; i<this.searchService.searchResult.length; i++) {
-      let result = this.searchService.searchResult[i];
+      let result = this.searchService.searchResult[i]; this.translate(result);
       this.listingResults.push({
         id: result.id,
         featured: (result.featured) ? true : false,
         status: (result.ad.status == 'SOLD') ? true : false,
         state: (result.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
         price: result.price,
-        priceDetail: result.currency,
+        priceDetail: result.priceDetail, // priceDetail: result.currency,
         image: (result.images) ? ((result.images[0]) ? result.images[0].image.s3Path : this.searchService.dummyImg) : this.searchService.dummyImg,
-        title: result.title,
+        title: result.title.slice(0, 20),
         adress: result.location.city +' '+ result.location.street,
-        area: result.landSize +' '+result.landSizeMeasureType,
+        area: result.area, // area: result.landSize +' '+result.landSizeMeasureType,
         beds: result.bedrooms,
         bathrooms: result.bathrooms,
         user: result.ad.user.firstName,
@@ -990,72 +996,41 @@ export class ListingsComponent implements OnInit,AfterViewInit,OnDestroy {
 
     setTimeout(() => this.eventListeners(), 500);
   }
+  translate(pr) {
+    ( find(this, pr.landSizeMeasureType, 'All') ) ? pr.area = pr.landSize +' '+ find(this, pr.landSizeMeasureType, 'All')['value'] : pr.area = pr.landSize +' '+pr.landSizeMeasureType;
+    ( find(this, pr.currency) ) ?                   pr.priceDetail = find(this, pr.currency)['value'] : pr.priceDetail = pr.currency;
+
+    function find($this, value, service=pr.serviceType) {
+      return _.find($this.translator.translatorObj[service], ['key', value])
+    }
+  }
 
   saleRent(serviceType) {
     this.listingResults = []; this.apiLocations = [];
 
-    let httpOptions;
-    if(serviceType == 'forSale') {
-      $('.chosen-sort').val(null).trigger("chosen:updated");
-      httpOptions = {
-        observe: 'response',
-        params: new HttpParams()
-          .set( 'serviceType.in',  'SALE' )
-          .set( 'size', '10')
-      }
+    if(serviceType == 'serviceType.in=SALE&size=10'
+    || serviceType == 'serviceType.in=RENTAL&size=10') {
       localStorage.setItem('cityId', null); localStorage.setItem('propertyType', null); localStorage.setItem('serviceType', null);
-
-    } else if(serviceType == 'forRent') {
-      $('.chosen-sort').val(null).trigger("chosen:updated");
-      httpOptions = {
-        observe: 'response',
-        params: new HttpParams()
-          .set( 'serviceType.in',  'RENTAL' )
-          .set( 'size', '10')
-      }
-      localStorage.setItem('cityId', null); localStorage.setItem('propertyType', null); localStorage.setItem('serviceType', null);
-
-    } else {
-      if( this.searchService.searchQuery) localStorage.setItem('searchQuery', this.searchService.searchQuery.params.toString())
-      if(!this.searchService.searchQuery) {
-        if(!localStorage.getItem('searchQuery')) return;
-        let searchQuery = localStorage.getItem('searchQuery');
-        httpOptions = {
-          observe: 'response',
-          params: new HttpParams({ fromString: searchQuery })
-        }
-      }
     }
+
+    let httpOptions;
+    httpOptions = {
+      observe: 'response',
+      params: new HttpParams({ fromString: serviceType })
+    }
+    console.log(serviceType);
 
     if(!httpOptions) return;
     this.http.get<any>(this.api.link+'/api/public/properties', httpOptions).subscribe(
       res => {
         let size = res['headers'].get('X-Total-Count');
 
-        if(serviceType == 'forSale') {
-          localStorage.setItem('searchQuery', 'serviceType.in=SALE&size='+size);
-          httpOptions = {
-            params: new HttpParams()
-              .set( 'serviceType.in',  'SALE' )
-              .set( 'size', size )
-          }
-          this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe(res => { this.searchService.newSearch(res); this.searchService.getSearchImages(); this.searchService.searchQuery = httpOptions })
-
-        } else if(serviceType == 'forRent') {
-          localStorage.setItem('searchQuery', 'serviceType.in=RENTAL&size='+size);
-          httpOptions = {
-            params: new HttpParams()
-              .set( 'serviceType.in',  'RENTAL' )
-              .set( 'size', size )
-          }
-          this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe(res => { this.searchService.newSearch(res); this.searchService.getSearchImages(); this.searchService.searchQuery = httpOptions })
-
-        } else {
-          httpOptions = {
-            params: new HttpParams({ fromString: localStorage.getItem('searchQuery') })
-          }
-          this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe(res => { this.searchService.newSearch(res); this.searchService.getSearchImages(); this.searchService.searchQuery = httpOptions })
+        let i = serviceType.indexOf('size'),
+          stringParams = serviceType.substr(0 ,i+5) + size;
+        httpOptions = {
+          params: new HttpParams({ fromString: stringParams })
         }
+        this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe(res => { this.searchService.newSearch(res); this.searchService.getSearchImages(); this.searchService.searchQuery = httpOptions })
       }
     )
   }

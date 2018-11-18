@@ -173,6 +173,7 @@ export class SearchService {
   public bookmarkedProperties:any = [];
   public getBookmarkedProperties(bookmarks, header) {
     this.bookmarkedProperties = [];
+    if(bookmarks.length == 0) { this.doneWithImages.next( Math.random() ); return; }
     bookmarks.forEach(item => {
       this.http.get(this.api.link+'/api/properties/'+item.propertyId, header).subscribe(res => {
         this.bookmarkedProperties.push(res);

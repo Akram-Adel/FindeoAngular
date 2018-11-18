@@ -6,6 +6,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LanguageService } from '../../services/language.service';
 import { ApiService } from '../../services/api.service';
 import { SearchService } from '../../services/search.service';
+import { TranslatorService } from '../../services/translator.service';
+
+import * as _ from 'lodash';
 
 declare var $:any;
 
@@ -33,7 +36,8 @@ export class AgentPageComponent implements OnInit, OnDestroy {
     private api:ApiService,
     private http:HttpClient,
     private searchService:SearchService,
-    private fb:FormBuilder) {
+    private fb:FormBuilder,
+    private translator:TranslatorService) {
 
       this.emailForm = this.fb.group({
         email: [null, Validators.required],
@@ -416,36 +420,36 @@ export class AgentPageComponent implements OnInit, OnDestroy {
     }
     // sale listings
     for(let i=0; i<ar.saleListing.length; i++) {
-      let l = ar.saleListing[i]
+      let l = ar.saleListing[i]; this.translate(l);
       this.agent.listings.push({
         id: l.id,
         featured: false,
         state: (l.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
         price: l.price,
-        priceDetail: l.currency,
-        image: (l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
-        name: l.title,
+        priceDetail: l.priceDetail, // priceDetail: result.currency,
+        image: (l.images[0] && l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
+        name: l.title.slice(0, 20),
         mapUrl: null,
         adress: l.location.city +' '+ l.location.street,
-        area: l.landSize +' '+l.landSizeMeasureType,
+        area: l.area, // area: result.landSize +' '+result.landSizeMeasureType,
         bedrooms: l.bedrooms,
         bathrooms: l.bathrooms
       })
     }
     // rent listings
     for(let i=0; i<ar.rentalListing.length; i++) {
-      let l = ar.rentalListing[i]
+      let l = ar.rentalListing[i]; this.translate(l);
       this.agent.listings.push({
         id: l.id,
         featured: false,
         state: (l.serviceType == 'SALE') ? 'For Sale' : 'For Rent',
         price: l.price,
-        priceDetail: l.currency,
-        image: (l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
-        name: l.title,
+        priceDetail: l.priceDetail, // priceDetail: result.currency,
+        image: (l.images[0] && l.images[0].image.s3Path) ? l.images[0].image.s3Path : "assets/images/listing-01.jpg",
+        name: l.title.slice(0, 20),
         mapUrl: null,
         adress: l.location.city +' '+ l.location.street,
-        area: l.landSize +' '+l.landSizeMeasureType,
+        area: l.area, // area: result.landSize +' '+result.landSizeMeasureType,
         bedrooms: l.bedrooms,
         bathrooms: l.bathrooms
       })
@@ -458,6 +462,14 @@ export class AgentPageComponent implements OnInit, OnDestroy {
       this.MY_ngAfterViewInit();
       $('.overlay').fadeOut();
     }, 100);
+  }
+  translate(pr) {
+    ( find(this, pr.landSizeMeasureType, 'All') ) ? pr.area = pr.landSize +' '+ find(this, pr.landSizeMeasureType, 'All')['value'] : pr.area = pr.landSize +' '+pr.landSizeMeasureType;
+    ( find(this, pr.currency) ) ?                   pr.priceDetail = find(this, pr.currency)['value'] : pr.priceDetail = pr.currency;
+
+    function find($this, value, service=pr.serviceType) {
+      return _.find($this.translator.translatorObj[service], ['key', value])
+    }
   }
 
   prevPage() {

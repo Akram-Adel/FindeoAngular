@@ -17,9 +17,11 @@ export class UserService {
   public profileId:number;
   public imageId:number;
   public imageUrl:string = 'https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png';
+
   public isAgent:boolean;
   public agentId:number;
   public agentName:string;
+  public agentImageUrl:string = 'https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png';
   public description:string;
   public agentLocation:Object;
 
@@ -67,6 +69,7 @@ export class UserService {
       this.isAgent = true;
       this.agentId = agentData.id;
       this.agentName = agentData.name;
+      this.agentImageUrl = agentData.logo.s3Path;
       this.description = agentData.description;
       this.agentLocation = agentData.location;
     }

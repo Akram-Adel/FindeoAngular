@@ -589,6 +589,9 @@ export class SinglePropertyComponent implements OnInit, OnDestroy {
   }
   gotFeatured() {
     this.featuredProperties = [];
+    if(this.searchService.featuredProperties.saleListing == null) return;
+    if(this.searchService.featuredProperties.rentalListing == null) return;
+
     //sales
     for(let i=0; i<this.searchService.featuredProperties.saleListing.length; i++) {
       let p = this.searchService.featuredProperties.saleListing[i];

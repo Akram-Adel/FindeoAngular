@@ -35,7 +35,8 @@ export class AgentComponent implements OnInit {
     phone: '',
     about: null,
     isAgent: false,
-    agentName: null
+    agentName: null,
+    agentImageUrl: "https://s3-eu-west-1.amazonaws.com/aliraqhomes/assets/Blank-profile.png",
   }
   cityList:any = [];
   selectedCity:any = {}; selectedName:string;
@@ -198,6 +199,7 @@ export class AgentComponent implements OnInit {
   synchAgentInfo() {
     setTimeout(() => {
       this.profileInfo.agentName = this.userService['agentName'];
+      this.profileInfo.agentImageUrl = this.userService['agentImageUrl'];
 
       this.chosenPlugin();
       this.chosenCities();
@@ -293,7 +295,7 @@ export class AgentComponent implements OnInit {
         description: self.profileInfo.about,
         phone: self.profileInfo.phone,
         email: self.profileInfo.email,
-        logoId: self.userService['imageId'],
+        logoId: self.userService['agentImageUrl'],
         userId: self.userService['id'],
         locationId: locationId
       }, self.api.userHeader()).subscribe({
@@ -331,11 +333,15 @@ export class AgentComponent implements OnInit {
 
     // update user photo
     function updatePhoto(res) {
-      self.http.put(self.api.link+'/api/profiles', {
-        id: self.userService['profileId'],
-        phone: self.profileInfo['phone'],
-        avatarId: res.id,
-        userId: self.userService['id']
+      self.http.put(self.api.link+'/api/agents', {
+        id: self.userService['agentId'],
+        name: self.profileInfo.agentName,
+        description: self.profileInfo.about,
+        phone: self.profileInfo.phone,
+        email: self.profileInfo.email,
+        logoId: res.id,
+        userId: self.userService['id'],
+        // locationId: locationId
       }, self.api.userHeader()).subscribe({
         next: res => saveSuccess(),
         error: err => { self.isConnecting = false; self.api.API_ERROR(err, self.language); }

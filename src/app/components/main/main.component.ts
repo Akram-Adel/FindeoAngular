@@ -63,6 +63,7 @@ export class MainComponent implements OnInit,AfterViewInit,OnDestroy {
     this.languageService.language$.subscribe( language => this.language = language );
     this.languageService.changeLanguage( this.route.snapshot.paramMap.get('lng') );
 
+    localStorage.setItem('area', 'null');
     this.areas$ = this.searchTerm
       .pipe(
         debounceTime(300),
@@ -380,14 +381,15 @@ export class MainComponent implements OnInit,AfterViewInit,OnDestroy {
     return this.http.get<any[]>(this.api.link+'/api/public/regions/search/'+this.selectedCity.id+'/'+term)
   }
   autofill(area) {
-    $('#areaInput').val(area.arabicName); this.searchForm.controls.regionCityId.setValue(area.countryId)
+    $('#areaInput').val(area.arabicName); this.searchForm.controls.regionCityId.setValue(area.countryId);
+    localStorage.setItem('area', area.arabicName);
   }
   areaBlur() {
     setTimeout(() => this.isAutofill = false, 200);
   }
 
   search(form) {
-    let paramsStr = `serviceType.in=${form.serviceType}&size=100`;
+    let paramsStr = `serviceType.in=${form.serviceType}&size=10`;
       if(form.propertyType !== 'null') paramsStr += `&propertyType.in=${form.propertyType}`;
       if(form.city !== null)           paramsStr += `&cityId.equals=${form.city}`;
       if(form.regionCityId !== null)   paramsStr += `&regionId.equals=${form.regionCityId}`;
@@ -396,27 +398,15 @@ export class MainComponent implements OnInit,AfterViewInit,OnDestroy {
     localStorage.setItem( 'propertyType', form.propertyType )
     localStorage.setItem( 'cityId', form.city )
 
-    const httpOptions = {
-      params: new HttpParams({ fromString: paramsStr })
-    }
-    this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe({
-      next: res => { this.searchService.newSearch(res); this.router.navigate([this.language+'/listings/default']); this.searchService.searchQuery = httpOptions},
-      error: err => this.api.API_ERROR(err, this.language)
-    });
+    this.router.navigate([this.language+'/listings/'+paramsStr]);
   }
 
   journy(type, service) {
     if(!type || !service) { return };
-    const httpOptions = {
-      params: new HttpParams()
-        .set( 'serviceType.in',  service )
-        .set( 'propertyType.in', type )
-        .set( 'size', '1000')
-    }
-    this.http.get(this.api.link+'/api/public/properties', httpOptions).subscribe({
-      next: res => { this.searchService.newSearch(res); this.router.navigate([this.language+'/listings/default']); this.searchService.searchQuery = httpOptions},
-      error: err => this.api.API_ERROR(err, this.language)
-    });
+
+    let params = 'serviceType.in='+service+ '&propertyType.in='+type+ '&size=10';
+
+    this.router.navigate([this.language+'/listings/'+params]);
   }
 
   gotFeatured() {
